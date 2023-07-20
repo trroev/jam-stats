@@ -9,14 +9,23 @@ module.exports = {
   ],
   theme: {
     extend: {
+      rotate: {
+        135: "135deg",
+      },
       colors: {
         darkPrimary: '#252525',
-        lightPrimary: '#F5F5F5'
+        lightPrimary: '#F5F5F5',
+        greenAccent: '#1ED760',
+        grayAccent: "#7D7D7D",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         serif: ["var(--font-serif)", ...fontFamily.serif],
       },
+      inset: {
+        "unset": "unset",
+      },
+     
   },
   plugins: [],
 }};
