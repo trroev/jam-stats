@@ -9,11 +9,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        darkPrimary: '#252525',
+        lightPrimary: '#F5F5F5'
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         serif: ["var(--font-serif)", ...fontFamily.serif],
       },
-    },
   },
   plugins: [],
-};
+}};
