@@ -1,6 +1,12 @@
-import { Raleway as FontSans, Merriweather as FontSerif } from "next/font/google";
+import { Raleway, Merriweather } from "next/font/google";
 
-export const fontSans = FontSans({
+export const raleway = Raleway({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+export const merriweather = Merriweather({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-serif",
 });
