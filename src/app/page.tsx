@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen max-h-screen flex-col items-center justify-center p-24 overflow-clip">
       <Image
-        className="fixed -top-10 lg:top-unset lg:-bottom-40 -left-20 lg:-left-60 xl:-left-80 -z-10 rotate-135 lg:rotate-45"
+        className="fixed -top-10 lg:top-unset lg:-bottom-40 -left-20 lg:-left-60 xl:-left-80 z-10 rotate-135 lg:rotate-45"
         width={logoSize.width}
         height={logoSize.height}
         src={logo}
