@@ -18,7 +18,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body
-        className={`min-h-screen font-sans antialiased ${fontSans.variable}`}
+        className={`min-h-screen font-sans antialiased ${fontSans.variable} text-white`}
+        style={{ backgroundColor: "#252525" }}
       >
         <AuthProvider>{children}</AuthProvider>
       </body>
