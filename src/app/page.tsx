@@ -21,15 +21,18 @@ export default function Home() {
         </button>
       )}
       {status === "authenticated" && (
-        <button
-          className="rounded-md p-2 border border-slate-900"
-          onClick={(e) => {
-            e.preventDefault()
-            signOut({ callbackUrl: "/" })
-          }}
-        >
-          Sign Out
-        </button>
+        <>
+          <h2>Hello, {session?.user?.name}</h2>
+          <button
+            className="rounded-md p-2 border border-slate-900"
+            onClick={(e) => {
+              e.preventDefault()
+              signOut({ callbackUrl: "/" })
+            }}
+          >
+            Sign Out
+          </button>
+        </>
       )}
     </main>
   )
