@@ -9,7 +9,7 @@ import logo from "../lib/images/spotifyWaves.svg"
 
 export default function Home() {
   const { data: session, status } = useSession()
-  const [playlists, setPlaylists] = useState([])
+  // const [userImage, setUserImage] = useState(null)
   // console.log({ session, status })
   // console.log(session?.accessToken)
 
@@ -20,19 +20,32 @@ export default function Home() {
   }
 
   // useEffect(() => {
-  //   async function f() {
-  //     if (session && session.accessToken) {
-  //       const response = await fetch("https://api.spotify.com/v1/me", {
-  //         headers: {
-  //           Authorization: `Bearer ${session.accessToken}`,
-  //         },
-  //       })
-  //       const data = await response.json()
-  //       console.log(data)
-  //       // setPlaylists(data.playlists.items)
+  //   const fetchSpotifyUserData = async () => {
+  //     try {
+  //       if (session && session.accessToken) {
+  //         const response = await fetch("https://api.spotify.com/v1/me", {
+  //           headers: {
+  //             Authorization: `Bearer ${session.accessToken}`,
+  //           },
+  //         })
+
+  //         if (!response.ok) {
+  //           // Handle non-successful response (e.g., if access token is expired)
+  //           console.error("Failed to fetch Spotify user data:", response)
+  //           return
+  //         }
+
+  //         const data = await response.json()
+  //         console.log(data)
+  //         setUserImage(data.images[1]?.url)
+  //       }
+  //     } catch (error) {
+  //       // Handle network or other errors
+  //       console.error("Error fetching Spotify user data:", error)
   //     }
   //   }
-  //   f()
+
+  //   fetchSpotifyUserData()
   // }, [session])
 
   return (
