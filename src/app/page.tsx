@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { signIn, signOut, useSession } from "next-auth/react"
 
@@ -8,13 +9,31 @@ import logo from "../lib/images/spotifyWaves.svg"
 
 export default function Home() {
   const { data: session, status } = useSession()
-  console.log({ session, status })
-  console.log(session?.accessToken)
+  const [playlists, setPlaylists] = useState([])
+  // console.log({ session, status })
+  // console.log(session?.accessToken)
+
   const size = useWindowSize()
   const logoSize = {
     width: size.width ? Math.floor(size.width * 0.35) : 0,
     height: size.height ? Math.floor(size.height * 0.35) : 0,
   }
+
+  // useEffect(() => {
+  //   async function f() {
+  //     if (session && session.accessToken) {
+  //       const response = await fetch("https://api.spotify.com/v1/me", {
+  //         headers: {
+  //           Authorization: `Bearer ${session.accessToken}`,
+  //         },
+  //       })
+  //       const data = await response.json()
+  //       console.log(data)
+  //       // setPlaylists(data.playlists.items)
+  //     }
+  //   }
+  //   f()
+  // }, [session])
 
   return (
     <main className="flex min-h-screen max-h-screen flex-col items-center justify-center p-24 overflow-clip">

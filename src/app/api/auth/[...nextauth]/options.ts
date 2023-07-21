@@ -1,7 +1,11 @@
+import { Token } from "@/types"
 import type { NextAuthOptions } from "next-auth"
 import SpotifyProvider from "next-auth/providers/spotify"
 
+// can update scopes as needed
 const scopes = [
+  "user-top-read",
+  "user-read-private",
   "user-read-email",
   "playlist-read-private",
   "playlist-read-collaborative",
@@ -17,20 +21,19 @@ const LOGIN_URL =
   "https://accounts.spotify.com/authorize?" +
   new URLSearchParams(params).toString()
 
-async function refreshAccessToken(token) {
+async function refreshAccessToken(token: Token) {
   const params = new URLSearchParams()
   params.append("grant_type", "refresh_token")
   params.append("refresh_token", token.refreshToken)
+
+  const authHeader = Buffer.from(
+    `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
+  ).toString("base64")
+
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
     headers: {
-      Authorization:
-        "Basic " +
-        new Buffer.from(
-          process.env.SPOTIFY_CLIENT_ID +
-            ":" +
-            process.env.SPOTIFY_CLIENT_SECRET
-        ).toString("base64"),
+      Authorization: "Basic " + authHeader,
     },
     body: params,
   })
@@ -51,7 +54,6 @@ export const options: NextAuthOptions = {
       authorization: LOGIN_URL,
     }),
   ],
-  // secret: process.env.JWT_SECRET,
   // pages: {
   //   signIn: "/",
   // },
@@ -64,7 +66,7 @@ export const options: NextAuthOptions = {
         return token
       }
       // access token has not expired
-      if (token.expiresIn && Date.now() < token.expiresIn * 1000) {
+      if (token.expiresIn && Date.now() < (token.expiresIn as number) * 1000) {
         return token
       }
       // access token has expired
