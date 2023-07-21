@@ -9,6 +9,7 @@ import logo from "../lib/images/spotifyWaves.svg"
 export default function Home() {
   const { data: session, status } = useSession()
   console.log({ session, status })
+  console.log(session?.accessToken)
   const size = useWindowSize()
   const logoSize = {
     width: size.width ? Math.floor(size.width * 0.35) : 0,
@@ -32,7 +33,8 @@ export default function Home() {
           className="rounded-md p-2 border border-slate-900 justify-self-end"
           onClick={(e) => {
             e.preventDefault()
-            signIn()
+            // will update callbackUrl to user dashboard once that is set up
+            signIn("spotify", { callbackUrl: "/" })
           }}
         >
           Sign In with Spotify
