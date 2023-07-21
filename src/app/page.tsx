@@ -3,8 +3,12 @@
 import Image from "next/image"
 import { signIn, signOut, useSession } from "next-auth/react"
 
-import useWindowSize from "../lib/hooks/useWindowSize"
-import logo from "../lib/images/spotifyWaves.svg"
+import { merriweather } from "@/lib/fonts"
+import useWindowSize from "@/lib/hooks/useWindowSize"
+import openAiLogo from "@/lib/images/openAiLogo.svg"
+import loginButton from "@/lib/images/spotifyLoginButton.svg"
+import spotifyLogo from "@/lib/images/spotifyLogo.svg"
+import wave from "@/lib/images/spotifyWaves.svg"
 
 export default function Home() {
   const { data: session, status } = useSession()
@@ -21,7 +25,7 @@ export default function Home() {
         className="fixed -top-10 lg:top-unset lg:-bottom-40 -left-20 lg:-left-60 xl:-left-80 z-10 rotate-135 lg:rotate-45"
         width={logoSize.width}
         height={logoSize.height}
-        src={logo}
+        src={wave}
         alt="Spotify Logo Waves"
       />
       <h1 className="text-5xl font-bold justify-self-center place-self-center text-greenAccent leading-loose tracking-wider">
@@ -29,13 +33,12 @@ export default function Home() {
       </h1>
       {status === "unauthenticated" && (
         <button
-          className="rounded-md p-2 border border-slate-900 justify-self-end"
           onClick={(e) => {
             e.preventDefault()
             signIn()
           }}
         >
-          Sign In with Spotify
+          <Image height={65} src={loginButton} alt="login with spotify" />
         </button>
       )}
       {status === "authenticated" && (
@@ -52,7 +55,22 @@ export default function Home() {
           </button>
         </>
       )}
-      <div className="bg-grayAccent absolute bottom-0 w-full max-w-5xl h-28"></div>
+      <div className="bg-grayAccent fixed bottom-0 w-full max-w-5xl h-28">
+        <div className="flex p-8 justify-center items-center gap-4">
+          <p
+            className={`${merriweather.variable} font-serif font-bold text-black text-xl`}
+          >
+            Powered by
+          </p>
+          <Image height={45} src={spotifyLogo} alt="Spotify's Logo" />
+          <p
+            className={`${merriweather.variable} font-serif font-bold text-black text-xl`}
+          >
+            &
+          </p>
+          <Image height={45} src={openAiLogo} alt="OpenAI's Logo" />
+        </div>
+      </div>
     </main>
   )
 }
