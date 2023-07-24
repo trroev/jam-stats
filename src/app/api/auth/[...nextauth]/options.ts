@@ -1,5 +1,5 @@
-import { Token } from "@/types"
 import type { NextAuthOptions } from "next-auth"
+import { JWT } from "next-auth/jwt"
 import SpotifyProvider from "next-auth/providers/spotify"
 
 // can update scopes as needed
@@ -21,7 +21,7 @@ const LOGIN_URL =
   "https://accounts.spotify.com/authorize?" +
   new URLSearchParams(params).toString()
 
-async function refreshAccessToken(token: Token) {
+async function refreshAccessToken(token: JWT) {
   const params = new URLSearchParams()
   params.append("grant_type", "refresh_token")
   params.append("refresh_token", token.refreshToken)
@@ -58,7 +58,7 @@ export const options: NextAuthOptions = {
   //   signIn: "/",
   // },
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account }: { token: JWT; account: any }) {
       if (account) {
         token.accessToken = account.access_token
         token.refreshToken = account.refresh_token
@@ -72,7 +72,7 @@ export const options: NextAuthOptions = {
       // access token has expired
       return await refreshAccessToken(token)
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: JWT }) {
       session.accessToken = token.accessToken
       return session
     },
