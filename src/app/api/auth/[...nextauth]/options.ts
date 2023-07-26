@@ -2,24 +2,7 @@ import type { NextAuthOptions } from "next-auth"
 import { JWT } from "next-auth/jwt"
 import SpotifyProvider from "next-auth/providers/spotify"
 
-// can update scopes as needed
-const scopes = [
-  "user-top-read",
-  "user-read-private",
-  "user-read-email",
-  "playlist-read-private",
-  "playlist-read-collaborative",
-  "user-read-currently-playing",
-  "user-modify-playback-state",
-].join(",")
-
-const params = {
-  scope: scopes,
-}
-
-const LOGIN_URL =
-  "https://accounts.spotify.com/authorize?" +
-  new URLSearchParams(params).toString()
+import { LOGIN_URL } from "@/lib/spotify"
 
 async function refreshAccessToken(token: JWT) {
   const params = new URLSearchParams()
