@@ -28,7 +28,7 @@ export default function useSpotify(): {
           }
 
           const data = await response.json()
-          // console.log(data)
+          console.log("USER DATA: ", data)
 
           // extracting relevant information from the response and setting it in the userProfile state
           setUserProfile({
@@ -44,7 +44,7 @@ export default function useSpotify(): {
     }
 
     // fetch the user's top 10 artists data
-    const fetchSpotifyUserTopItems = async () => {
+    const fetchSpotifyUserTopArtists = async () => {
       try {
         if (session && session.accessToken) {
           const response = await fetch(
@@ -63,7 +63,7 @@ export default function useSpotify(): {
           }
 
           const data = await response.json()
-          // console.log(data)
+          console.log("USER TOP ARTISTS: ", data)
 
           // mapping the retrieved data to the Artist interface and setting it in the topArtists state
           const artists: Artist[] = data.items.map((artist: any) => {
@@ -83,10 +83,51 @@ export default function useSpotify(): {
         console.error("Error fetching Spotify user data:", error)
       }
     }
+    // fetch the user's top 10 tracks data
+    const fetchSpotifyUserTopTracks = async () => {
+      try {
+        if (session && session.accessToken) {
+          const response = await fetch(
+            "https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=10",
+            {
+              headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+              },
+            }
+          )
+
+          if (!response.ok) {
+            // handle non-successful response
+            console.error("Failed to fetch Spotify user data:", response)
+            return
+          }
+
+          const data = await response.json()
+          console.log("USER TOP TRACKS: ", data)
+
+          // // mapping the retrieved data to the Artist interface and setting it in the topArtists state
+          // const artists: Artist[] = data.items.map((artist: any) => {
+          //   const image = artist.images.length > 0 ? artist.images[0].url : null
+          //   const spotifyUrl = `https://open.spotify.com/artist/${artist.id}`
+          //   return {
+          //     name: artist.name,
+          //     image: image,
+          //     spotifyUrl: spotifyUrl,
+          //   }
+          // })
+
+          // setTopArtists(artists)
+        }
+      } catch (error) {
+        // handle network or other errors
+        console.error("Error fetching Spotify user data:", error)
+      }
+    }
 
     // call the functions to fetch the data when the session changes
     fetchSpotifyUserData()
-    fetchSpotifyUserTopItems()
+    fetchSpotifyUserTopArtists()
+    fetchSpotifyUserTopTracks()
   }, [session])
 
   return { topArtists, userProfile }
