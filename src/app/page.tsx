@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Image from "next/image"
 import { signIn, signOut, useSession } from "next-auth/react"
 
@@ -14,8 +13,6 @@ import { SpotifyData } from "@/components/spotify-data"
 
 export default function Home() {
   const { data: session, status } = useSession()
-  // console.log({ session, status })
-  // console.log(session?.accessToken)
 
   const size = useWindowSize()
   const logoSize = {

@@ -6,8 +6,7 @@ export function SpotifyData() {
   const { topArtists, userProfile } = useSpotify()
 
   if (!userProfile) {
-    // if userProfile is not available, render loading state
-    return <div>Loading...</div>
+    return null
   }
 
   return (
@@ -30,6 +29,7 @@ export function SpotifyData() {
                     alt={artist.name}
                     width={100}
                     height={100}
+                    className="rounded-full"
                   />
                 )}
               </a>
