@@ -75,7 +75,6 @@ export const options: NextAuthOptions = {
       if (session.user) {
         session.user.username = token.username
       }
-
       return session
     },
   },

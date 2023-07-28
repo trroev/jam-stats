@@ -10,10 +10,11 @@ import openAiLogo from "@/lib/images/openAiLogo.svg"
 import loginButton from "@/lib/images/spotifyLoginButton.svg"
 import spotifyLogo from "@/lib/images/spotifyLogo.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
+import UserInfo from "@/components/UserInfo"
+import UserTopItems from "@/components/UserTopItems"
 
 export default function Home() {
   const { data: session, status } = useSession()
-  // const [userImage, setUserImage] = useState(null)
   // console.log({ session, status })
   // console.log(session?.accessToken)
 
@@ -22,35 +23,6 @@ export default function Home() {
     width: size.width ? Math.floor(size.width * 0.35) : 0,
     height: size.height ? Math.floor(size.height * 0.35) : 0,
   }
-
-  // useEffect(() => {
-  //   const fetchSpotifyUserData = async () => {
-  //     try {
-  //       if (session && session.accessToken) {
-  //         const response = await fetch("https://api.spotify.com/v1/me", {
-  //           headers: {
-  //             Authorization: `Bearer ${session.accessToken}`,
-  //           },
-  //         })
-
-  //         if (!response.ok) {
-  //           // Handle non-successful response (e.g., if access token is expired)
-  //           console.error("Failed to fetch Spotify user data:", response)
-  //           return
-  //         }
-
-  //         const data = await response.json()
-  //         console.log(data)
-  //         setUserImage(data.images[1]?.url)
-  //       }
-  //     } catch (error) {
-  //       // Handle network or other errors
-  //       console.error("Error fetching Spotify user data:", error)
-  //     }
-  //   }
-
-  //   fetchSpotifyUserData()
-  // }, [session])
 
   return (
     <main className="flex min-h-screen max-h-screen flex-col items-center justify-center p-24 overflow-clip">
@@ -78,6 +50,8 @@ export default function Home() {
       {status === "authenticated" && (
         <>
           <h2>Hello, {session?.user?.name}</h2>
+          {/* <UserInfo /> */}
+          <UserTopItems />
           <button
             className="rounded-md p-2 border border-slate-900"
             onClick={(e) => {
