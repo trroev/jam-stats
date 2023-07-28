@@ -1,0 +1,93 @@
+import { useEffect, useState } from "react"
+import { Artist, UserProfile } from "@/types"
+import { useSession } from "next-auth/react"
+
+export default function useSpotify(): {
+  topArtists: Artist[]
+  userProfile: UserProfile | null
+} {
+  const { data: session } = useSession()
+  const [topArtists, setTopArtists] = useState<Artist[]>([])
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+
+  useEffect(() => {
+    // fetch the user's profile data
+    const fetchSpotifyUserData = async () => {
+      try {
+        if (session && session.accessToken) {
+          const response = await fetch("https://api.spotify.com/v1/me", {
+            headers: {
+              Authorization: `Bearer ${session.accessToken}`,
+            },
+          })
+
+          if (!response.ok) {
+            // handle non-successful response (e.g. if access token is expired)
+            console.error("Failed to fetch Spotify user data:", response)
+            return
+          }
+
+          const data = await response.json()
+          // console.log(data)
+
+          // extracting relevant information from the response and setting it in the userProfile state
+          setUserProfile({
+            name: data.display_name,
+            email: data.email,
+            id: data.id,
+            userImage: data.images[1]?.url || null,
+          })
+        }
+      } catch (error) {
+        console.error("Error fetching Spotify user data:", error)
+      }
+    }
+
+    // fetch the user's top 10 artists data
+    const fetchSpotifyUserTopItems = async () => {
+      try {
+        if (session && session.accessToken) {
+          const response = await fetch(
+            "https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=10",
+            {
+              headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+              },
+            }
+          )
+
+          if (!response.ok) {
+            // handle non-successful response
+            console.error("Failed to fetch Spotify user data:", response)
+            return
+          }
+
+          const data = await response.json()
+          // console.log(data)
+
+          // mapping the retrieved data to the Artist interface and setting it in the topArtists state
+          const artists: Artist[] = data.items.map((artist: any) => {
+            const image = artist.images.length > 0 ? artist.images[0].url : null
+            const spotifyUrl = `https://open.spotify.com/artist/${artist.id}`
+            return {
+              name: artist.name,
+              image: image,
+              spotifyUrl: spotifyUrl,
+            }
+          })
+
+          setTopArtists(artists)
+        }
+      } catch (error) {
+        // handle network or other errors
+        console.error("Error fetching Spotify user data:", error)
+      }
+    }
+
+    // call the functions to fetch the data when the session changes
+    fetchSpotifyUserData()
+    fetchSpotifyUserTopItems()
+  }, [session])
+
+  return { topArtists, userProfile }
+}

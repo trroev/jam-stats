@@ -10,8 +10,7 @@ import openAiLogo from "@/lib/images/openAiLogo.svg"
 import loginButton from "@/lib/images/spotifyLoginButton.svg"
 import spotifyLogo from "@/lib/images/spotifyLogo.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
-import UserInfo from "@/components/UserInfo"
-import UserTopItems from "@/components/UserTopItems"
+import { SpotifyData } from "@/components/spotify-data"
 
 export default function Home() {
   const { data: session, status } = useSession()
@@ -50,8 +49,7 @@ export default function Home() {
       {status === "authenticated" && (
         <>
           <h2>Hello, {session?.user?.name}</h2>
-          {/* <UserInfo /> */}
-          <UserTopItems />
+          <SpotifyData />
           <button
             className="rounded-md p-2 border border-slate-900"
             onClick={(e) => {
