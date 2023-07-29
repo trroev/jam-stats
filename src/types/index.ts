@@ -4,6 +4,12 @@ export interface Artist {
   spotifyUrl: string
 }
 
+export interface Tracks {
+  name: string
+  artist: string
+  album: string
+}
+
 export interface UserProfile {
   name: string
   email: string

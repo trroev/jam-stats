@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react"
-import { Artist, UserProfile } from "@/types"
+import { Artist, Tracks, UserProfile } from "@/types"
 import { useSession } from "next-auth/react"
 
 export default function useSpotify(): {
   topArtists: Artist[]
+  topTracks: Tracks[]
   userProfile: UserProfile | null
 } {
   const { data: session } = useSession()
   const [topArtists, setTopArtists] = useState<Artist[]>([])
+  const [topTracks, setTopTracks] = useState<Tracks[]>([])
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
 
   useEffect(() => {
@@ -88,7 +90,7 @@ export default function useSpotify(): {
       try {
         if (session && session.accessToken) {
           const response = await fetch(
-            "https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=10",
+            "https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=10",
             {
               headers: {
                 Authorization: `Bearer ${session.accessToken}`,
@@ -105,18 +107,18 @@ export default function useSpotify(): {
           const data = await response.json()
           console.log("USER TOP TRACKS: ", data)
 
-          // // mapping the retrieved data to the Artist interface and setting it in the topArtists state
-          // const artists: Artist[] = data.items.map((artist: any) => {
-          //   const image = artist.images.length > 0 ? artist.images[0].url : null
-          //   const spotifyUrl = `https://open.spotify.com/artist/${artist.id}`
-          //   return {
-          //     name: artist.name,
-          //     image: image,
-          //     spotifyUrl: spotifyUrl,
-          //   }
-          // })
+          // mapping the retrieved data to the Artist interface and setting it in the topArtists state
+          const tracks: Tracks[] = data.items.map((track: any) => {
+            // const artist = track.artists.length > 0 ? track.artists[0].name : null
+            // const album = `https://open.spotify.com/artist/${artist.id}`
+            return {
+              name: track.name,
+              artist: track.artists[0].name,
+              album: track.album.name,
+            }
+          })
 
-          // setTopArtists(artists)
+          setTopTracks(tracks)
         }
       } catch (error) {
         // handle network or other errors
@@ -130,5 +132,5 @@ export default function useSpotify(): {
     fetchSpotifyUserTopTracks()
   }, [session])
 
-  return { topArtists, userProfile }
+  return { topArtists, topTracks, userProfile }
 }

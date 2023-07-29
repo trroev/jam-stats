@@ -3,7 +3,7 @@ import Image from "next/image"
 import useSpotify from "@/lib/hooks/useSpotify"
 
 export function SpotifyData() {
-  const { topArtists, userProfile } = useSpotify()
+  const { topArtists, topTracks, userProfile } = useSpotify()
 
   if (!userProfile) {
     return null
@@ -34,6 +34,19 @@ export function SpotifyData() {
                 )}
               </a>
               <span>{artist.name}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 className="flex justify-center">Your top 10 Tracks:</h2>
+        <ul className="grid grid-cols-4 gap-3">
+          {topTracks.map((track) => (
+            <li key={track.name} className="flex items-center">
+              <h3>
+                {track.name} by {track.artist}
+              </h3>
+              <h3>{track.album}</h3>
             </li>
           ))}
         </ul>
