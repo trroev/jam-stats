@@ -4,7 +4,7 @@ export interface Artist {
   spotifyUrl: string
 }
 
-export interface Tracks {
+export interface Track {
   name: string
   artist: string
   album: string
