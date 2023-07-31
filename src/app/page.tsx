@@ -32,16 +32,21 @@ export default function Home() {
           onClick={(e) => {
             e.preventDefault()
             // will update callbackUrl to user dashboard once that is set up
-            signIn("spotify", { callbackUrl: "/" })
+            signIn("spotify", { callbackUrl: "/me" })
           }}
         >
-          <Image height={60} src={loginButton} alt="login with spotify" />
+          <Image
+            priority
+            height={60}
+            src={loginButton}
+            alt="login with spotify"
+          />
         </button>
       )}
       {status === "authenticated" && (
         <>
           <h2>Hello, {session?.user?.name}</h2>
-          <SpotifyData />
+          <a href="/me">Go to Your Data</a>
           <button
             className="rounded-md p-2 border border-slate-900"
             onClick={(e) => {
@@ -55,6 +60,7 @@ export default function Home() {
       )}
       <LowerBanner />
       <Image
+        priority
         className="fixed -top-10 lg:top-unset lg:-bottom-40 -left-20 lg:-left-60 xl:-left-80 z-10 rotate-135 lg:rotate-45"
         width={waveSize.width}
         height={waveSize.height}
