@@ -2,20 +2,21 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import { Artist } from "@/types"
 import { motion } from "framer-motion"
 
+import useSpotify from "@/lib/hooks/useSpotify"
 import useWindowSize from "@/lib/hooks/useWindowSize"
 import wave from "@/lib/images/spotifyWaves.svg"
-import { SpotifyData } from "@/components/spotify-data"
+import ArtistCard from "@/components/artist-card"
+import TrackCard from "@/components/track-card"
 
 export default function Profile() {
   const [loading, setLoading] = useState(true)
+  const { topArtists, topTracks, userProfile } = useSpotify()
 
   const size = useWindowSize()
-  const waveSize = {
-    width: size.width ? Math.floor(size.width * 1.15) : 0,
-    height: size.height ? Math.floor(size.height * 1.15) : 0,
-  }
+  const waveHeight = Math.floor(size.height ? size.height * 1.2 : 0)
 
   useEffect(() => {
     setTimeout(() => {
@@ -44,17 +45,44 @@ export default function Profile() {
         />
       </div>
     )
+  } else if (userProfile == null) {
+    //should redirect to home with error message or something.
+    return null
   } else {
     return (
-      <main className="flex min-h-screen max-h-screen flex-col items-center justify-center p-24">
+      <main className="flex min-h-screen flex-col items-center justify-center p-24">
         <Image
+          priority
           src={wave}
           alt="wave"
-          className="absolute opacity-10 -z-40"
-          width={waveSize.width}
-          height={waveSize.height}
+          className="fixed opacity-10 -z-40 top-24"
+          height={waveHeight}
         />
-        <SpotifyData />
+        <div>
+          <h1 className="flex justify-center">Welcome, {userProfile.name}!</h1>
+          <div className="flex justify-between gap-4">
+            <div>
+              <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
+                Fav Artists
+              </h2>
+              <ul className="flex flex-col bg-transparentDarkGray border-black border-2 border-b">
+                {topArtists.map((artist: Artist) => (
+                  <ArtistCard key={artist.name} {...artist} />
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
+                Top Tracks
+              </h2>
+              <ul className="flex flex-col bg-transparentDarkGray gap-4">
+                {topTracks.map((track) => (
+                  <TrackCard key={track.name} {...track} />
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </main>
     )
   }
