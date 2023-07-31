@@ -13,8 +13,8 @@ export default function Profile() {
 
   const size = useWindowSize()
   const waveSize = {
-    width: size.width ? Math.floor(size.width * 0.35) : 0,
-    height: size.height ? Math.floor(size.height * 0.35) : 0,
+    width: size.width ? Math.floor(size.width * 1.15) : 0,
+    height: size.height ? Math.floor(size.height * 1.15) : 0,
   }
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function Profile() {
           transition={{
             duration: 3,
             ease: "backInOut",
-            times: [0, 0.2, 0.5, 0.8, 1],
+            times: 1,
             repeat: Infinity,
             repeatDelay: 1,
           }}
@@ -46,7 +46,14 @@ export default function Profile() {
     )
   } else {
     return (
-      <main className="flex min-h-screen max-h-screen flex-col items-center justify-center p-24 overflow-clip ">
+      <main className="flex min-h-screen max-h-screen flex-col items-center justify-center p-24">
+        <Image
+          src={wave}
+          alt="wave"
+          className="absolute opacity-10 -z-40"
+          width={waveSize.width}
+          height={waveSize.height}
+        />
         <SpotifyData />
       </main>
     )
