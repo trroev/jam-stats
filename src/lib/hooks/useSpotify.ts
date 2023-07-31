@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
-import { Artist, Tracks, UserProfile } from "@/types"
+import { Artist, Track, UserProfile } from "@/types"
 import { useSession } from "next-auth/react"
 
 export default function useSpotify(): {
   topArtists: Artist[]
-  topTracks: Tracks[]
+  topTracks: Track[]
   userProfile: UserProfile | null
 } {
   const { data: session } = useSession()
   const [topArtists, setTopArtists] = useState<Artist[]>([])
-  const [topTracks, setTopTracks] = useState<Tracks[]>([])
+  const [topTracks, setTopTracks] = useState<Track[]>([])
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
 
   useEffect(() => {
@@ -108,7 +108,7 @@ export default function useSpotify(): {
           console.log("USER TOP TRACKS: ", data)
 
           // mapping the retrieved data to the Artist interface and setting it in the topArtists state
-          const tracks: Tracks[] = data.items.map((track: any) => {
+          const tracks: Track[] = data.items.map((track: any) => {
             // const artist = track.artists.length > 0 ? track.artists[0].name : null
             // const album = `https://open.spotify.com/artist/${artist.id}`
             return {
