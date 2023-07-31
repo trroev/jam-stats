@@ -75,6 +75,8 @@ export default function useSpotify(): {
               name: artist.name,
               image: image,
               spotifyUrl: spotifyUrl,
+              popularity: artist.popularity,
+              genres: artist.genres,
             }
           })
 
@@ -115,6 +117,7 @@ export default function useSpotify(): {
               name: track.name,
               artist: track.artists[0].name,
               album: track.album.name,
+              image: track.album.images[0].url,
             }
           })
 
