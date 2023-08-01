@@ -3,12 +3,18 @@
 import Image from "next/image"
 import { Artist } from "@/types"
 
-export default function ArtistCard(artist: Artist) {
+interface ArtistCardProps{
+  artist: Artist
+  index: number
+}
+
+export default function ArtistCard({artist, index}: ArtistCardProps) {
   return (
     <li
       key={artist.name}
-      className="flex items-center justify-center relative w-80 h-fit border-b-2 border-black px-8 py-4"
+      className="flex items-center justify-center relative w-80 h-fit bg-darkGrayAccent border-2 border-black px-8 py-4"
     >
+      <span className="absolute -top-2 -left-1 text-3xl font-bold">{(index + 1)}</span>
       <div className="w-1/2">
         <h3 className="absolute top-8 left-4 text-2xl font-bold overflow-visible z-10">
           {artist.name}

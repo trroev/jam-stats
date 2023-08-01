@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { Artist } from "@/types"
 import { motion } from "framer-motion"
-
 import useSpotify from "@/lib/hooks/useSpotify"
 import useWindowSize from "@/lib/hooks/useWindowSize"
 import wave from "@/lib/images/spotifyWaves.svg"
@@ -21,7 +19,7 @@ export default function Profile() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false)
-    }, 3000)
+    }, 1500)
   }, [])
 
   if (loading) {
@@ -36,7 +34,7 @@ export default function Profile() {
             borderRadius: ["0%", "25%", "40%", "50%", "0%"],
           }}
           transition={{
-            duration: 3,
+            duration: 1.5,
             ease: "backInOut",
             times: 1,
             repeat: Infinity,
@@ -65,9 +63,9 @@ export default function Profile() {
               <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
                 Fav Artists
               </h2>
-              <ul className="flex flex-col bg-transparentDarkGray border-black border-2 border-b">
-                {topArtists.map((artist: Artist) => (
-                  <ArtistCard key={artist.name} {...artist} />
+              <ul className="flex flex-col gap-4">
+                {topArtists.map((artist, i) => (
+                  <ArtistCard key={artist.name} artist={artist} index={i} />
                 ))}
               </ul>
             </div>
@@ -75,9 +73,9 @@ export default function Profile() {
               <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
                 Top Tracks
               </h2>
-              <ul className="flex flex-col bg-transparentDarkGray gap-4">
-                {topTracks.map((track) => (
-                  <TrackCard key={track.name} {...track} />
+              <ul className="flex flex-col gap-4">
+                {topTracks.map((track, i) => (
+                  <TrackCard key={track.image} track={track} index={i} />
                 ))}
               </ul>
             </div>
