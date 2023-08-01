@@ -11,6 +11,7 @@ export default function useSpotify(): {
   const [topArtists, setTopArtists] = useState<Artist[]>([])
   const [topTracks, setTopTracks] = useState<Track[]>([])
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const [userShows, setUserShows] = useState([])
 
   useEffect(() => {
     // fetch the user's profile data
@@ -129,10 +130,42 @@ export default function useSpotify(): {
       }
     }
 
+    const fetchSpotifyShowData = async () => {
+      try {
+        if (session && session.accessToken) {
+          const response = await fetch("https://api.spotify.com/v1/me/shows?limit=10", {
+            headers: {
+              Authorization: `Bearer ${session.accessToken}`,
+            },
+          })
+
+          if (!response.ok) {
+            // handle non-successful response (e.g. if access token is expired)
+            console.error("Failed to fetch Spotify show data:", response)
+            return
+          }
+
+          const data = await response.json()
+          console.log("SHOW DATA: ", data)
+
+          // NEED TO SET SHOW DATA HERE
+          // setUserProfile({
+          //   name: data.display_name,
+          //   email: data.email,
+          //   id: data.id,
+          //   userImage: data.images[1]?.url || null,
+          // })
+        }
+      } catch (error) {
+        console.error("Error fetching Spotify user show data:", error)
+      }
+    }
+
     // call the functions to fetch the data when the session changes
     fetchSpotifyUserData()
     fetchSpotifyUserTopArtists()
     fetchSpotifyUserTopTracks()
+    fetchSpotifyShowData()
   }, [session])
 
   return { topArtists, topTracks, userProfile }

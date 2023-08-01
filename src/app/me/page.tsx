@@ -65,7 +65,7 @@ export default function Profile() {
               </h2>
               <ul className="flex flex-col gap-4">
                 {topArtists.map((artist, i) => (
-                  <ArtistCard key={artist.name} artist={artist} index={i} />
+                  <ArtistCard key={i} artist={artist} index={i} />
                 ))}
               </ul>
             </div>
@@ -75,7 +75,7 @@ export default function Profile() {
               </h2>
               <ul className="flex flex-col gap-4">
                 {topTracks.map((track, i) => (
-                  <TrackCard key={track.image} track={track} index={i} />
+                  <TrackCard key={i} track={track} index={i} />
                 ))}
               </ul>
             </div>
