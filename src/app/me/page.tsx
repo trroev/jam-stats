@@ -8,8 +8,7 @@ import { User } from "lucide-react"
 import useSpotify from "@/lib/hooks/useSpotify"
 import useWindowSize from "@/lib/hooks/useWindowSize"
 import wave from "@/lib/images/spotifyWaves.svg"
-import ArtistCard from "@/components/artist-card"
-import TrackCard from "@/components/track-card"
+import Card from "@/components/card"
 
 export default function Profile() {
   const [loading, setLoading] = useState(true)
@@ -87,7 +86,7 @@ export default function Profile() {
                     transition={{ duration: 0.4, delay: i * 0.2 }}
                     key={i}
                   >
-                    <ArtistCard artist={artist} index={i} />
+                    <Card artist={artist} index={i} />
                   </motion.li>
                 ))}
               </ul>
@@ -104,7 +103,7 @@ export default function Profile() {
                     transition={{ duration: 0.4, delay: i * 0.2 + 0.2 }}
                     key={i}
                   >
-                    <TrackCard track={track} index={i} />
+                    <Card track={track} index={i} />
                   </motion.li>
                 ))}
               </ul>
