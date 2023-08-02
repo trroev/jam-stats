@@ -9,7 +9,6 @@ import openAiLogo from "@/lib/images/openAiLogo.svg"
 import loginButton from "@/lib/images/spotifyLoginButton.svg"
 import spotifyLogo from "@/lib/images/spotifyLogo.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
-import { SpotifyData } from "@/components/spotify-data"
 
 export default function Home() {
   const { data: session, status } = useSession()
