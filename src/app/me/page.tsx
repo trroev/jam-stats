@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { motion } from "framer-motion"
+import { User } from "lucide-react"
+
 import useSpotify from "@/lib/hooks/useSpotify"
 import useWindowSize from "@/lib/hooks/useWindowSize"
 import wave from "@/lib/images/spotifyWaves.svg"
@@ -12,7 +14,6 @@ import TrackCard from "@/components/track-card"
 export default function Profile() {
   const [loading, setLoading] = useState(true)
   const { topArtists, topTracks, userProfile } = useSpotify()
-
   const size = useWindowSize()
   const waveHeight = Math.floor(size.height ? size.height * 1.2 : 0)
 
@@ -48,7 +49,7 @@ export default function Profile() {
     return null
   } else {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <main className="flex min-h-screen flex-col items-center justify-start py-8">
         <Image
           priority
           src={wave}
@@ -56,16 +57,38 @@ export default function Profile() {
           className="fixed opacity-10 -z-40 top-24"
           height={waveHeight}
         />
-        <div>
-          <h1 className="flex justify-center">Welcome, {userProfile.name}!</h1>
-          <div className="flex justify-between gap-4">
+        <div className="flex flex-col justify-center items-start gap-4">
+          <div className="flex justify-starts items-center rounded-full bg-black w-fit px-4 py-1 gap-2">
+            {userProfile.userImage ? (
+              <div className="w-6 h-6 rounded-full relative">
+                <Image
+                  className="rounded-full"
+                  src={userProfile.userImage}
+                  alt="profile"
+                  fill
+                  objectFit="cover"
+                />
+              </div>
+            ) : (
+              <User size={25} />
+            )}
+            <h1>{userProfile.name}</h1>
+          </div>
+          <div className="flex flex-col lg:flex-row justify-between gap-4">
             <div>
               <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
                 Fav Artists
               </h2>
               <ul className="flex flex-col gap-4">
                 {topArtists.map((artist, i) => (
-                  <ArtistCard key={i} artist={artist} index={i} />
+                  <motion.li
+                    initial={{ opacity: 0, x: -100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.2 }}
+                    key={i}
+                  >
+                    <ArtistCard artist={artist} index={i} />
+                  </motion.li>
                 ))}
               </ul>
             </div>
@@ -75,7 +98,14 @@ export default function Profile() {
               </h2>
               <ul className="flex flex-col gap-4">
                 {topTracks.map((track, i) => (
-                  <TrackCard key={i} track={track} index={i} />
+                  <motion.li
+                    initial={{ opacity: 0, x: -100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.2 + 0.2 }}
+                    key={i}
+                  >
+                    <TrackCard track={track} index={i} />
+                  </motion.li>
                 ))}
               </ul>
             </div>
