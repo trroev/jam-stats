@@ -11,6 +11,7 @@ export interface Track {
   artist: string
   album: string
   image: string
+  explicit?: boolean
 }
 
 export interface UserProfile {
@@ -18,4 +19,11 @@ export interface UserProfile {
   email: string
   id: string
   userImage: string | null
+}
+
+export interface UserShow {
+  name: string
+  image: string
+  spotifyUrl: string
+  explicit: boolean
 }

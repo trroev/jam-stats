@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react"
-import { Artist, Track, UserProfile } from "@/types"
+import { Artist, Track, UserProfile, UserShow } from "@/types"
 import { useSession } from "next-auth/react"
 
 export default function useSpotify(): {
   topArtists: Artist[]
   topTracks: Track[]
   userProfile: UserProfile | null
+  userShows: UserShow[]
 } {
   const { data: session } = useSession()
   const [topArtists, setTopArtists] = useState<Artist[]>([])
   const [topTracks, setTopTracks] = useState<Track[]>([])
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [userShows, setUserShows] = useState([])
+  const [userShows, setUserShows] = useState<UserShow[]>([])
+  const [userGenres, setUserGenres] = useState<string[]>([])
+  const metaGenres = ["rock", "pop", "country", "rap", "jazz", "indie", "bluegrass", "progressive", "metal", "classical", "alternative"]
+
+  function sortObjectByValues(obj: { [key: string]: number }) {
+    const sortedEntries = Object.entries(obj).sort((a, b) => b[1] - a[1]);
+    const sortedObject = Object.fromEntries(sortedEntries);
+    return sortedObject;
+  }
 
   useEffect(() => {
     // fetch the user's profile data
@@ -51,7 +60,7 @@ export default function useSpotify(): {
       try {
         if (session && session.accessToken) {
           const response = await fetch(
-            "https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=10",
+            "https://api.spotify.com/v1/me/top/artists?time_range=medium_term",
             {
               headers: {
                 Authorization: `Bearer ${session.accessToken}`,
@@ -67,6 +76,41 @@ export default function useSpotify(): {
 
           const data = await response.json()
           console.log("USER TOP ARTISTS: ", data)
+          const genres: { [key: string]: number } = data.items.reduce(
+            (acc: any, artist: any) => {
+              artist.genres.forEach((genre: string) => {
+                if (acc[genre]){
+                  acc[genre] += 1
+                  if(genre.split(" ").length > 1){
+                    const splitGenre = genre.split(" ")
+                    splitGenre.forEach((g: string) => {
+                      if (acc[g]){
+                        acc[g] += 1
+                      } else {
+                        metaGenres.includes(g) ? acc[g] = 1 : null
+                      }
+                    })
+                  }
+                } else {
+                  acc[genre] = 1
+                  if(genre.split(" ").length > 1){
+                    const splitGenre = genre.split(" ")
+                    splitGenre.forEach((g: string) => {
+                      if (acc[g]){
+                        acc[g] += 1
+                      } else {
+                        metaGenres.includes(g) ? acc[g] = 1 : null
+                      }
+                    })
+                  }
+                }
+              })
+              const sortedGenres = sortObjectByValues(acc)
+              return sortedGenres
+            },
+            {}
+          )
+          console.log("GENRES: ", genres)
 
           // mapping the retrieved data to the Artist interface and setting it in the topArtists state
           const artists: Artist[] = data.items.map((artist: any) => {
@@ -93,7 +137,7 @@ export default function useSpotify(): {
       try {
         if (session && session.accessToken) {
           const response = await fetch(
-            "https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=10",
+            "https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=20",
             {
               headers: {
                 Authorization: `Bearer ${session.accessToken}`,
@@ -110,15 +154,13 @@ export default function useSpotify(): {
           const data = await response.json()
           console.log("USER TOP TRACKS: ", data)
 
-          // mapping the retrieved data to the Artist interface and setting it in the topArtists state
           const tracks: Track[] = data.items.map((track: any) => {
-            // const artist = track.artists.length > 0 ? track.artists[0].name : null
-            // const album = `https://open.spotify.com/artist/${artist.id}`
             return {
               name: track.name,
               artist: track.artists[0].name,
               album: track.album.name,
               image: track.album.images[0].url,
+              explicit: track.explicit,
             }
           })
 
@@ -133,7 +175,7 @@ export default function useSpotify(): {
     const fetchSpotifyShowData = async () => {
       try {
         if (session && session.accessToken) {
-          const response = await fetch("https://api.spotify.com/v1/me/shows?limit=10", {
+          const response = await fetch("https://api.spotify.com/v1/me/shows", {
             headers: {
               Authorization: `Bearer ${session.accessToken}`,
             },
@@ -147,14 +189,19 @@ export default function useSpotify(): {
 
           const data = await response.json()
           console.log("SHOW DATA: ", data)
-
-          // NEED TO SET SHOW DATA HERE
-          // setUserProfile({
-          //   name: data.display_name,
-          //   email: data.email,
-          //   id: data.id,
-          //   userImage: data.images[1]?.url || null,
-          // })
+          
+          const shows: UserShow[] = data.items.map((item: any) => {
+            const image = item.show.images.length > 0 ? item.show.images[0].url : null
+            const spotifyUrl = `https://open.spotify.com/show/${item.show.id}`
+            return {
+              name: item.show.name,
+              image: image,
+              spotifyUrl: spotifyUrl,
+              explicit: item.show.explicit,
+            }
+          })
+          
+          setUserShows(shows)
         }
       } catch (error) {
         console.error("Error fetching Spotify user show data:", error)
@@ -168,5 +215,5 @@ export default function useSpotify(): {
     fetchSpotifyShowData()
   }, [session])
 
-  return { topArtists, topTracks, userProfile }
+  return { topArtists, topTracks, userProfile, userShows }
 }
