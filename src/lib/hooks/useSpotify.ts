@@ -2,19 +2,23 @@ import { useEffect, useState } from "react"
 import { Artist, Track, UserProfile, UserShow } from "@/types"
 import { useSession } from "next-auth/react"
 
+const metaGenres = ["rock", "pop", "country", "rap", "jazz", "indie", "bluegrass", "progressive", "metal", "classical", "alternative"]
+
 export default function useSpotify(): {
   topArtists: Artist[]
   topTracks: Track[]
   userProfile: UserProfile | null
   userShows: UserShow[]
+  userGenres: { [key: string]: number}
+  showTitleList: string[]
 } {
   const { data: session } = useSession()
   const [topArtists, setTopArtists] = useState<Artist[]>([])
   const [topTracks, setTopTracks] = useState<Track[]>([])
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [userShows, setUserShows] = useState<UserShow[]>([])
-  const [userGenres, setUserGenres] = useState<string[]>([])
-  const metaGenres = ["rock", "pop", "country", "rap", "jazz", "indie", "bluegrass", "progressive", "metal", "classical", "alternative"]
+  const [userGenres, setUserGenres] = useState<{ [key: string]: number}>({})
+  const showTitleList = userShows.map((show: UserShow) => show.name)
 
   function sortObjectByValues(obj: { [key: string]: number }) {
     const sortedEntries = Object.entries(obj).sort((a, b) => b[1] - a[1]);
@@ -111,6 +115,7 @@ export default function useSpotify(): {
             {}
           )
           console.log("GENRES: ", genres)
+          setUserGenres(genres)
 
           // mapping the retrieved data to the Artist interface and setting it in the topArtists state
           const artists: Artist[] = data.items.map((artist: any) => {
@@ -215,5 +220,5 @@ export default function useSpotify(): {
     fetchSpotifyShowData()
   }, [session])
 
-  return { topArtists, topTracks, userProfile, userShows }
+  return { topArtists, topTracks, userProfile, userShows, userGenres, showTitleList }
 }
