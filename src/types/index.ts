@@ -12,6 +12,7 @@ export interface Track {
   album: string
   image: string
   popularity: number
+  spotifyUrl: string
   explicit?: boolean
 }
 

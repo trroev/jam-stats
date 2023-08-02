@@ -177,6 +177,7 @@ export default function useSpotify(): {
               album: track.album.name,
               image: track.album.images[0].url,
               popularity: track.popularity,
+              spotifyUrl: track.external_urls.spotify,
               explicit: track.explicit,
             }
           })
