@@ -11,6 +11,7 @@ export interface Track {
   artist: string
   album: string
   image: string
+  popularity: number
   explicit?: boolean
 }
 

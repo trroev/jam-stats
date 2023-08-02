@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import { Artist, Track, UserProfile, UserShow } from "@/types"
 import { useSession } from "next-auth/react"
-
-const metaGenres = ["rock", "pop", "country", "rap", "jazz", "indie", "bluegrass", "progressive", "metal", "classical", "alternative"]
+import { sortObjectByValues, metaGenres, popularityDescription, getMostAndLeastPopularTrack, getMostAndLeastPopularArtist } from "../util/util"
 
 export default function useSpotify(): {
   topArtists: Artist[]
@@ -11,6 +10,13 @@ export default function useSpotify(): {
   userShows: UserShow[]
   userGenres: { [key: string]: number}
   showTitleList: string[]
+  averageTrackPopularity: number
+  averageArtistPopularity: number
+  tasteDescription: string
+  mostPopularTrack: Track
+  leastPopularTrack: Track
+  mostPopularArtist: Artist
+  leastPopularArtist: Artist
 } {
   const { data: session } = useSession()
   const [topArtists, setTopArtists] = useState<Artist[]>([])
@@ -19,12 +25,17 @@ export default function useSpotify(): {
   const [userShows, setUserShows] = useState<UserShow[]>([])
   const [userGenres, setUserGenres] = useState<{ [key: string]: number}>({})
   const showTitleList = userShows.map((show: UserShow) => show.name)
-
-  function sortObjectByValues(obj: { [key: string]: number }) {
-    const sortedEntries = Object.entries(obj).sort((a, b) => b[1] - a[1]);
-    const sortedObject = Object.fromEntries(sortedEntries);
-    return sortedObject;
-  }
+  const averageTrackPopularity = topTracks.reduce((acc: number, track: Track) => {
+    acc += track.popularity
+    return acc
+  }, 0) / topTracks.length
+  const averageArtistPopularity = topArtists.reduce((acc: number, artist: Artist) => {
+    acc += artist.popularity
+    return acc
+  }, 0) / topArtists.length
+  const tasteDescription = popularityDescription(Math.floor(averageArtistPopularity))
+  const [mostPopularTrack, leastPopularTrack] = getMostAndLeastPopularTrack(topTracks)
+  const [mostPopularArtist, leastPopularArtist] = getMostAndLeastPopularArtist(topArtists)
 
   useEffect(() => {
     // fetch the user's profile data
@@ -165,6 +176,7 @@ export default function useSpotify(): {
               artist: track.artists[0].name,
               album: track.album.name,
               image: track.album.images[0].url,
+              popularity: track.popularity,
               explicit: track.explicit,
             }
           })
@@ -212,6 +224,7 @@ export default function useSpotify(): {
         console.error("Error fetching Spotify user show data:", error)
       }
     }
+    console.log(tasteDescription)
 
     // call the functions to fetch the data when the session changes
     fetchSpotifyUserData()
@@ -220,5 +233,5 @@ export default function useSpotify(): {
     fetchSpotifyShowData()
   }, [session])
 
-  return { topArtists, topTracks, userProfile, userShows, userGenres, showTitleList }
+  return { topArtists, topTracks, userProfile, userShows, userGenres, showTitleList, averageTrackPopularity, averageArtistPopularity, tasteDescription, mostPopularTrack, leastPopularTrack, mostPopularArtist, leastPopularArtist }
 }
