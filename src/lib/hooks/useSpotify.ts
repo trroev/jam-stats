@@ -12,7 +12,6 @@ export default function useSpotify(): {
   showTitleList: string[]
   averageTrackPopularity: number
   averageArtistPopularity: number
-  tasteDescription: string
   mostPopularTrack: Track
   leastPopularTrack: Track
   mostPopularArtist: Artist
@@ -234,5 +233,5 @@ export default function useSpotify(): {
     fetchSpotifyShowData()
   }, [session])
 
-  return { topArtists, topTracks, userProfile, userShows, userGenres, showTitleList, averageTrackPopularity, averageArtistPopularity, tasteDescription, mostPopularTrack, leastPopularTrack, mostPopularArtist, leastPopularArtist }
+  return { topArtists, topTracks, userProfile, userShows, userGenres, showTitleList, averageTrackPopularity, averageArtistPopularity, mostPopularTrack, leastPopularTrack, mostPopularArtist, leastPopularArtist }
 }
