@@ -29,3 +29,18 @@ export interface UserShow {
   spotifyUrl: string
   explicit: boolean
 }
+
+export interface TopTrackProps{
+  topTracks: Track[]
+  averageTrackPopularity: number
+  trackDescription: string
+}
+
+export interface FavArtistProps{
+  topArtists: Artist[]
+  averageArtistPopularity: number
+  artistDescription: string
+}
+export interface UserPillProps{
+  userProfile: UserProfile
+}
