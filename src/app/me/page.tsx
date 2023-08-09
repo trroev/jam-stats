@@ -1,8 +1,16 @@
 "use client"
 
+import { time } from "console"
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { FavArtistProps, TopTrackProps, UserPillProps } from "@/types"
+import {
+  Artist,
+  FavArtistProps,
+  TimeFrame,
+  TopTrackProps,
+  Track,
+  UserPillProps,
+} from "@/types"
 import { motion } from "framer-motion"
 import { User } from "lucide-react"
 
@@ -14,23 +22,20 @@ import Card from "@/components/card"
 
 export default function Profile() {
   const [loading, setLoading] = useState(true)
-  const {
-    topArtists,
-    topTracks,
-    userProfile,
-    averageArtistPopularity,
-    averageTrackPopularity,
-  } = useSpotify()
+
+  const user = useSpotify()
   const size = useWindowSize()
   const waveHeight = Math.floor(size.height ? size.height * 1.2 : 0)
-  const artistDescription = popularityDescription(averageArtistPopularity)
-  const trackDescription = popularityDescription(averageTrackPopularity)
+  const artistDescription = popularityDescription(user.averageArtistPopularity)
+  const trackDescription = popularityDescription(user.averageTrackPopularity)
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false)
     }, 1500)
   }, [])
+
+  console.log(user)
 
   if (loading) {
     return (
@@ -53,7 +58,7 @@ export default function Profile() {
         />
       </div>
     )
-  } else if (userProfile == null) {
+  } else if (user.userProfile == null) {
     //should redirect to home with error message or something.
     return null
   } else {
@@ -67,16 +72,24 @@ export default function Profile() {
           height={waveHeight}
         />
         <div className="flex flex-col justify-center items-start gap-8">
-          <UserPill userProfile={userProfile} />
+          <UserPill userProfile={user.userProfile} />
           <div className="flex flex-col justify-between gap-4">
             <FavArtists
-              topArtists={topArtists}
-              averageArtistPopularity={averageArtistPopularity}
+              topArtists={{
+                short: user.topArtistsShort,
+                medium: user.topArtistsMedium,
+                long: user.topArtistsLong,
+              }}
+              averageArtistPopularity={user.averageArtistPopularity}
               artistDescription={artistDescription}
             />
             <TopTracks
-              topTracks={topTracks}
-              averageTrackPopularity={averageTrackPopularity}
+              topTracks={{
+                short: user.topTracksShort,
+                medium: user.topTracksMedium,
+                long: user.topTracksLong,
+              }}
+              averageTrackPopularity={user.averageTrackPopularity}
               trackDescription={trackDescription}
             />
           </div>
@@ -112,13 +125,69 @@ const FavArtists = ({
   averageArtistPopularity,
   artistDescription,
 }: FavArtistProps) => {
+  const [artistsToDisplay, setArtistsToDisplay] = useState<{
+    time: "long" | "medium" | "short"
+    artists: Artist[]
+  }>({ time: "long", artists: topArtists.long })
+
   return (
     <div>
-      <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
-        Fav Artists
-      </h2>
+      <div className="flex gap-4">
+        <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
+          Fav Artists
+        </h2>
+        <button
+          className={
+            artistsToDisplay.time === "long" ? "text-greenAccent font-bold" : ""
+          }
+          onClick={() => {
+            if (artistsToDisplay.time === "long") {
+              return
+            } else {
+              setArtistsToDisplay({ time: "long", artists: topArtists.long })
+            }
+          }}
+        >
+          All Time
+        </button>
+        <button
+          className={
+            artistsToDisplay.time === "medium"
+              ? "text-greenAccent font-bold"
+              : ""
+          }
+          onClick={() => {
+            if (artistsToDisplay.time === "medium") {
+              return
+            } else {
+              setArtistsToDisplay({
+                time: "medium",
+                artists: topArtists.medium,
+              })
+            }
+          }}
+        >
+          Last 6 Months
+        </button>
+        <button
+          className={
+            artistsToDisplay.time === "short"
+              ? "text-greenAccent font-bold"
+              : ""
+          }
+          onClick={() => {
+            if (artistsToDisplay.time === "short") {
+              return
+            } else {
+              setArtistsToDisplay({ time: "short", artists: topArtists.short })
+            }
+          }}
+        >
+          Last 4 Weeks
+        </button>
+      </div>
       <ul className="grid grid-flow-row grid-cols-4 gap-8 justify-items-end">
-        {topArtists.slice(0, 5).map((artist, i) => (
+        {artistsToDisplay.artists.map((artist, i) => (
           <motion.li
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
@@ -128,18 +197,21 @@ const FavArtists = ({
             <Card artist={artist} index={i} />
           </motion.li>
         ))}
-        <motion.li
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3, delay: 5 * 0.2 }}
-          className="col-span-3 px-32 flex justify-center items-center bg-darkGrayAccent rounded-md border-black border-2 gap-8"
-        >
-          <h2 className="text-2xl font-bold bg-greenAccent text-black p-6 rounded-full">
-            {averageArtistPopularity.toFixed(0)}
-          </h2>
-          <span className="text-sm">{artistDescription}</span>
-        </motion.li>
       </ul>
+      <motion.li
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.3,
+          delay: (artistsToDisplay.artists.length + 1) * 0.2,
+        }}
+        className="w-full mt-8 flex justify-center items-center bg-darkGrayAccent rounded-md border-black border-2 gap-8"
+      >
+        <h2 className="text-2xl font-bold bg-greenAccent text-black p-6 rounded-full">
+          {averageArtistPopularity.toFixed(0)}
+        </h2>
+        <span className="text-sm">{artistDescription}</span>
+      </motion.li>
     </div>
   )
 }
@@ -149,24 +221,66 @@ const TopTracks = ({
   averageTrackPopularity,
   trackDescription,
 }: TopTrackProps) => {
+  const [tracksToDisplay, setTracksToDisplay] = useState<{
+    time: "long" | "medium" | "short"
+    tracks: Track[]
+  }>({ time: "long", tracks: topTracks.long })
   return (
     <div>
-      <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
-        Top Tracks
-      </h2>
-      <ul className="grid grid-flow-row grid-cols-4 gap-8 justify-items-end">
-        <motion.li
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3, delay: 0 }}
-          className="col-span-3 px-32 flex justify-center items-center bg-darkGrayAccent rounded-md border-black border-2 gap-8"
+      <div className="flex gap-4">
+        <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
+          Fav Artists
+        </h2>
+        <button
+          className={
+            tracksToDisplay.time === "long" ? "text-greenAccent font-bold" : ""
+          }
+          onClick={() => {
+            if (tracksToDisplay.time === "long") {
+              return
+            } else {
+              setTracksToDisplay({ time: "long", tracks: topTracks.long })
+            }
+          }}
         >
-          <h2 className="text-2xl font-bold bg-greenAccent text-black p-6 rounded-full">
-            {averageTrackPopularity.toFixed(0)}
-          </h2>
-          <span className="text-sm">{trackDescription}</span>
-        </motion.li>
-        {topTracks.slice(0, 5).map((track, i) => (
+          All Time
+        </button>
+        <button
+          className={
+            tracksToDisplay.time === "medium"
+              ? "text-greenAccent font-bold"
+              : ""
+          }
+          onClick={() => {
+            if (tracksToDisplay.time === "medium") {
+              return
+            } else {
+              setTracksToDisplay({
+                time: "medium",
+                tracks: topTracks.medium,
+              })
+            }
+          }}
+        >
+          Last 6 Months
+        </button>
+        <button
+          className={
+            tracksToDisplay.time === "short" ? "text-greenAccent font-bold" : ""
+          }
+          onClick={() => {
+            if (tracksToDisplay.time === "short") {
+              return
+            } else {
+              setTracksToDisplay({ time: "short", tracks: topTracks.short })
+            }
+          }}
+        >
+          Last 4 Weeks
+        </button>
+      </div>
+      <ul className="grid grid-flow-row grid-cols-4 gap-8 justify-items-end">
+        {tracksToDisplay.tracks.map((track, i) => (
           <motion.li
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
@@ -181,6 +295,20 @@ const TopTracks = ({
           </motion.li>
         ))}
       </ul>
+      <motion.li
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.3,
+          delay: (tracksToDisplay.tracks.length + 1) * 0.2,
+        }}
+        className="w-full mt-8 flex justify-center items-center bg-darkGrayAccent rounded-md border-black border-2 gap-8"
+      >
+        <h2 className="text-2xl font-bold bg-greenAccent text-black p-6 rounded-full">
+          {averageTrackPopularity.toFixed(0)}
+        </h2>
+        <span className="text-sm">{trackDescription}</span>
+      </motion.li>
     </div>
   )
 }

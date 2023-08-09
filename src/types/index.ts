@@ -6,6 +6,12 @@ export interface Artist {
   popularity: number
 }
 
+export interface TopArtists {
+  short: Artist[],
+  medium: Artist[],
+  long: Artist[]
+}
+
 export interface Track {
   name: string
   artist: string
@@ -14,6 +20,12 @@ export interface Track {
   popularity: number
   spotifyUrl: string
   explicit?: boolean
+}
+
+export interface TopTracks {
+  short: Track[],
+  medium: Track[],
+  long: Track[]
 }
 
 export interface UserProfile {
@@ -30,14 +42,17 @@ export interface UserShow {
   explicit: boolean
 }
 
+export type TimeFrame = "allTime" | "lastSixMonths" | "lastFourWeeks"
+
 export interface TopTrackProps{
-  topTracks: Track[]
+  topTracks: TopTracks
   averageTrackPopularity: number
   trackDescription: string
 }
 
+
 export interface FavArtistProps{
-  topArtists: Artist[]
+  topArtists: TopArtists
   averageArtistPopularity: number
   artistDescription: string
 }
