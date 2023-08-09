@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { Artist, Track, UserProfile, UserShow } from "@/types"
+import { Artist, Track, UserProfile, Show } from "@/types"
 import { useSession } from "next-auth/react"
-import { sortObjectByValues, metaGenres, popularityDescription, getMostAndLeastPopularTrack, getMostAndLeastPopularArtist } from "../util/util"
+import { sortObjectByValues, metaGenres, popularityDescription } from "../util/util"
 
 export default function useSpotify(): {
   topArtistsShort:Artist[]
@@ -11,8 +11,8 @@ export default function useSpotify(): {
   topTracksMedium: Track[]
   topTracksLong: Track[]
   userProfile: UserProfile | null
-  userShows: UserShow[]
-  userGenres: { [key: string]: number}
+  shows: Show[]
+  userGenres: [string, number][]
   showTitleList: string[]
   averageTrackPopularity: number
   averageArtistPopularity: number
@@ -25,9 +25,9 @@ export default function useSpotify(): {
   const [topTracksMedium, setTopTracksMedium] = useState<Track[]>([])
   const [topTracksLong, setTopTracksLong] = useState<Track[]>([])
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [userShows, setUserShows] = useState<UserShow[]>([])
-  const [userGenres, setUserGenres] = useState<{ [key: string]: number}>({})
-  const showTitleList = userShows.map((show: UserShow) => show.name)
+  const [shows, setshows] = useState<Show[]>([])
+  const [userGenres, setUserGenres] = useState<[string, number][]>([])
+  const showTitleList = shows.map((show: Show) => show.name)
   const averageTrackPopularity = topTracksLong.reduce((acc: number, track: Track) => {
     acc += track.popularity
     return acc
@@ -172,7 +172,7 @@ export default function useSpotify(): {
 
           const data = await response.json()
           console.log("USER TOP ARTISTS: ", data)
-          const genres: { [key: string]: number } = data.items.reduce(
+          const genres: [string, number][] = data.items.reduce(
             (acc: any, artist: any) => {
               artist.genres.forEach((genre: string) => {
                 if (acc[genre]){
@@ -366,7 +366,7 @@ export default function useSpotify(): {
           const data = await response.json()
           console.log("SHOW DATA: ", data)
           
-          const shows: UserShow[] = data.items.map((item: any) => {
+          const shows: Show[] = data.items.map((item: any) => {
             const image = item.show.images.length > 0 ? item.show.images[0].url : null
             const spotifyUrl = `https://open.spotify.com/show/${item.show.id}`
             return {
@@ -377,7 +377,7 @@ export default function useSpotify(): {
             }
           })
           
-          setUserShows(shows)
+          setshows(shows)
         }
       } catch (error) {
         console.error("Error fetching Spotify user show data:", error)
@@ -395,5 +395,5 @@ export default function useSpotify(): {
     fetchSpotifyShowData()
   }, [session])
 
-  return { topArtistsShort, topArtistsMedium, topArtistsLong, topTracksShort, topTracksMedium, topTracksLong, userProfile, userShows, userGenres, showTitleList, averageTrackPopularity, averageArtistPopularity }
+  return { topArtistsShort, topArtistsMedium, topArtistsLong, topTracksShort, topTracksMedium, topTracksLong, userProfile, shows, userGenres, showTitleList, averageTrackPopularity, averageArtistPopularity }
 }

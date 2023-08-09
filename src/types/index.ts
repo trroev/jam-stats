@@ -35,7 +35,7 @@ export interface UserProfile {
   userImage: string | null
 }
 
-export interface UserShow {
+export interface Show {
   name: string
   image: string
   spotifyUrl: string

@@ -5,6 +5,7 @@ import Image from "next/image"
 import {
   Artist,
   FavArtistProps,
+  Show,
   TopTrackProps,
   Track,
   UserPillProps,
@@ -90,6 +91,7 @@ export default function Profile() {
               averageTrackPopularity={user.averageTrackPopularity}
               trackDescription={trackDescription}
             />
+            <Podcasts shows={user.shows} />
           </div>
         </div>
       </main>
@@ -313,6 +315,28 @@ const TopTracks = ({
         </h2>
         <span className="text-sm">{trackDescription}</span>
       </motion.li>
+    </div>
+  )
+}
+
+const Podcasts = ({ shows }: { shows: Show[] }) => {
+  return (
+    <div>
+      <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
+        Podcasts
+      </h2>
+      <ul className="grid grid-flow-row grid-cols-4 gap-8 justify-items-end">
+        {shows.map((show, i) => (
+          <motion.li
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: i * 0.2 }}
+            key={i}
+          >
+            <Card show={show} index={i} />
+          </motion.li>
+        ))}
+      </ul>
     </div>
   )
 }

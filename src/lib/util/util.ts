@@ -3,8 +3,8 @@ import { Type } from "typescript";
 
 export function sortObjectByValues(obj: { [key: string]: number }) {
     const sortedEntries = Object.entries(obj).sort((a, b) => b[1] - a[1]);
-    const sortedObject = Object.fromEntries(sortedEntries);
-    return sortedObject;
+
+    return sortedEntries;
   }
 
 export const metaGenres = ["rock", "pop", "country", "rap", "jazz", "indie", "bluegrass", "progressive", "metal", "classical", "alternative"]
