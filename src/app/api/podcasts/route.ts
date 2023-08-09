@@ -9,17 +9,13 @@ const apiConfig = new Configuration({
 
 const openai = new OpenAIApi(apiConfig)
 
-const bands = [
-  "Thee Oh Sees",
-  "Ty Segall",
-  "La Luz",
-  "The Brian Jonestown Massacre",
-  "Cage the Elephant",
-  "Black Lips",
-  "Allah-Lahs",
-  "King Gizzard and the Lizard Wizard",
-  "Parquet Courts",
-  "The Murlocs",
+const podcasts = [
+  "Morning Joe",
+  "The MinnMax Show",
+  "Pod Save America",
+  "Sci Show Tangents",
+  "Smartless",
+  "Behind the Bastards",
 ]
 
 // function buildPrompt(prompt: string) {
@@ -40,14 +36,17 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "system",
-        content: `When I give you an array of my favorite bands, will you generate 5 recommendations for bands based on the given array.
-        The recommendations that you give should be unique, and not included in the given array.
-        Provide a short summary explaining why you are making the recommendation.
-        Adopt the persona of a music snob, making sure to tease me about my favorite bands in a playful way.`,
+        content: `I am going to give you an array of my favorite podcasts.
+        Adopt the persona of someone who who like these shows.
+        Provide your persona's name, age, occupation, and interests.
+        As that persona, answer the following questions delimited by triple quotes:
+        """1. Do you believe in astrology?
+        2. What was your high school gpa?
+        3. Were your parents divorced?"""`,
       },
       {
         role: "user",
-        content: `${bands}`,
+        content: `${podcasts}`,
       },
     ],
     max_tokens: 500,
