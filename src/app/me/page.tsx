@@ -1,12 +1,10 @@
 "use client"
 
-import { time } from "console"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import {
   Artist,
   FavArtistProps,
-  TimeFrame,
   TopTrackProps,
   Track,
   UserPillProps,
@@ -138,7 +136,9 @@ const FavArtists = ({
         </h2>
         <button
           className={
-            artistsToDisplay.time === "long" ? "text-greenAccent font-bold" : ""
+            artistsToDisplay.time === "long"
+              ? "text-greenAccent font-bold underline"
+              : ""
           }
           onClick={() => {
             if (artistsToDisplay.time === "long") {
@@ -153,7 +153,7 @@ const FavArtists = ({
         <button
           className={
             artistsToDisplay.time === "medium"
-              ? "text-greenAccent font-bold"
+              ? "text-greenAccent font-bold underline"
               : ""
           }
           onClick={() => {
@@ -172,7 +172,7 @@ const FavArtists = ({
         <button
           className={
             artistsToDisplay.time === "short"
-              ? "text-greenAccent font-bold"
+              ? "text-greenAccent font-bold underline"
               : ""
           }
           onClick={() => {
@@ -229,11 +229,13 @@ const TopTracks = ({
     <div>
       <div className="flex gap-4">
         <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
-          Fav Artists
+          Top Tracks
         </h2>
         <button
           className={
-            tracksToDisplay.time === "long" ? "text-greenAccent font-bold" : ""
+            tracksToDisplay.time === "long"
+              ? "text-greenAccent font-bold underline"
+              : ""
           }
           onClick={() => {
             if (tracksToDisplay.time === "long") {
@@ -248,7 +250,7 @@ const TopTracks = ({
         <button
           className={
             tracksToDisplay.time === "medium"
-              ? "text-greenAccent font-bold"
+              ? "text-greenAccent font-bold underline"
               : ""
           }
           onClick={() => {
@@ -266,7 +268,9 @@ const TopTracks = ({
         </button>
         <button
           className={
-            tracksToDisplay.time === "short" ? "text-greenAccent font-bold" : ""
+            tracksToDisplay.time === "short"
+              ? "text-greenAccent font-bold underline"
+              : ""
           }
           onClick={() => {
             if (tracksToDisplay.time === "short") {
