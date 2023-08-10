@@ -137,134 +137,149 @@ export default function useSpotify(): {
       })
     }
 
-    const fetchSpotifyUserTopArtistsShort = async () => {
-      try {
-        if (session && session.accessToken) {
-          const response = await fetch(
-            "https://api.spotify.com/v1/me/top/artists?time_range=short_term",
-            {
-              headers: {
-                Authorization: `Bearer ${session.accessToken}`,
-              },
-            }
-          )
-
-          if (!response.ok) {
-            // handle non-successful response
-            console.error("Failed to fetch Spotify user data:", response)
-            return
-          }
-
-          const data = await response.json()
-
-          // mapping the retrieved data to the Artist interface and setting it in the topArtists state
-          const artists: Artist[] = mapArtists(data.items)
-
-          setTopArtistsShort(artists)
+    // fetch user's top Spotify Artists for different time ranges
+    const fetchSpotifyTopArtists = async (
+      timeRange: string,
+      stateSetter: Function
+    ) => {
+      await fetchSpotifyData(
+        `https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}`,
+        (data: any) => {
+          console.log("TOP ARTISTS DATA:", data)
+          stateSetter(mapArtists(data.items))
         }
-      } catch (error) {
-        // handle network or other errors
-        console.error("Error fetching Spotify user data:", error)
-      }
+      )
     }
-    // fetch the user's top 10 artists data
-    const fetchSpotifyUserTopArtistsMedium = async () => {
-      try {
-        if (session && session.accessToken) {
-          const response = await fetch(
-            "https://api.spotify.com/v1/me/top/artists?time_range=medium_term",
-            {
-              headers: {
-                Authorization: `Bearer ${session.accessToken}`,
-              },
-            }
-          )
 
-          if (!response.ok) {
-            // handle non-successful response
-            console.error("Failed to fetch Spotify user data:", response)
-            return
-          }
+    // const fetchSpotifyUserTopArtistsShort = async () => {
+    //   try {
+    //     if (session && session.accessToken) {
+    //       const response = await fetch(
+    //         "https://api.spotify.com/v1/me/top/artists?time_range=short_term",
+    //         {
+    //           headers: {
+    //             Authorization: `Bearer ${session.accessToken}`,
+    //           },
+    //         }
+    //       )
 
-          const data = await response.json()
-          console.log("USER TOP ARTISTS: ", data)
+    //       if (!response.ok) {
+    //         // handle non-successful response
+    //         console.error("Failed to fetch Spotify user data:", response)
+    //         return
+    //       }
 
-          // mapping the retrieved data to the Artist interface and setting it in the topArtists state
-          const artists: Artist[] = mapArtists(data.items)
+    //       const data = await response.json()
 
-          setTopArtistsMedium(artists)
-        }
-      } catch (error) {
-        // handle network or other errors
-        console.error("Error fetching Spotify user data:", error)
-      }
-    }
-    const fetchSpotifyUserTopArtistsLong = async () => {
-      try {
-        if (session && session.accessToken) {
-          const response = await fetch(
-            "https://api.spotify.com/v1/me/top/artists?time_range=long_term",
-            {
-              headers: {
-                Authorization: `Bearer ${session.accessToken}`,
-              },
-            }
-          )
+    //       // mapping the retrieved data to the Artist interface and setting it in the topArtists state
+    //       const artists: Artist[] = mapArtists(data.items)
 
-          if (!response.ok) {
-            // handle non-successful response
-            console.error("Failed to fetch Spotify user data:", response)
-            return
-          }
+    //       setTopArtistsShort(artists)
+    //     }
+    //   } catch (error) {
+    //     // handle network or other errors
+    //     console.error("Error fetching Spotify user data:", error)
+    //   }
+    // }
+    // // fetch the user's top 10 artists data
+    // const fetchSpotifyUserTopArtistsMedium = async () => {
+    //   try {
+    //     if (session && session.accessToken) {
+    //       const response = await fetch(
+    //         "https://api.spotify.com/v1/me/top/artists?time_range=medium_term",
+    //         {
+    //           headers: {
+    //             Authorization: `Bearer ${session.accessToken}`,
+    //           },
+    //         }
+    //       )
 
-          const data = await response.json()
-          console.log("USER TOP ARTISTS: ", data)
-          const genres: [string, number][] = data.items.reduce(
-            (acc: any, artist: any) => {
-              artist.genres.forEach((genre: string) => {
-                if (acc[genre]) {
-                  acc[genre] += 1
-                  if (genre.split(" ").length > 1) {
-                    const splitGenre = genre.split(" ")
-                    splitGenre.forEach((g: string) => {
-                      if (acc[g]) {
-                        acc[g] += 1
-                      } else {
-                        metaGenres.includes(g) ? (acc[g] = 1) : null
-                      }
-                    })
-                  }
-                } else {
-                  acc[genre] = 1
-                  if (genre.split(" ").length > 1) {
-                    const splitGenre = genre.split(" ")
-                    splitGenre.forEach((g: string) => {
-                      if (acc[g]) {
-                        acc[g] += 1
-                      } else {
-                        metaGenres.includes(g) ? (acc[g] = 1) : null
-                      }
-                    })
-                  }
-                }
-              })
-              const sortedGenres = sortObjectByValues(acc)
-              return sortedGenres
-            },
-            {}
-          )
-          setUserGenres(genres)
+    //       if (!response.ok) {
+    //         // handle non-successful response
+    //         console.error("Failed to fetch Spotify user data:", response)
+    //         return
+    //       }
 
-          // mapping the retrieved data to the Artist interface and setting it in the topArtists state
-          const artists: Artist[] = mapArtists(data.items)
+    //       const data = await response.json()
+    //       console.log("USER TOP ARTISTS: ", data)
 
-          setTopArtistsLong(artists)
-        }
-      } catch (error) {
-        // handle network or other errors
-        console.error("Error fetching Spotify user data:", error)
-      }
-    }
+    //       // mapping the retrieved data to the Artist interface and setting it in the topArtists state
+    //       const artists: Artist[] = mapArtists(data.items)
+
+    //       setTopArtistsMedium(artists)
+    //     }
+    //   } catch (error) {
+    //     // handle network or other errors
+    //     console.error("Error fetching Spotify user data:", error)
+    //   }
+    // }
+    // const fetchSpotifyUserTopArtistsLong = async () => {
+    //   try {
+    //     if (session && session.accessToken) {
+    //       const response = await fetch(
+    //         "https://api.spotify.com/v1/me/top/artists?time_range=long_term",
+    //         {
+    //           headers: {
+    //             Authorization: `Bearer ${session.accessToken}`,
+    //           },
+    //         }
+    //       )
+
+    //       if (!response.ok) {
+    //         // handle non-successful response
+    //         console.error("Failed to fetch Spotify user data:", response)
+    //         return
+    //       }
+
+    //       const data = await response.json()
+    //       console.log("USER TOP ARTISTS: ", data)
+    //       const genres: [string, number][] = data.items.reduce(
+    //         (acc: any, artist: any) => {
+    //           artist.genres.forEach((genre: string) => {
+    //             if (acc[genre]) {
+    //               acc[genre] += 1
+    //               if (genre.split(" ").length > 1) {
+    //                 const splitGenre = genre.split(" ")
+    //                 splitGenre.forEach((g: string) => {
+    //                   if (acc[g]) {
+    //                     acc[g] += 1
+    //                   } else {
+    //                     metaGenres.includes(g) ? (acc[g] = 1) : null
+    //                   }
+    //                 })
+    //               }
+    //             } else {
+    //               acc[genre] = 1
+    //               if (genre.split(" ").length > 1) {
+    //                 const splitGenre = genre.split(" ")
+    //                 splitGenre.forEach((g: string) => {
+    //                   if (acc[g]) {
+    //                     acc[g] += 1
+    //                   } else {
+    //                     metaGenres.includes(g) ? (acc[g] = 1) : null
+    //                   }
+    //                 })
+    //               }
+    //             }
+    //           })
+    //           const sortedGenres = sortObjectByValues(acc)
+    //           return sortedGenres
+    //         },
+    //         {}
+    //       )
+    //       setUserGenres(genres)
+
+    //       // mapping the retrieved data to the Artist interface and setting it in the topArtists state
+    //       const artists: Artist[] = mapArtists(data.items)
+
+    //       setTopArtistsLong(artists)
+    //     }
+    //   } catch (error) {
+    //     // handle network or other errors
+    //     console.error("Error fetching Spotify user data:", error)
+    //   }
+    // }
+
     const fetchSpotifyUserTopTracksShort = async () => {
       try {
         if (session && session.accessToken) {
@@ -394,9 +409,12 @@ export default function useSpotify(): {
 
     // call the functions to fetch the data when the session changes
     fetchSpotifyUserData()
-    fetchSpotifyUserTopArtistsShort()
-    fetchSpotifyUserTopArtistsMedium()
-    fetchSpotifyUserTopArtistsLong()
+    fetchSpotifyTopArtists("short_term", setTopArtistsShort)
+    fetchSpotifyTopArtists("medium_term", setTopArtistsMedium)
+    fetchSpotifyTopArtists("long_term", setTopArtistsLong)
+    // fetchSpotifyUserTopArtistsShort()
+    // fetchSpotifyUserTopArtistsMedium()
+    // fetchSpotifyUserTopArtistsLong()
     fetchSpotifyUserTopTracksShort()
     fetchSpotifyUserTopTracksMedium()
     fetchSpotifyUserTopTracksLong()
