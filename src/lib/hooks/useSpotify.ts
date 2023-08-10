@@ -273,17 +273,7 @@ export default function useSpotify(): {
 
           const data = await response.json()
 
-          const tracks: Track[] = data.items.map((track: any) => {
-            return {
-              name: track.name,
-              artist: track.artists[0].name,
-              album: track.album.name,
-              image: track.album.images[0].url,
-              popularity: track.popularity,
-              spotifyUrl: track.external_urls.spotify,
-              explicit: track.explicit,
-            }
-          })
+          const tracks: Track[] = mapTracks(data.items)
 
           setTopTracksShort(tracks)
         }
@@ -312,17 +302,7 @@ export default function useSpotify(): {
 
           const data = await response.json()
 
-          const tracks: Track[] = data.items.map((track: any) => {
-            return {
-              name: track.name,
-              artist: track.artists[0].name,
-              album: track.album.name,
-              image: track.album.images[0].url,
-              popularity: track.popularity,
-              spotifyUrl: track.external_urls.spotify,
-              explicit: track.explicit,
-            }
-          })
+          const tracks: Track[] = mapTracks(data.items)
 
           setTopTracksMedium(tracks)
         }
@@ -353,17 +333,7 @@ export default function useSpotify(): {
           const data = await response.json()
           console.log("USER TOP TRACKS: ", data)
 
-          const tracks: Track[] = data.items.map((track: any) => {
-            return {
-              name: track.name,
-              artist: track.artists[0].name,
-              album: track.album.name,
-              image: track.album.images[0].url,
-              popularity: track.popularity,
-              spotifyUrl: track.external_urls.spotify,
-              explicit: track.explicit,
-            }
-          })
+          const tracks: Track[] = mapTracks(data.items)
 
           setTopTracksLong(tracks)
         }
