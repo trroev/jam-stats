@@ -137,7 +137,7 @@ export default function useSpotify(): {
       })
     }
 
-    // fetch user's top Spotify Artists for different time ranges
+    // fetch user's top Spotify artists for different time ranges
     const fetchSpotifyTopArtists = async (
       timeRange: string,
       stateSetter: Function
@@ -280,6 +280,20 @@ export default function useSpotify(): {
     //   }
     // }
 
+    // fetch user's top Spotify tracks for different time ranges
+    const fetchSpotifyTopTracks = async (
+      timeRange: string,
+      stateSetter: Function
+    ) => {
+      await fetchSpotifyData(
+        `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}`,
+        (data: any) => {
+          console.log("TOP TRACKS DATA:", data)
+          stateSetter(mapTracks(data.items))
+        }
+      )
+    }
+
     const fetchSpotifyUserTopTracksShort = async () => {
       try {
         if (session && session.accessToken) {
@@ -415,9 +429,12 @@ export default function useSpotify(): {
     // fetchSpotifyUserTopArtistsShort()
     // fetchSpotifyUserTopArtistsMedium()
     // fetchSpotifyUserTopArtistsLong()
-    fetchSpotifyUserTopTracksShort()
-    fetchSpotifyUserTopTracksMedium()
-    fetchSpotifyUserTopTracksLong()
+    fetchSpotifyTopTracks("short_term", setTopTracksShort)
+    fetchSpotifyTopTracks("medium_term", setTopTracksMedium)
+    fetchSpotifyTopTracks("long_term", setTopTracksLong)
+    // fetchSpotifyUserTopTracksShort()
+    // fetchSpotifyUserTopTracksMedium()
+    // fetchSpotifyUserTopTracksLong()
     fetchSpotifyShowData()
   }, [session])
 
