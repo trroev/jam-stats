@@ -72,6 +72,27 @@ export default function useSpotify(): {
     }
   }
 
+  // helper functions to map data
+  const mapArtists = (items: any[]) =>
+    items.map((artist: any) => ({
+      name: artist.name,
+      image: artist.images.length > 0 ? artist.images[0].url : null,
+      spotifyUrl: `https://open.spotify.com/artist/${artist.id}`,
+      popularity: artist.popularity,
+      genres: artist.genres,
+    }))
+
+  const mapTracks = (items: any[]) =>
+    items.map((track: any) => ({
+      name: track.name,
+      artist: track.artists[0].name,
+      album: track.album.name,
+      image: track.album.images[0].url,
+      popularity: track.popularity,
+      spotifyUrl: track.external_urls.spotify,
+      explicit: track.explicit,
+    }))
+
   useEffect(() => {
     // fetch the user's profile data
     const fetchSpotifyUserData = async () => {
