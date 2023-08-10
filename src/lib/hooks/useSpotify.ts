@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react"
-import { Artist, Track, UserProfile, Show } from "@/types"
+import { Artist, Show, Track, UserProfile } from "@/types"
 import { useSession } from "next-auth/react"
-import { sortObjectByValues, metaGenres, popularityDescription } from "../util/util"
+
+import {
+  metaGenres,
+  popularityDescription,
+  sortObjectByValues,
+} from "../util/util"
 
 export default function useSpotify(): {
-  topArtistsShort:Artist[]
+  topArtistsShort: Artist[]
   topArtistsMedium: Artist[]
   topArtistsLong: Artist[]
   topTracksShort: Track[]
@@ -18,6 +23,7 @@ export default function useSpotify(): {
   averageArtistPopularity: number
 } {
   const { data: session } = useSession()
+
   const [topArtistsShort, setTopArtistsShort] = useState<Artist[]>([])
   const [topArtistsMedium, setTopArtistsMedium] = useState<Artist[]>([])
   const [topArtistsLong, setTopArtistsLong] = useState<Artist[]>([])
@@ -28,15 +34,43 @@ export default function useSpotify(): {
   const [shows, setshows] = useState<Show[]>([])
   const [userGenres, setUserGenres] = useState<[string, number][]>([])
   const showTitleList = shows.map((show: Show) => show.name)
-  const averageTrackPopularity = topTracksLong.reduce((acc: number, track: Track) => {
-    acc += track.popularity
-    return acc
-  }, 0) / topTracksLong.length
-  const averageArtistPopularity = topArtistsLong.reduce((acc: number, artist: Artist) => {
-    acc += artist.popularity
-    return acc
-  }, 0) / topArtistsLong.length
-  const tasteDescription = popularityDescription(Math.floor(averageArtistPopularity))
+  const averageTrackPopularity =
+    topTracksLong.reduce((acc: number, track: Track) => {
+      acc += track.popularity
+      return acc
+    }, 0) / topTracksLong.length
+  const averageArtistPopularity =
+    topArtistsLong.reduce((acc: number, artist: Artist) => {
+      acc += artist.popularity
+      return acc
+    }, 0) / topArtistsLong.length
+  const tasteDescription = popularityDescription(
+    Math.floor(averageArtistPopularity)
+  )
+
+  // helper function to fetch Spotify data
+  const fetchSpotifyData = async (url: string, stateSetter: Function) => {
+    try {
+      if (session && session.accessToken) {
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${session.accessToken}`,
+          },
+        })
+
+        if (!response.ok) {
+          console.error("Failed to fetch Spotify data:", response)
+          return
+        }
+
+        const data = await response.json()
+        console.log(data)
+        stateSetter(data)
+      }
+    } catch (error) {
+      console.error("Error fetching Spotify data:", error)
+    }
+  }
 
   useEffect(() => {
     // fetch the user's profile data
@@ -175,27 +209,27 @@ export default function useSpotify(): {
           const genres: [string, number][] = data.items.reduce(
             (acc: any, artist: any) => {
               artist.genres.forEach((genre: string) => {
-                if (acc[genre]){
+                if (acc[genre]) {
                   acc[genre] += 1
-                  if(genre.split(" ").length > 1){
+                  if (genre.split(" ").length > 1) {
                     const splitGenre = genre.split(" ")
                     splitGenre.forEach((g: string) => {
-                      if (acc[g]){
+                      if (acc[g]) {
                         acc[g] += 1
                       } else {
-                        metaGenres.includes(g) ? acc[g] = 1 : null
+                        metaGenres.includes(g) ? (acc[g] = 1) : null
                       }
                     })
                   }
                 } else {
                   acc[genre] = 1
-                  if(genre.split(" ").length > 1){
+                  if (genre.split(" ").length > 1) {
                     const splitGenre = genre.split(" ")
                     splitGenre.forEach((g: string) => {
-                      if (acc[g]){
+                      if (acc[g]) {
                         acc[g] += 1
                       } else {
-                        metaGenres.includes(g) ? acc[g] = 1 : null
+                        metaGenres.includes(g) ? (acc[g] = 1) : null
                       }
                     })
                   }
@@ -205,9 +239,9 @@ export default function useSpotify(): {
               return sortedGenres
             },
             {}
-            )
-            setUserGenres(genres)
-            
+          )
+          setUserGenres(genres)
+
           // mapping the retrieved data to the Artist interface and setting it in the topArtists state
           const artists: Artist[] = data.items.map((artist: any) => {
             const image = artist.images.length > 0 ? artist.images[0].url : null
@@ -220,7 +254,7 @@ export default function useSpotify(): {
               genres: artist.genres,
             }
           })
-          
+
           setTopArtistsLong(artists)
         }
       } catch (error) {
@@ -365,9 +399,10 @@ export default function useSpotify(): {
 
           const data = await response.json()
           console.log("SHOW DATA: ", data)
-          
+
           const shows: Show[] = data.items.map((item: any) => {
-            const image = item.show.images.length > 0 ? item.show.images[0].url : null
+            const image =
+              item.show.images.length > 0 ? item.show.images[0].url : null
             const spotifyUrl = `https://open.spotify.com/show/${item.show.id}`
             return {
               name: item.show.name,
@@ -376,7 +411,7 @@ export default function useSpotify(): {
               explicit: item.show.explicit,
             }
           })
-          
+
           setshows(shows)
         }
       } catch (error) {
@@ -395,5 +430,18 @@ export default function useSpotify(): {
     fetchSpotifyShowData()
   }, [session])
 
-  return { topArtistsShort, topArtistsMedium, topArtistsLong, topTracksShort, topTracksMedium, topTracksLong, userProfile, shows, userGenres, showTitleList, averageTrackPopularity, averageArtistPopularity }
+  return {
+    topArtistsShort,
+    topArtistsMedium,
+    topArtistsLong,
+    topTracksShort,
+    topTracksMedium,
+    topTracksLong,
+    userProfile,
+    shows,
+    userGenres,
+    showTitleList,
+    averageTrackPopularity,
+    averageArtistPopularity,
+  }
 }
