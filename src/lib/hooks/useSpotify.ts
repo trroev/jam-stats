@@ -146,17 +146,7 @@ export default function useSpotify(): {
           const data = await response.json()
 
           // mapping the retrieved data to the Artist interface and setting it in the topArtists state
-          const artists: Artist[] = data.items.map((artist: any) => {
-            const image = artist.images.length > 0 ? artist.images[0].url : null
-            const spotifyUrl = `https://open.spotify.com/artist/${artist.id}`
-            return {
-              name: artist.name,
-              image: image,
-              spotifyUrl: spotifyUrl,
-              popularity: artist.popularity,
-              genres: artist.genres,
-            }
-          })
+          const artists: Artist[] = mapArtists(data.items)
 
           setTopArtistsShort(artists)
         }
@@ -188,17 +178,7 @@ export default function useSpotify(): {
           console.log("USER TOP ARTISTS: ", data)
 
           // mapping the retrieved data to the Artist interface and setting it in the topArtists state
-          const artists: Artist[] = data.items.map((artist: any) => {
-            const image = artist.images.length > 0 ? artist.images[0].url : null
-            const spotifyUrl = `https://open.spotify.com/artist/${artist.id}`
-            return {
-              name: artist.name,
-              image: image,
-              spotifyUrl: spotifyUrl,
-              popularity: artist.popularity,
-              genres: artist.genres,
-            }
-          })
+          const artists: Artist[] = mapArtists(data.items)
 
           setTopArtistsMedium(artists)
         }
@@ -264,17 +244,7 @@ export default function useSpotify(): {
           setUserGenres(genres)
 
           // mapping the retrieved data to the Artist interface and setting it in the topArtists state
-          const artists: Artist[] = data.items.map((artist: any) => {
-            const image = artist.images.length > 0 ? artist.images[0].url : null
-            const spotifyUrl = `https://open.spotify.com/artist/${artist.id}`
-            return {
-              name: artist.name,
-              image: image,
-              spotifyUrl: spotifyUrl,
-              popularity: artist.popularity,
-              genres: artist.genres,
-            }
-          })
+          const artists: Artist[] = mapArtists(data.items)
 
           setTopArtistsLong(artists)
         }
