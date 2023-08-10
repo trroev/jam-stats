@@ -8,6 +8,8 @@ import {
   sortObjectByValues,
 } from "../util/util"
 
+const SPOTIFY_BASE_URL = "https://api.spotify.com/v1/me"
+
 export default function useSpotify(): {
   topArtistsShort: Artist[]
   topArtistsMedium: Artist[]
@@ -81,7 +83,7 @@ export default function useSpotify(): {
   useEffect(() => {
     // fetch the user's profile data
     const fetchSpotifyUserData = async () => {
-      await fetchSpotifyData("https://api.spotify.com/v1/me", (data: any) => {
+      await fetchSpotifyData(`${SPOTIFY_BASE_URL}`, (data: any) => {
         setUserProfile({
           name: data.display_name,
           email: data.email,
@@ -97,7 +99,7 @@ export default function useSpotify(): {
       stateSetter: Function
     ) => {
       await fetchSpotifyData(
-        `https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}`,
+        `${SPOTIFY_BASE_URL}/top/artists?time_range=${timeRange}`,
         (data: any) => {
           stateSetter(mapArtists(data.items))
         }
@@ -110,7 +112,7 @@ export default function useSpotify(): {
       stateSetter: Function
     ) => {
       await fetchSpotifyData(
-        `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}`,
+        `${SPOTIFY_BASE_URL}/top/tracks?time_range=${timeRange}`,
         (data: any) => {
           stateSetter(mapTracks(data.items))
         }
@@ -120,7 +122,7 @@ export default function useSpotify(): {
     const fetchSpotifyShowData = async () => {
       try {
         if (session && session.accessToken) {
-          const response = await fetch("https://api.spotify.com/v1/me/shows", {
+          const response = await fetch(`${SPOTIFY_BASE_URL}/shows`, {
             headers: {
               Authorization: `Bearer ${session.accessToken}`,
             },
