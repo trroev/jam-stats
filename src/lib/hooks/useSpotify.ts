@@ -33,20 +33,20 @@ export default function useSpotify(): {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [shows, setshows] = useState<Show[]>([])
   const [userGenres, setUserGenres] = useState<[string, number][]>([])
-  const showTitleList = shows.map((show: Show) => show.name)
-  const averageTrackPopularity =
-    topTracksLong.reduce((acc: number, track: Track) => {
-      acc += track.popularity
-      return acc
-    }, 0) / topTracksLong.length
-  const averageArtistPopularity =
-    topArtistsLong.reduce((acc: number, artist: Artist) => {
-      acc += artist.popularity
-      return acc
-    }, 0) / topArtistsLong.length
-  const tasteDescription = popularityDescription(
-    Math.floor(averageArtistPopularity)
-  )
+  // const showTitleList = shows.map((show: Show) => show.name)
+  // const averageTrackPopularity =
+  //   topTracksLong.reduce((acc: number, track: Track) => {
+  //     acc += track.popularity
+  //     return acc
+  //   }, 0) / topTracksLong.length
+  // const averageArtistPopularity =
+  //   topArtistsLong.reduce((acc: number, artist: Artist) => {
+  //     acc += artist.popularity
+  //     return acc
+  //   }, 0) / topArtistsLong.length
+  // const tasteDescription = popularityDescription(
+  //   Math.floor(averageArtistPopularity)
+  // )
 
   // helper function to fetch Spotify data
   const fetchSpotifyData = async (url: string, stateSetter: Function) => {
@@ -437,6 +437,26 @@ export default function useSpotify(): {
     // fetchSpotifyUserTopTracksLong()
     fetchSpotifyShowData()
   }, [session])
+
+  // calculate average artist and track popularity
+  const averageArtistPopularity =
+    topArtistsLong.reduce(
+      (acc: number, artist: Artist) => acc + artist.popularity,
+      0
+    ) / topArtistsLong.length
+  const averageTrackPopularity =
+    topTracksLong.reduce(
+      (acc: number, track: Track) => acc + track.popularity,
+      0
+    ) / topTracksLong.length
+
+  // calculate taste description
+  const tasteDescription = popularityDescription(
+    Math.floor(averageArtistPopularity)
+  )
+
+  // calculate show title list
+  const showTitleList = shows.map((show: Show) => show.name)
 
   return {
     topArtistsShort,
