@@ -21,26 +21,26 @@ export default function Card({ track, artist, show, index }: CardProps) {
     : null
 
   return (
-    <div className="flex items-center justify-center relative w-60 h-fit bg-darkGrayAccent border-2 border-black p-2 rounded-md">
-      <span className="absolute -top-3 -left-1 text-xl font-bold">
+    <div className="flex items-center w-full lg:items-center lg:justify-center lg:relative lg:w-60 lg:h-fit bg-transparentDarkGray border-2 border-black lg:p-2 rounded-md transition-all duration-500 delay-75">
+      <span className="pl-4 lg:absolute lg:-top-3 lg:-left-1 text-xl font-bold">
         {index + 1}
       </span>
-      <div className="w-1/2">
-        <h3 className="absolute top-6 left-4 text-lg font-bold overflow-visible z-10">
+      <div className="w-full gap-8 ml-4 lg:ml-0 lg:block lg:w-1/2 transition-all duration-500 delay-75">
+        <h3 className="lg:absolute lg:top-6 lg:left-4 lg:text-lg font-bold lg:overflow-visible lg:z-10 transition-all duration-500 delay-75">
           {toDisplay ? toDisplay.name : "something went wrong"}
         </h3>
-        <span className="absolute bottom-4 left-4 z-10 text-xs w-1/2">
+        <span className="hidden md:block lg:absolute lg:bottom-4 lg:left-4 lg:z-10 lg:text-xs lg:w-1/2 transition-all duration-500 delay-75">
           {secondaryInfo}
         </span>
       </div>
-      <div className="w-1/2">
+      <div className="lg:w-1/2">
         <a
           href={toDisplay ? toDisplay.spotifyUrl : "#"}
           target="_blank"
           rel="noopener noreferrer"
           className="relative"
         >
-          <div className="bg-black rounded-md relative">
+          <div className="bg-black rounded-md w-2/3 md:w-full float-right lg:w-full transition-all duration-500 delay-75">
             {toDisplay ? (
               <Image
                 src={toDisplay.image}

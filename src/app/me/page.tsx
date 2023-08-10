@@ -15,9 +15,16 @@ import { User } from "lucide-react"
 
 import useSpotify from "@/lib/hooks/useSpotify"
 import useWindowSize from "@/lib/hooks/useWindowSize"
+import gear from "@/lib/images/gear.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
 import { popularityDescription } from "@/lib/util/util"
 import Card from "@/components/card"
+
+const ulClasses =
+  "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-4 lg:gap-8 lg:justify-items-end lg:px-4"
+const sectionHeaderClasses =
+  "flex justify-start text-4xl text-greenAccent font-bold mb-4"
+const liClasses = "w-full"
 
 export default function Profile() {
   const [loading, setLoading] = useState(true)
@@ -27,6 +34,10 @@ export default function Profile() {
   const waveHeight = Math.floor(size.height ? size.height * 1.2 : 0)
   const artistDescription = popularityDescription(user.averageArtistPopularity)
   const trackDescription = popularityDescription(user.averageTrackPopularity)
+  const waveSize = {
+    width: size.width ? Math.floor(size.width * 0.35) : 0,
+    height: size.height ? Math.floor(size.height * 0.35) : 0,
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -37,32 +48,13 @@ export default function Profile() {
   console.log(user)
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen w-screen gap-8">
-        <motion.div
-          className="bg-greenAccent h-32 w-32"
-          animate={{
-            opacity: [0.2, 0.4, 0.6, 0.8, 1],
-            scale: [1, 1.5, 2, 3, 1],
-            rotate: [0, 270, 180, 90, 0],
-            borderRadius: ["0%", "25%", "40%", "50%", "0%"],
-          }}
-          transition={{
-            duration: 1.5,
-            ease: "backInOut",
-            times: 1,
-            repeat: Infinity,
-            repeatDelay: 1,
-          }}
-        />
-      </div>
-    )
+    return <Loading {...waveSize} />
   } else if (user.userProfile == null) {
     //should redirect to home with error message or something.
     return null
   } else {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-start py-8 max-w-5xl">
+      <main className="flex min-h-screen flex-col items-center justify-start py-8 max-w-5xl px-4">
         <Image
           priority
           src={wave}
@@ -133,9 +125,7 @@ const FavArtists = ({
   return (
     <div>
       <div className="flex gap-4">
-        <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
-          Fav Artists
-        </h2>
+        <h2 className={sectionHeaderClasses}>Fav Artists</h2>
         <button
           className={
             artistsToDisplay.time === "long"
@@ -188,9 +178,10 @@ const FavArtists = ({
           Last 4 Weeks
         </button>
       </div>
-      <ul className="grid grid-flow-row grid-cols-4 gap-8 justify-items-end">
+      <ul className={ulClasses}>
         {artistsToDisplay.artists.map((artist, i) => (
           <motion.li
+            className={liClasses}
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: i * 0.2 }}
@@ -230,9 +221,7 @@ const TopTracks = ({
   return (
     <div>
       <div className="flex gap-4">
-        <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
-          Top Tracks
-        </h2>
+        <h2 className={sectionHeaderClasses}>Top Tracks</h2>
         <button
           className={
             tracksToDisplay.time === "long"
@@ -285,9 +274,10 @@ const TopTracks = ({
           Last 4 Weeks
         </button>
       </div>
-      <ul className="grid grid-flow-row grid-cols-4 gap-8 justify-items-end">
+      <ul className={ulClasses}>
         {tracksToDisplay.tracks.map((track, i) => (
           <motion.li
+            className={liClasses}
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -322,12 +312,11 @@ const TopTracks = ({
 const Podcasts = ({ shows }: { shows: Show[] }) => {
   return (
     <div>
-      <h2 className="flex justify-start text-4xl text-greenAccent font-bold mb-4">
-        Podcasts
-      </h2>
-      <ul className="grid grid-flow-row grid-cols-4 gap-8 justify-items-end">
+      <h2 className={sectionHeaderClasses}>Podcasts</h2>
+      <ul className={ulClasses}>
         {shows.map((show, i) => (
           <motion.li
+            className={liClasses}
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: i * 0.2 }}
@@ -337,6 +326,56 @@ const Podcasts = ({ shows }: { shows: Show[] }) => {
           </motion.li>
         ))}
       </ul>
+    </div>
+  )
+}
+
+const Loading = (waveSize: { height: number; width: number }) => {
+  return (
+    <div className="flex min-h-screen max-h-screen flex-col items-center justify-center p-24 overflow-clip gap-4">
+      <motion.div
+        animate={{
+          opacity: [1, 0.5, 1],
+          rotate: [0, 90, 180],
+        }}
+        transition={{
+          duration: 2,
+          ease: "easeInOut",
+          times: 1,
+          repeat: Infinity,
+        }}
+      >
+        <Image src={gear} alt="loading" />
+      </motion.div>
+      <div className="flex justify-center items-center text-greenAccent">
+        <h1>Working</h1>
+        <motion.span
+          animate={{ opacity: [0, 1] }}
+          transition={{ duration: 0.5 }}
+        >
+          .
+        </motion.span>
+        <motion.span
+          animate={{ opacity: [0, 1] }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          .
+        </motion.span>
+        <motion.span
+          animate={{ opacity: [0, 1] }}
+          transition={{ duration: 0.5, delay: 1 }}
+        >
+          .
+        </motion.span>
+      </div>
+      <Image
+        priority
+        className="fixed -top-10 lg:top-unset lg:-bottom-40 -left-20 lg:-left-60 xl:-left-80 z-10 rotate-135 lg:rotate-45"
+        width={waveSize.width}
+        height={waveSize.height}
+        src={wave}
+        alt="Spotify Logo Waves"
+      />
     </div>
   )
 }
