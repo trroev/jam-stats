@@ -95,36 +95,48 @@ export default function useSpotify(): {
 
   useEffect(() => {
     // fetch the user's profile data
+    // const fetchSpotifyUserData = async () => {
+    //   try {
+    //     if (session && session.accessToken) {
+    //       const response = await fetch("https://api.spotify.com/v1/me", {
+    //         headers: {
+    //           Authorization: `Bearer ${session.accessToken}`,
+    //         },
+    //       })
+
+    //       if (!response.ok) {
+    //         // handle non-successful response (e.g. if access token is expired)
+    //         console.error("Failed to fetch Spotify user data:", response)
+    //         return
+    //       }
+
+    //       const data = await response.json()
+    //       console.log("USER DATA: ", data)
+
+    //       // extracting relevant information from the response and setting it in the userProfile state
+    //       setUserProfile({
+    //         name: data.display_name,
+    //         email: data.email,
+    //         id: data.id,
+    //         userImage: data.images[1]?.url || null,
+    //       })
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching Spotify user data:", error)
+    //   }
+    // }
     const fetchSpotifyUserData = async () => {
-      try {
-        if (session && session.accessToken) {
-          const response = await fetch("https://api.spotify.com/v1/me", {
-            headers: {
-              Authorization: `Bearer ${session.accessToken}`,
-            },
-          })
-
-          if (!response.ok) {
-            // handle non-successful response (e.g. if access token is expired)
-            console.error("Failed to fetch Spotify user data:", response)
-            return
-          }
-
-          const data = await response.json()
-          console.log("USER DATA: ", data)
-
-          // extracting relevant information from the response and setting it in the userProfile state
-          setUserProfile({
-            name: data.display_name,
-            email: data.email,
-            id: data.id,
-            userImage: data.images[1]?.url || null,
-          })
-        }
-      } catch (error) {
-        console.error("Error fetching Spotify user data:", error)
-      }
+      await fetchSpotifyData("https://api.spotify.com/v1/me", (data: any) => {
+        console.log("USER PROFILE DATA:", data)
+        setUserProfile({
+          name: data.display_name,
+          email: data.email,
+          id: data.id,
+          userImage: data.images[1]?.url || null,
+        })
+      })
     }
+
     const fetchSpotifyUserTopArtistsShort = async () => {
       try {
         if (session && session.accessToken) {
