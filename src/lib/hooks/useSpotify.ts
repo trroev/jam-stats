@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Artist, Show, Track, UserProfile } from "@/types"
+import { Artist, Show, SpotifyData, Track, UserProfile } from "@/types"
 import { useSession } from "next-auth/react"
 
 import {
@@ -11,25 +11,6 @@ import {
 } from "../util/util"
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1/me"
-
-interface SpotifyData {
-  userProfile: UserProfile | null
-  topArtists: {
-    short: Artist[]
-    medium: Artist[]
-    long: Artist[]
-  }
-  topTracks: {
-    short: Track[]
-    medium: Track[]
-    long: Track[]
-  }
-  shows: Show[]
-  userGenres: [string, number][]
-  showTitleList: string[]
-  averageArtistPopularity: number
-  averageTrackPopularity: number
-}
 
 export default function useSpotify(): SpotifyData {
   const { data: session } = useSession()
