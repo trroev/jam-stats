@@ -17,6 +17,8 @@ module.exports = {
         lightPrimary: '#F5F5F5',
         greenAccent: '#1ED760',
         grayAccent: "#7D7D7D",
+        darkGrayAccent: "#3F3F3F",
+        transparentDarkGray: "rgba(63, 63, 63, 0.5)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
