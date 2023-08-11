@@ -39,7 +39,7 @@ export default function useSpotify(): SpotifyData {
   const [topTracksMedium, setTopTracksMedium] = useState<Track[]>([])
   const [topTracksLong, setTopTracksLong] = useState<Track[]>([])
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
-  const [shows, setshows] = useState<Show[]>([])
+  const [shows, setShows] = useState<Show[]>([])
   const [userGenres, setUserGenres] = useState<[string, number][]>([])
 
   // helper function to fetch Spotify data
@@ -153,7 +153,7 @@ export default function useSpotify(): SpotifyData {
           }
         })
 
-        setshows(shows)
+        setShows(shows)
       }
     } catch (error) {
       console.error("Error fetching Spotify user show data:", error)
