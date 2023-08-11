@@ -238,17 +238,5 @@ export default function useSpotify(): SpotifyData {
     showTitleList,
     averageArtistPopularity,
     averageTrackPopularity,
-    // topArtistsShort,
-    // topArtistsMedium,
-    // topArtistsLong,
-    // topTracksShort,
-    // topTracksMedium,
-    // topTracksLong,
-    // userProfile,
-    // shows,
-    // userGenres,
-    // showTitleList,
-    // averageTrackPopularity,
-    // averageArtistPopularity,
   }
 }
