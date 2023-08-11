@@ -86,109 +86,109 @@ export default function useSpotify(): SpotifyData {
       explicit: track.explicit,
     }))
 
-  useEffect(() => {
-    // fetch the user's profile data
-    const fetchSpotifyUserData = async () => {
-      await fetchSpotifyData(`${SPOTIFY_BASE_URL}`, (data: any) => {
-        setUserProfile({
-          name: data.display_name,
-          email: data.email,
-          id: data.id,
-          userImage: data.images[1]?.url || null,
-        })
+  // fetch the user's profile data
+  const fetchSpotifyUserData = async () => {
+    await fetchSpotifyData(`${SPOTIFY_BASE_URL}`, (data: any) => {
+      setUserProfile({
+        name: data.display_name,
+        email: data.email,
+        id: data.id,
+        userImage: data.images[1]?.url || null,
       })
-    }
+    })
+  }
 
-    // fetch user's top Spotify artists for different time ranges
-    const fetchSpotifyTopArtists = async (
-      timeRange: string,
-      stateSetter: Function
-    ) => {
-      await fetchSpotifyData(
-        `${SPOTIFY_BASE_URL}/top/artists?time_range=${timeRange}`,
-        (data: any) => {
-          stateSetter(mapArtists(data.items))
-        }
-      )
-    }
-
-    // fetch user's top Spotify tracks for different time ranges
-    const fetchSpotifyTopTracks = async (
-      timeRange: string,
-      stateSetter: Function
-    ) => {
-      await fetchSpotifyData(
-        `${SPOTIFY_BASE_URL}/top/tracks?time_range=${timeRange}`,
-        (data: any) => {
-          stateSetter(mapTracks(data.items))
-        }
-      )
-    }
-
-    const fetchSpotifyShowData = async () => {
-      try {
-        if (session && session.accessToken) {
-          const response = await fetch(`${SPOTIFY_BASE_URL}/shows`, {
-            headers: {
-              Authorization: `Bearer ${session.accessToken}`,
-            },
-          })
-
-          if (!response.ok) {
-            // handle non-successful response (e.g. if access token is expired)
-            console.error("Failed to fetch Spotify show data:", response)
-            return
-          }
-
-          const data = await response.json()
-
-          const shows: Show[] = data.items.map((item: any) => {
-            const image =
-              item.show.images.length > 0 ? item.show.images[0].url : null
-            const spotifyUrl = `https://open.spotify.com/show/${item.show.id}`
-            return {
-              name: item.show.name,
-              image: image,
-              spotifyUrl: spotifyUrl,
-              explicit: item.show.explicit,
-            }
-          })
-
-          setshows(shows)
-        }
-      } catch (error) {
-        console.error("Error fetching Spotify user show data:", error)
+  // fetch user's top Spotify artists for different time ranges
+  const fetchSpotifyTopArtists = async (
+    timeRange: string,
+    stateSetter: Function
+  ) => {
+    await fetchSpotifyData(
+      `${SPOTIFY_BASE_URL}/top/artists?time_range=${timeRange}`,
+      (data: any) => {
+        stateSetter(mapArtists(data.items))
       }
-    }
+    )
+  }
 
-    // calculate and set userGenres
-    const calculateUserGenres = () => {
-      const genresMap = new Map<string, number>()
+  // fetch user's top Spotify tracks for different time ranges
+  const fetchSpotifyTopTracks = async (
+    timeRange: string,
+    stateSetter: Function
+  ) => {
+    await fetchSpotifyData(
+      `${SPOTIFY_BASE_URL}/top/tracks?time_range=${timeRange}`,
+      (data: any) => {
+        stateSetter(mapTracks(data.items))
+      }
+    )
+  }
 
-      topArtistsLong.forEach((artist: Artist) => {
-        artist.genres.forEach((genre: string) => {
-          const genreWords = genre.split(" ")
-          genreWords.forEach((g: string) => {
-            if (metaGenres.includes(g)) {
-              genresMap.set(g, (genresMap.get(g) || 0) + 1)
-            }
-          })
-          if (genreWords.length === 1) {
-            genresMap.set(genre, (genresMap.get(genre) || 0) + 1)
+  const fetchSpotifyShowData = async () => {
+    try {
+      if (session && session.accessToken) {
+        const response = await fetch(`${SPOTIFY_BASE_URL}/shows`, {
+          headers: {
+            Authorization: `Bearer ${session.accessToken}`,
+          },
+        })
+
+        if (!response.ok) {
+          // handle non-successful response (e.g. if access token is expired)
+          console.error("Failed to fetch Spotify show data:", response)
+          return
+        }
+
+        const data = await response.json()
+
+        const shows: Show[] = data.items.map((item: any) => {
+          const image =
+            item.show.images.length > 0 ? item.show.images[0].url : null
+          const spotifyUrl = `https://open.spotify.com/show/${item.show.id}`
+          return {
+            name: item.show.name,
+            image: image,
+            spotifyUrl: spotifyUrl,
+            explicit: item.show.explicit,
           }
         })
-      })
 
-      const genresObject: { [key: string]: number } = {}
-      genresMap.forEach((value, key) => {
-        genresObject[key] = value
-      })
-
-      const sortedGenres = sortObjectByValues(genresObject)
-      // @ts-ignore
-      setUserGenres(Object.entries(sortedGenres) as [string, number][])
+        setshows(shows)
+      }
+    } catch (error) {
+      console.error("Error fetching Spotify user show data:", error)
     }
+  }
 
+  // calculate and set userGenres
+  const calculateUserGenres = () => {
+    const genresMap = new Map<string, number>()
+
+    topArtistsLong.forEach((artist: Artist) => {
+      artist.genres.forEach((genre: string) => {
+        const genreWords = genre.split(" ")
+        genreWords.forEach((g: string) => {
+          if (metaGenres.includes(g)) {
+            genresMap.set(g, (genresMap.get(g) || 0) + 1)
+          }
+        })
+        if (genreWords.length === 1) {
+          genresMap.set(genre, (genresMap.get(genre) || 0) + 1)
+        }
+      })
+    })
+
+    const genresObject: { [key: string]: number } = {}
+    genresMap.forEach((value, key) => {
+      genresObject[key] = value
+    })
+
+    const sortedGenres = sortObjectByValues(genresObject)
+    // @ts-ignore
+    setUserGenres(Object.entries(sortedGenres) as [string, number][])
+  }
+
+  useEffect(() => {
     // call the functions to fetch the data when the session changes
     fetchSpotifyUserData()
     fetchSpotifyTopArtists("short_term", setTopArtistsShort)
