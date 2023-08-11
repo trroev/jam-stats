@@ -18,7 +18,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body
-        className={`min-h-screen font-sans antialiased ${raleway.variable} bg-darkPrimary text-lightPrimary`}
+        className={`min-h-screen font-sans antialiased ${raleway.variable} bg-darkPrimary text-lightPrimary flex justify-center items-start`}
       >
         <AuthProvider>{children}</AuthProvider>
       </body>
