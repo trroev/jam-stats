@@ -10,20 +10,26 @@ import {
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1/me"
 
-export default function useSpotify(): {
-  topArtistsShort: Artist[]
-  topArtistsMedium: Artist[]
-  topArtistsLong: Artist[]
-  topTracksShort: Track[]
-  topTracksMedium: Track[]
-  topTracksLong: Track[]
+interface SpotifyData {
   userProfile: UserProfile | null
+  topArtists: {
+    short: Artist[]
+    medium: Artist[]
+    long: Artist[]
+  }
+  topTracks: {
+    short: Track[]
+    medium: Track[]
+    long: Track[]
+  }
   shows: Show[]
   userGenres: [string, number][]
   showTitleList: string[]
-  averageTrackPopularity: number
   averageArtistPopularity: number
-} {
+  averageTrackPopularity: number
+}
+
+export default function useSpotify(): SpotifyData {
   const { data: session } = useSession()
 
   const [topArtistsShort, setTopArtistsShort] = useState<Artist[]>([])
@@ -216,17 +222,33 @@ export default function useSpotify(): {
   const showTitleList = shows.map((show: Show) => show.name)
 
   return {
-    topArtistsShort,
-    topArtistsMedium,
-    topArtistsLong,
-    topTracksShort,
-    topTracksMedium,
-    topTracksLong,
     userProfile,
+    topArtists: {
+      short: topArtistsShort,
+      medium: topArtistsMedium,
+      long: topArtistsLong,
+    },
+    topTracks: {
+      short: topTracksShort,
+      medium: topTracksMedium,
+      long: topTracksLong,
+    },
     shows,
     userGenres,
     showTitleList,
-    averageTrackPopularity,
     averageArtistPopularity,
+    averageTrackPopularity,
+    // topArtistsShort,
+    // topArtistsMedium,
+    // topArtistsLong,
+    // topTracksShort,
+    // topTracksMedium,
+    // topTracksLong,
+    // userProfile,
+    // shows,
+    // userGenres,
+    // showTitleList,
+    // averageTrackPopularity,
+    // averageArtistPopularity,
   }
 }

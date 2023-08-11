@@ -67,18 +67,18 @@ export default function Profile() {
           <div className="flex flex-col justify-between gap-4">
             <FavArtists
               topArtists={{
-                short: user.topArtistsShort,
-                medium: user.topArtistsMedium,
-                long: user.topArtistsLong,
+                short: user.topArtists.short,
+                medium: user.topArtists.medium,
+                long: user.topArtists.long,
               }}
               averageArtistPopularity={user.averageArtistPopularity}
               artistDescription={artistDescription}
             />
             <TopTracks
               topTracks={{
-                short: user.topTracksShort,
-                medium: user.topTracksMedium,
-                long: user.topTracksLong,
+                short: user.topTracks.short,
+                medium: user.topTracks.medium,
+                long: user.topTracks.long,
               }}
               averageTrackPopularity={user.averageTrackPopularity}
               trackDescription={trackDescription}
