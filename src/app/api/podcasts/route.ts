@@ -9,15 +9,6 @@ const apiConfig = new Configuration({
 
 const openai = new OpenAIApi(apiConfig)
 
-const podcasts = [
-  "Morning Joe",
-  "The MinnMax Show",
-  "Pod Save America",
-  "Sci Show Tangents",
-  "Smartless",
-  "Behind the Bastards",
-]
-
 export async function POST(req: Request) {
   // Extract the `prompt` from the body of the request
   const { prompt } = await req.json()
