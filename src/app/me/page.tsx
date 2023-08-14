@@ -43,12 +43,11 @@ export default function Profile() {
     height: size.height ? Math.floor(size.height * 0.35) : 0,
   }
 
-  const { completion, complete, setInput, setCompletion } = useCompletion({
-    body: { topArtistsString },
+  const { completion, complete } = useCompletion({
     api: "/api/music-recs",
   })
 
-  const onSubmit = (e: any) => {
+  const getRecs = (e: any) => {
     e.preventDefault()
     complete(topArtistsString)
   }
@@ -77,10 +76,8 @@ export default function Profile() {
         <div className="flex flex-col justify-center items-start gap-8">
           <UserPill userProfile={user.userProfile} />
           <div className="flex flex-col justify-between gap-4">
-            <form onSubmit={onSubmit}>
-              <p>{completion}</p>
-              <button type="submit">Give me Band Recs!</button>
-            </form>
+            <p>{completion}</p>
+            <button onClick={getRecs}>Give me Band Recs!</button>
             <FavArtists
               topArtists={{
                 short: user.topArtists.short,

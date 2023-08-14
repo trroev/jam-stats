@@ -9,30 +9,9 @@ const apiConfig = new Configuration({
 
 const openai = new OpenAIApi(apiConfig)
 
-const bands = [
-  "Thee Oh Sees",
-  "Ty Segall",
-  "La Luz",
-  "The Brian Jonestown Massacre",
-  "Cage the Elephant",
-  "Black Lips",
-  "Allah-Lahs",
-  "King Gizzard and the Lizard Wizard",
-  "Parquet Courts",
-  "The Murlocs",
-]
-
-// function buildPrompt(prompt: string) {
-//   return prompt.split("\n").map((message) => ({
-//     role: "user",
-//     content: message,
-//   }))
-// }
-
 export async function POST(req: Request) {
   // Extract the `prompt` from the body of the request
   const { prompt } = await req.json()
-  console.log({ prompt })
 
   // Request the OpenAI API for the response based on the prompt
   const response = await openai.createChatCompletion({

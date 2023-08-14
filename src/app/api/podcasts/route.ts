@@ -18,13 +18,6 @@ const podcasts = [
   "Behind the Bastards",
 ]
 
-// function buildPrompt(prompt: string) {
-//   return prompt.split("\n").map((message) => ({
-//     role: "user",
-//     content: message,
-//   }))
-// }
-
 export async function POST(req: Request) {
   // Extract the `prompt` from the body of the request
   // const { prompt } = await req.json()
