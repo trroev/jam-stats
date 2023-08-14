@@ -43,18 +43,14 @@ export default function Profile() {
     height: size.height ? Math.floor(size.height * 0.35) : 0,
   }
 
-  const { completion, handleSubmit, setInput } = useCompletion({
+  const { completion, complete, setInput, setCompletion } = useCompletion({
     body: { topArtistsString },
     api: "/api/music-recs",
   })
 
   const onSubmit = (e: any) => {
     e.preventDefault()
-    setInput(topArtistsString)
-
-    setTimeout(() => {
-      handleSubmit(e)
-    }, 0)
+    complete(topArtistsString)
   }
 
   useEffect(() => {
@@ -62,8 +58,6 @@ export default function Profile() {
       setLoading(false)
     }, 1500)
   }, [])
-
-  console.log(user)
 
   if (loading) {
     return <Loading {...waveSize} />
@@ -83,10 +77,10 @@ export default function Profile() {
         <div className="flex flex-col justify-center items-start gap-8">
           <UserPill userProfile={user.userProfile} />
           <div className="flex flex-col justify-between gap-4">
-            <p>{completion}</p>
-            <button type="submit" onClick={onSubmit}>
-              Give me Band Recs!
-            </button>
+            <form onSubmit={onSubmit}>
+              <p>{completion}</p>
+              <button type="submit">Give me Band Recs!</button>
+            </form>
             <FavArtists
               topArtists={{
                 short: user.topArtists.short,
