@@ -59,6 +59,12 @@ export interface UserPillProps {
   userProfile: UserProfile
 }
 
+export interface AIMusicRecsProps {
+  user: {
+    topArtists: TopArtists
+  }
+}
+
 export interface SpotifyData {
   userProfile: UserProfile | null
   topArtists: {

@@ -1,13 +1,7 @@
 "use client"
 
-import { Artist, TopArtists } from "@/types"
+import { AIMusicRecsProps, Artist } from "@/types"
 import { useCompletion } from "ai/react"
-
-interface AIMusicRecsProps {
-  user: {
-    topArtists: TopArtists
-  }
-}
 
 export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   // combine the top artists arrays from different time ranges into a single array
