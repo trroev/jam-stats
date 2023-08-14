@@ -21,11 +21,9 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   const uniqueTopArtists = new Set(
     allTopArtists.map((artist: Artist) => artist.name)
   )
-  console.log(uniqueTopArtists)
 
   // convert the set of unique artists into a comma-separated string
   const topArtistsString = Array.from(uniqueTopArtists).join(", ")
-  console.log(topArtistsString)
 
   const { completion, complete } = useCompletion({
     api: "/api/music-recs",
