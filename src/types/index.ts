@@ -65,6 +65,12 @@ export interface AIMusicRecsProps {
   }
 }
 
+export interface AIPodcastsProps {
+  user: {
+    shows: Show[]
+  }
+}
+
 export interface SpotifyData {
   userProfile: UserProfile | null
   topArtists: {

@@ -20,6 +20,7 @@ import gear from "@/lib/images/gear.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
 import { popularityDescription } from "@/lib/util/util"
 import AIMusicRecs from "@/components/ai-music-recs"
+import AIPodcasts from "@/components/ai-podcasts"
 import Card from "@/components/card"
 
 const ulClasses =
@@ -84,6 +85,7 @@ export default function Profile() {
               averageTrackPopularity={user.averageTrackPopularity}
               trackDescription={trackDescription}
             />
+            <AIPodcasts user={user} />
             <Podcasts shows={user.shows} />
           </div>
         </div>

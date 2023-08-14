@@ -20,7 +20,7 @@ const podcasts = [
 
 export async function POST(req: Request) {
   // Extract the `prompt` from the body of the request
-  // const { prompt } = await req.json()
+  const { prompt } = await req.json()
 
   // Request the OpenAI API for the response based on the prompt
   const response = await openai.createChatCompletion({
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         role: "system",
         content: `I am going to give you an array of my favorite podcasts.
         Adopt the persona of someone who who like these shows.
-        Provide your persona's name, age, occupation, and interests.
+        Provide your persona's name (first and last), age, occupation, and interests.
         As that persona, answer the following questions delimited by triple quotes:
         """1. Do you believe in astrology?
         2. What was your high school gpa?
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       },
       {
         role: "user",
-        content: `${podcasts}`,
+        content: prompt,
       },
     ],
     max_tokens: 500,
