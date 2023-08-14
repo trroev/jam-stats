@@ -10,7 +10,7 @@ import {
   Track,
   UserPillProps,
 } from "@/types"
-import { useCompletion } from "ai/react"
+// import { useCompletion } from "ai/react"
 import { motion } from "framer-motion"
 import { User } from "lucide-react"
 
@@ -19,6 +19,7 @@ import useWindowSize from "@/lib/hooks/useWindowSize"
 import gear from "@/lib/images/gear.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
 import { popularityDescription } from "@/lib/util/util"
+import AIMusicRecs from "@/components/ai-music-recs"
 import Card from "@/components/card"
 
 const ulClasses =
@@ -31,9 +32,6 @@ export default function Profile() {
   const [loading, setLoading] = useState(true)
 
   const user = useSpotify()
-  const topArtistsString = user.topArtists.long
-    .map((artist) => artist.name)
-    .join(", ")
   const size = useWindowSize()
   const waveHeight = Math.floor(size.height ? size.height * 1.2 : 0)
   const artistDescription = popularityDescription(user.averageArtistPopularity)
@@ -41,15 +39,6 @@ export default function Profile() {
   const waveSize = {
     width: size.width ? Math.floor(size.width * 0.35) : 0,
     height: size.height ? Math.floor(size.height * 0.35) : 0,
-  }
-
-  const { completion, complete } = useCompletion({
-    api: "/api/music-recs",
-  })
-
-  const getRecs = (e: any) => {
-    e.preventDefault()
-    complete(topArtistsString)
   }
 
   useEffect(() => {
@@ -76,8 +65,7 @@ export default function Profile() {
         <div className="flex flex-col justify-center items-start gap-8">
           <UserPill userProfile={user.userProfile} />
           <div className="flex flex-col justify-between gap-4">
-            <p>{completion}</p>
-            <button onClick={getRecs}>Give me Band Recs!</button>
+            <AIMusicRecs user={user} />
             <FavArtists
               topArtists={{
                 short: user.topArtists.short,
