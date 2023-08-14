@@ -19,7 +19,7 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   // convert the set of unique artists into a comma-separated string
   const topArtistsString = Array.from(uniqueTopArtists).join(", ")
 
-  const { completion, complete } = useCompletion({
+  const { completion, complete, isLoading, stop } = useCompletion({
     api: "/api/music-recs",
   })
 
@@ -31,7 +31,13 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   return (
     <>
       <p>{completion}</p>
-      <button onClick={getRecs}>Get Music Recommendations</button>
+      {isLoading ? (
+        <button onClick={stop}>Stop Generating</button>
+      ) : (
+        <button disabled={isLoading} onClick={getRecs}>
+          Get Music Recommendations
+        </button>
+      )}
     </>
   )
 }
