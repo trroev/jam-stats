@@ -31,7 +31,8 @@ const bands = [
 
 export async function POST(req: Request) {
   // Extract the `prompt` from the body of the request
-  // const { prompt } = await req.json()
+  const { prompt } = await req.json()
+  console.log({ prompt })
 
   // Request the OpenAI API for the response based on the prompt
   const response = await openai.createChatCompletion({
@@ -40,14 +41,14 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "system",
-        content: `When I give you an array of my favorite bands, will you generate 5 recommendations for bands based on the given array.
-        The recommendations that you give should be unique, and not included in the given array.
+        content: `When I give you a list of my favorite bands, will you generate 5 recommendations for bands based on the given list of bands.
+        The recommendations that you give should be unique, and not included in the given list of bands.
         Provide a short summary explaining why you are making the recommendation.
         Adopt the persona of a music snob, making sure to tease me about my favorite bands in a playful way.`,
       },
       {
         role: "user",
-        content: `${bands}`,
+        content: prompt,
       },
     ],
     max_tokens: 500,

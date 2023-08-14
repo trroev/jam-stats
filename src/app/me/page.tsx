@@ -10,6 +10,7 @@ import {
   Track,
   UserPillProps,
 } from "@/types"
+import { useCompletion } from "ai/react"
 import { motion } from "framer-motion"
 import { User } from "lucide-react"
 
@@ -30,6 +31,9 @@ export default function Profile() {
   const [loading, setLoading] = useState(true)
 
   const user = useSpotify()
+  const topArtistsString = user.topArtists.long
+    .map((artist) => artist.name)
+    .join(", ")
   const size = useWindowSize()
   const waveHeight = Math.floor(size.height ? size.height * 1.2 : 0)
   const artistDescription = popularityDescription(user.averageArtistPopularity)
@@ -37,6 +41,20 @@ export default function Profile() {
   const waveSize = {
     width: size.width ? Math.floor(size.width * 0.35) : 0,
     height: size.height ? Math.floor(size.height * 0.35) : 0,
+  }
+
+  const { completion, handleSubmit, setInput } = useCompletion({
+    body: { topArtistsString },
+    api: "/api/music-recs",
+  })
+
+  const onSubmit = (e: any) => {
+    e.preventDefault()
+    setInput(topArtistsString)
+
+    setTimeout(() => {
+      handleSubmit(e)
+    }, 0)
   }
 
   useEffect(() => {
@@ -65,6 +83,10 @@ export default function Profile() {
         <div className="flex flex-col justify-center items-start gap-8">
           <UserPill userProfile={user.userProfile} />
           <div className="flex flex-col justify-between gap-4">
+            <p>{completion}</p>
+            <button type="submit" onClick={onSubmit}>
+              Give me Band Recs!
+            </button>
             <FavArtists
               topArtists={{
                 short: user.topArtists.short,
