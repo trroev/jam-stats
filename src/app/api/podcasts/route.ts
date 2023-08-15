@@ -20,13 +20,14 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "system",
-        content: `I am going to give you an array of my favorite podcasts.
-        Adopt the persona of someone who who like these shows.
+        content: `I am going to give you list of my favorite podcasts.
+        Adopt the persona of someone who would like these shows.
         Provide your persona's name (first and last), age, occupation, and interests.
         As that persona, answer the following questions delimited by triple quotes:
         """1. Do you believe in astrology?
         2. What was your high school gpa?
-        3. Were your parents divorced?"""`,
+        3. Were your parents divorced?"""
+        Make sure to list the question before the answer in your response.`,
       },
       {
         role: "user",
