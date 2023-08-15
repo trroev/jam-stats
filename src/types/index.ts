@@ -55,8 +55,11 @@ export interface FavArtistProps {
   averageArtistPopularity: number
   artistDescription: string
 }
-export interface UserPillProps {
-  userProfile: UserProfile
+
+export interface HeaderProps {
+  user: UserProfile
+  display: string
+  setDisplay: React.Dispatch<React.SetStateAction<string>>
 }
 
 export interface AIMusicRecsProps {

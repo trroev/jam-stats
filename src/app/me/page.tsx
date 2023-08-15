@@ -5,10 +5,10 @@ import Image from "next/image"
 import {
   Artist,
   FavArtistProps,
+  HeaderProps,
   Show,
   TopTrackProps,
   Track,
-  UserPillProps,
 } from "@/types"
 // import { useCompletion } from "ai/react"
 import { motion } from "framer-motion"
@@ -28,9 +28,12 @@ const ulClasses =
 const sectionHeaderClasses =
   "flex justify-start text-4xl text-greenAccent font-bold mb-4"
 const liClasses = "w-full"
+const animationDuration = 0.2
+const animationDelay = 0.1
 
 export default function Profile() {
   const [loading, setLoading] = useState(true)
+  const [display, setDisplay] = useState("artists")
 
   const user = useSpotify()
   const size = useWindowSize()
@@ -64,29 +67,38 @@ export default function Profile() {
           height={waveHeight}
         />
         <div className="flex flex-col justify-center items-start gap-8">
-          <UserPill userProfile={user.userProfile} />
+          <Header
+            user={user.userProfile}
+            display={display}
+            setDisplay={setDisplay}
+          />
           <div className="flex flex-col justify-between gap-4">
-            <AIMusicRecs user={user} />
-            <FavArtists
-              topArtists={{
-                short: user.topArtists.short,
-                medium: user.topArtists.medium,
-                long: user.topArtists.long,
-              }}
-              averageArtistPopularity={user.averageArtistPopularity}
-              artistDescription={artistDescription}
-            />
-            <TopTracks
-              topTracks={{
-                short: user.topTracks.short,
-                medium: user.topTracks.medium,
-                long: user.topTracks.long,
-              }}
-              averageTrackPopularity={user.averageTrackPopularity}
-              trackDescription={trackDescription}
-            />
-            <AIPodcasts user={user} />
-            <Podcasts shows={user.shows} />
+
+            {display === "artists" ? (
+              <AIMusicRecs user={user} />
+              <FavArtists
+                topArtists={{
+                  short: user.topArtists.short,
+                  medium: user.topArtists.medium,
+                  long: user.topArtists.long,
+                }}
+                averageArtistPopularity={user.averageArtistPopularity}
+                artistDescription={artistDescription}
+              />
+            ) : display === "tracks" ? (
+              <TopTracks
+                topTracks={{
+                  short: user.topTracks.short,
+                  medium: user.topTracks.medium,
+                  long: user.topTracks.long,
+                }}
+                averageTrackPopularity={user.averageTrackPopularity}
+                trackDescription={trackDescription}
+              />
+            ) : (
+              <AIPodcasts user={user} />
+              <Podcasts shows={user.shows} />
+            )}
           </div>
         </div>
       </main>
@@ -94,23 +106,55 @@ export default function Profile() {
   }
 }
 
-const UserPill = ({ userProfile }: UserPillProps) => {
+const Header = ({ user, display, setDisplay }: HeaderProps) => {
   return (
-    <div className="flex justify-starts items-center rounded-full bg-black w-fit px-4 py-1 gap-2">
-      {userProfile.userImage ? (
-        <div className="w-6 h-6 rounded-full relative">
-          <Image
-            className="rounded-full"
-            src={userProfile.userImage}
-            alt="profile"
-            fill
-            objectFit="cover"
-          />
-        </div>
-      ) : (
-        <User size={25} />
-      )}
-      <h1>{userProfile.name}</h1>
+    <div>
+      <div className="flex justify-starts items-center rounded-full bg-black w-fit px-4 py-1 gap-2">
+        {user.userImage ? (
+          <div className="w-6 h-6 rounded-full relative">
+            <Image
+              className="rounded-full"
+              src={user.userImage}
+              alt="profile"
+              fill
+              objectFit="cover"
+            />
+          </div>
+        ) : (
+          <User size={25} />
+        )}
+        <h1>{user.name}</h1>
+      </div>
+      <button
+        className={
+          display === "artists"
+            ? "text-greenAccent text-xl font-bold transition-all duration-100"
+            : "transition-all duration-100"
+        }
+        onClick={() => setDisplay("artists")}
+      >
+        Artists
+      </button>
+      <button
+        className={
+          display === "tracks"
+            ? "text-greenAccent text-xl font-bold transition-all duration-100"
+            : "transition-all duration-100"
+        }
+        onClick={() => setDisplay("tracks")}
+      >
+        Tracks
+      </button>
+      <button
+        className={
+          display === "shows"
+            ? "text-greenAccent text-xl font-bold transition-all duration-100"
+            : "transition-all duration-100"
+        }
+        onClick={() => setDisplay("shows")}
+      >
+        Podcasts
+      </button>
     </div>
   )
 }
@@ -128,58 +172,77 @@ const FavArtists = ({
   return (
     <div>
       <div className="flex gap-4">
-        <h2 className={sectionHeaderClasses}>Fav Artists</h2>
-        <button
-          className={
-            artistsToDisplay.time === "long"
-              ? "text-greenAccent font-bold underline"
-              : ""
-          }
-          onClick={() => {
-            if (artistsToDisplay.time === "long") {
-              return
-            } else {
-              setArtistsToDisplay({ time: "long", artists: topArtists.long })
-            }
+        <motion.div
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: animationDuration * 2 }}
+        >
+          <h2 className={sectionHeaderClasses}>Fav Artists</h2>
+        </motion.div>
+        <motion.div
+          className="flex gap-4"
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: animationDuration * 2,
+            delay: animationDelay * 2,
           }}
         >
-          All Time
-        </button>
-        <button
-          className={
-            artistsToDisplay.time === "medium"
-              ? "text-greenAccent font-bold underline"
-              : ""
-          }
-          onClick={() => {
-            if (artistsToDisplay.time === "medium") {
-              return
-            } else {
-              setArtistsToDisplay({
-                time: "medium",
-                artists: topArtists.medium,
-              })
+          <button
+            className={
+              artistsToDisplay.time === "long"
+                ? "text-greenAccent font-bold underline"
+                : ""
             }
-          }}
-        >
-          Last 6 Months
-        </button>
-        <button
-          className={
-            artistsToDisplay.time === "short"
-              ? "text-greenAccent font-bold underline"
-              : ""
-          }
-          onClick={() => {
-            if (artistsToDisplay.time === "short") {
-              return
-            } else {
-              setArtistsToDisplay({ time: "short", artists: topArtists.short })
+            onClick={() => {
+              if (artistsToDisplay.time === "long") {
+                return
+              } else {
+                setArtistsToDisplay({ time: "long", artists: topArtists.long })
+              }
+            }}
+          >
+            All Time
+          </button>
+          <button
+            className={
+              artistsToDisplay.time === "medium"
+                ? "text-greenAccent font-bold underline"
+                : ""
             }
-          }}
-        >
-          Last 4 Weeks
-        </button>
+            onClick={() => {
+              if (artistsToDisplay.time === "medium") {
+                return
+              } else {
+                setArtistsToDisplay({
+                  time: "medium",
+                  artists: topArtists.medium,
+                })
+              }
+            }}
+          >
+            Last 6 Months
+          </button>
+          <button
+            className={
+              artistsToDisplay.time === "short"
+                ? "text-greenAccent font-bold underline"
+                : ""
+            }
+            onClick={() => {
+              if (artistsToDisplay.time === "short") {
+                return
+              } else {
+                setArtistsToDisplay({
+                  time: "short",
+                  artists: topArtists.short,
+                })
+              }
+            }}
+          >
+            Last 4 Weeks
+          </button>
+        </motion.div>
       </div>
       <ul className={ulClasses}>
         {artistsToDisplay.artists.map((artist, i) => (
@@ -187,7 +250,10 @@ const FavArtists = ({
             className={liClasses}
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: i * 0.2 }}
+            transition={{
+              duration: animationDuration,
+              delay: i * animationDelay,
+            }}
             key={i}
           >
             <Card artist={artist} index={i} />
@@ -198,8 +264,8 @@ const FavArtists = ({
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{
-          duration: 0.3,
-          delay: (artistsToDisplay.artists.length + 1) * 0.2,
+          duration: animationDuration,
+          delay: (artistsToDisplay.artists.length + 1) * animationDelay,
         }}
         className="w-full mt-8 flex justify-center items-center bg-darkGrayAccent rounded-md border-black border-2 gap-8"
       >
@@ -224,58 +290,74 @@ const TopTracks = ({
   return (
     <div>
       <div className="flex gap-4">
-        <h2 className={sectionHeaderClasses}>Top Tracks</h2>
-        <button
-          className={
-            tracksToDisplay.time === "long"
-              ? "text-greenAccent font-bold underline"
-              : ""
-          }
-          onClick={() => {
-            if (tracksToDisplay.time === "long") {
-              return
-            } else {
-              setTracksToDisplay({ time: "long", tracks: topTracks.long })
-            }
+        <motion.div
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: animationDuration * 2 }}
+        >
+          <h2 className={sectionHeaderClasses}>Top Tracks</h2>
+        </motion.div>
+        <motion.div
+          className="flex gap-4"
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: animationDuration * 2,
+            delay: animationDelay * 2,
           }}
         >
-          All Time
-        </button>
-        <button
-          className={
-            tracksToDisplay.time === "medium"
-              ? "text-greenAccent font-bold underline"
-              : ""
-          }
-          onClick={() => {
-            if (tracksToDisplay.time === "medium") {
-              return
-            } else {
-              setTracksToDisplay({
-                time: "medium",
-                tracks: topTracks.medium,
-              })
+          <button
+            className={
+              tracksToDisplay.time === "long"
+                ? "text-greenAccent font-bold underline"
+                : ""
             }
-          }}
-        >
-          Last 6 Months
-        </button>
-        <button
-          className={
-            tracksToDisplay.time === "short"
-              ? "text-greenAccent font-bold underline"
-              : ""
-          }
-          onClick={() => {
-            if (tracksToDisplay.time === "short") {
-              return
-            } else {
-              setTracksToDisplay({ time: "short", tracks: topTracks.short })
+            onClick={() => {
+              if (tracksToDisplay.time === "long") {
+                return
+              } else {
+                setTracksToDisplay({ time: "long", tracks: topTracks.long })
+              }
+            }}
+          >
+            All Time
+          </button>
+          <button
+            className={
+              tracksToDisplay.time === "medium"
+                ? "text-greenAccent font-bold underline"
+                : ""
             }
-          }}
-        >
-          Last 4 Weeks
-        </button>
+            onClick={() => {
+              if (tracksToDisplay.time === "medium") {
+                return
+              } else {
+                setTracksToDisplay({
+                  time: "medium",
+                  tracks: topTracks.medium,
+                })
+              }
+            }}
+          >
+            Last 6 Months
+          </button>
+          <button
+            className={
+              tracksToDisplay.time === "short"
+                ? "text-greenAccent font-bold underline"
+                : ""
+            }
+            onClick={() => {
+              if (tracksToDisplay.time === "short") {
+                return
+              } else {
+                setTracksToDisplay({ time: "short", tracks: topTracks.short })
+              }
+            }}
+          >
+            Last 4 Weeks
+          </button>
+        </motion.div>
       </div>
       <ul className={ulClasses}>
         {tracksToDisplay.tracks.map((track, i) => (
@@ -285,8 +367,8 @@ const TopTracks = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{
               ease: "easeInOut",
-              duration: 0.3,
-              delay: i * 0.2 + 0.2,
+              duration: animationDuration,
+              delay: i * animationDelay + animationDelay,
             }}
             key={i}
           >
@@ -298,8 +380,8 @@ const TopTracks = ({
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{
-          duration: 0.3,
-          delay: (tracksToDisplay.tracks.length + 1) * 0.2,
+          duration: animationDuration,
+          delay: (tracksToDisplay.tracks.length + 1) * animationDelay,
         }}
         className="w-full mt-8 flex justify-center items-center bg-darkGrayAccent rounded-md border-black border-2 gap-8"
       >
@@ -315,14 +397,23 @@ const TopTracks = ({
 const Podcasts = ({ shows }: { shows: Show[] }) => {
   return (
     <div>
-      <h2 className={sectionHeaderClasses}>Podcasts</h2>
+      <motion.div
+        initial={{ opacity: 0, y: -100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: animationDuration * 2 }}
+      >
+        <h2 className={sectionHeaderClasses}>Podcasts</h2>
+      </motion.div>
       <ul className={ulClasses}>
         {shows.map((show, i) => (
           <motion.li
             className={liClasses}
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: i * 0.2 }}
+            transition={{
+              duration: animationDuration,
+              delay: i * animationDelay,
+            }}
             key={i}
           >
             <Card show={show} index={i} />
