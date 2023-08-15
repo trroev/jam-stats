@@ -76,9 +76,9 @@ export const mapTracks = (items: any[]) =>
     explicit: track.explicit,
   }))
 
-export const createArrayFromRecResponse = (response: string) => {
+  export const createArrayFromRecResponse = (response: string) => {
     const splitBySuggestion = response.split(/(?=\d+\.\s)/)
-    const newItems = splitBySuggestion[splitBySuggestion.length - 1].split(". ")
+    const newItems = splitBySuggestion[splitBySuggestion.length - 1].split("." || "!")
     const lastSentence = newItems[newItems.length - 1]
     splitBySuggestion[splitBySuggestion.length - 1] = newItems
       .slice(0, -1)
@@ -86,3 +86,5 @@ export const createArrayFromRecResponse = (response: string) => {
     splitBySuggestion[splitBySuggestion.length] = lastSentence
     return splitBySuggestion
   }
+
+  

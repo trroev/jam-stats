@@ -6,8 +6,6 @@ import { useCompletion } from "ai/react"
 
 import { createArrayFromRecResponse } from "@/lib/util/util"
 
-import Card from "./card"
-
 export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   // combine the top artists arrays from different time ranges into a single array
   const allTopArtists = [
@@ -15,7 +13,8 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
     ...user.topArtists.medium,
     ...user.topArtists.short,
   ]
-  const [textArray, setTextArray] = useState<string[]>([])
+
+  const [recs, setRecs] = useState<string[]>([])
 
   // create a set to store unique artist names
   const uniqueTopArtists = new Set(
@@ -27,9 +26,8 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
 
   const { completion, complete, isLoading, stop } = useCompletion({
     api: "/api/music-recs",
-    onFinish: (prompt, completion) => {
-      console.log(completion)
-      setTextArray(createArrayFromRecResponse(completion))
+    onFinish: (_prompt, completion) => {
+      setRecs(createArrayFromRecResponse(completion))
     },
   })
 
@@ -39,8 +37,8 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   }
 
   useEffect(() => {
-    console.log(textArray)
-  }, [textArray])
+    console.log(recs)
+  }, [recs])
 
   return (
     <>
