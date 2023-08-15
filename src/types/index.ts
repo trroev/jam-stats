@@ -62,6 +62,18 @@ export interface HeaderProps {
   setDisplay: React.Dispatch<React.SetStateAction<string>>
 }
 
+export interface AIMusicRecsProps {
+  user: {
+    topArtists: TopArtists
+  }
+}
+
+export interface AIPodcastsProps {
+  user: {
+    shows: Show[]
+  }
+}
+
 export interface SpotifyData {
   userProfile: UserProfile | null
   topArtists: {

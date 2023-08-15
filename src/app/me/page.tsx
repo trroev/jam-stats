@@ -10,6 +10,7 @@ import {
   TopTrackProps,
   Track,
 } from "@/types"
+// import { useCompletion } from "ai/react"
 import { motion } from "framer-motion"
 import { User } from "lucide-react"
 
@@ -18,6 +19,8 @@ import useWindowSize from "@/lib/hooks/useWindowSize"
 import gear from "@/lib/images/gear.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
 import { popularityDescription } from "@/lib/util/util"
+import AIMusicRecs from "@/components/ai-music-recs"
+import AIPodcasts from "@/components/ai-podcasts"
 import Card from "@/components/card"
 
 const ulClasses =
@@ -48,8 +51,6 @@ export default function Profile() {
     }, 1500)
   }, [])
 
-  console.log(user)
-
   if (loading) {
     return <Loading {...waveSize} />
   } else if (user.userProfile == null) {
@@ -72,7 +73,9 @@ export default function Profile() {
             setDisplay={setDisplay}
           />
           <div className="flex flex-col justify-between gap-4">
+
             {display === "artists" ? (
+              <AIMusicRecs user={user} />
               <FavArtists
                 topArtists={{
                   short: user.topArtists.short,
@@ -93,6 +96,7 @@ export default function Profile() {
                 trackDescription={trackDescription}
               />
             ) : (
+              <AIPodcasts user={user} />
               <Podcasts shows={user.shows} />
             )}
           </div>
