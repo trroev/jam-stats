@@ -75,3 +75,14 @@ export const mapTracks = (items: any[]) =>
     spotifyUrl: track.external_urls.spotify,
     explicit: track.explicit,
   }))
+
+export const createArrayFromRecResponse = (response: string) => {
+    const splitBySuggestion = response.split(/(?=\d+\.\s)/)
+    const newItems = splitBySuggestion[splitBySuggestion.length - 1].split(". ")
+    const lastSentence = newItems[newItems.length - 1]
+    splitBySuggestion[splitBySuggestion.length - 1] = newItems
+      .slice(0, -1)
+      .join(". ")
+    splitBySuggestion[splitBySuggestion.length] = lastSentence
+    return splitBySuggestion
+  }

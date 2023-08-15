@@ -2,17 +2,9 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import {
-  Artist,
-  FavArtistProps,
-  HeaderProps,
-  Show,
-  TopTrackProps,
-  Track,
-} from "@/types"
+import { Artist, FavArtistProps, Show, TopTrackProps, Track } from "@/types"
 // import { useCompletion } from "ai/react"
 import { motion } from "framer-motion"
-import { User } from "lucide-react"
 
 import useSpotify from "@/lib/hooks/useSpotify"
 import useWindowSize from "@/lib/hooks/useWindowSize"
@@ -22,11 +14,12 @@ import { popularityDescription } from "@/lib/util/util"
 import AIMusicRecs from "@/components/ai-music-recs"
 import AIPodcasts from "@/components/ai-podcasts"
 import Card from "@/components/card"
+import Header from "@/components/header"
 
 const ulClasses =
   "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-4 lg:gap-8 lg:justify-items-end lg:px-4"
 const sectionHeaderClasses =
-  "flex justify-start text-4xl text-greenAccent font-bold mb-4"
+  "flex justify-start text-4xl text-greenAccent font-bold"
 const liClasses = "w-full"
 const animationDuration = 0.2
 const animationDelay = 0.1
@@ -58,7 +51,7 @@ export default function Profile() {
     return null
   } else {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-start py-8 max-w-5xl px-4">
+      <main className="flex min-h-screen flex-col items-center justify-start max-w-5xl">
         <Image
           priority
           src={wave}
@@ -73,18 +66,19 @@ export default function Profile() {
             setDisplay={setDisplay}
           />
           <div className="flex flex-col justify-between gap-4">
-
             {display === "artists" ? (
-              <AIMusicRecs user={user} />
-              <FavArtists
-                topArtists={{
-                  short: user.topArtists.short,
-                  medium: user.topArtists.medium,
-                  long: user.topArtists.long,
-                }}
-                averageArtistPopularity={user.averageArtistPopularity}
-                artistDescription={artistDescription}
-              />
+              <div className="flex flex-col justify-center items-start gap-8 px-2">
+                <FavArtists
+                  topArtists={{
+                    short: user.topArtists.short,
+                    medium: user.topArtists.medium,
+                    long: user.topArtists.long,
+                  }}
+                  averageArtistPopularity={user.averageArtistPopularity}
+                  artistDescription={artistDescription}
+                />
+                <AIMusicRecs user={user} />
+              </div>
             ) : display === "tracks" ? (
               <TopTracks
                 topTracks={{
@@ -96,67 +90,16 @@ export default function Profile() {
                 trackDescription={trackDescription}
               />
             ) : (
-              <AIPodcasts user={user} />
-              <Podcasts shows={user.shows} />
+              <div className="flex flex-col justify-center items-start gap-8 px-2">
+                <Podcasts shows={user.shows} />
+                <AIPodcasts user={user} />
+              </div>
             )}
           </div>
         </div>
       </main>
     )
   }
-}
-
-const Header = ({ user, display, setDisplay }: HeaderProps) => {
-  return (
-    <div>
-      <div className="flex justify-starts items-center rounded-full bg-black w-fit px-4 py-1 gap-2">
-        {user.userImage ? (
-          <div className="w-6 h-6 rounded-full relative">
-            <Image
-              className="rounded-full"
-              src={user.userImage}
-              alt="profile"
-              fill
-              objectFit="cover"
-            />
-          </div>
-        ) : (
-          <User size={25} />
-        )}
-        <h1>{user.name}</h1>
-      </div>
-      <button
-        className={
-          display === "artists"
-            ? "text-greenAccent text-xl font-bold transition-all duration-100"
-            : "transition-all duration-100"
-        }
-        onClick={() => setDisplay("artists")}
-      >
-        Artists
-      </button>
-      <button
-        className={
-          display === "tracks"
-            ? "text-greenAccent text-xl font-bold transition-all duration-100"
-            : "transition-all duration-100"
-        }
-        onClick={() => setDisplay("tracks")}
-      >
-        Tracks
-      </button>
-      <button
-        className={
-          display === "shows"
-            ? "text-greenAccent text-xl font-bold transition-all duration-100"
-            : "transition-all duration-100"
-        }
-        onClick={() => setDisplay("shows")}
-      >
-        Podcasts
-      </button>
-    </div>
-  )
 }
 
 const FavArtists = ({
@@ -171,18 +114,18 @@ const FavArtists = ({
 
   return (
     <div>
-      <div className="flex gap-4">
+      <div className="flex gap-4 mb-8">
         <motion.div
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: animationDuration * 2 }}
         >
           <h2 className={sectionHeaderClasses}>Fav Artists</h2>
         </motion.div>
         <motion.div
           className="flex gap-4"
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{
             duration: animationDuration * 2,
             delay: animationDelay * 2,
@@ -288,19 +231,19 @@ const TopTracks = ({
     tracks: Track[]
   }>({ time: "long", tracks: topTracks.long })
   return (
-    <div>
-      <div className="flex gap-4">
+    <div className="px-2">
+      <div className="flex gap-4 mb-8">
         <motion.div
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: animationDuration * 2 }}
         >
           <h2 className={sectionHeaderClasses}>Top Tracks</h2>
         </motion.div>
         <motion.div
           className="flex gap-4"
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{
             duration: animationDuration * 2,
             delay: animationDelay * 2,
@@ -398,9 +341,10 @@ const Podcasts = ({ shows }: { shows: Show[] }) => {
   return (
     <div>
       <motion.div
-        initial={{ opacity: 0, y: -100 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
         transition={{ duration: animationDuration * 2 }}
+        className="mb-8"
       >
         <h2 className={sectionHeaderClasses}>Podcasts</h2>
       </motion.div>
