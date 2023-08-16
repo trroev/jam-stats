@@ -79,11 +79,11 @@ export const mapTracks = (items: any[]) =>
 export const extractBandsFromResponse = (response: string) => {
   // regex to match each numbered item and capture its content
   const matches = response.match(
-    /\d+\.\s(.*?)(?=\n\d+\.|\n$|\nRecommended Bands|$)/g
+    /\d+\.\s*(.*?)(?=\n\d+\.|\n$|\nRecommended Bands|$)/g
   )
   if (matches) {
     // map over the matches and extract the band names by removing the nubmers and dots
-    return matches.map((match) => match.replace(/\d+\.\s/, "").trim())
+    return matches.map((match) => match.replace(/\d+\.\s*/, "").trim())
   }
   // return an empty array of no matches are found
   return []
