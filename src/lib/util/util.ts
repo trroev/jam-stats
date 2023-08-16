@@ -76,15 +76,12 @@ export const mapTracks = (items: any[]) =>
     explicit: track.explicit,
   }))
 
-  export const createArrayFromRecResponse = (response: string) => {
-    const splitBySuggestion = response.split(/(?=\d+\.\s)/)
-    const newItems = splitBySuggestion[splitBySuggestion.length - 1].split("." || "!")
-    const lastSentence = newItems[newItems.length - 1]
-    splitBySuggestion[splitBySuggestion.length - 1] = newItems
-      .slice(0, -1)
-      .join(". ")
-    splitBySuggestion[splitBySuggestion.length] = lastSentence
-    return splitBySuggestion
+export const extractBandsFromResponse = (response: string) => {
+  const matches = response.match(
+    /\d+\.\s(.*?)(?=\n\d+\.|\n$|\nRecommended Bands|$)/g
+  )
+  if (matches) {
+    return matches.map((match) => match.replace(/\d+\.\s/, "").trim())
   }
-
-  
+  return []
+}

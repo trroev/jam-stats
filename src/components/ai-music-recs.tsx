@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { AIMusicRecsProps, Artist } from "@/types"
 import { useCompletion } from "ai/react"
 
-import { createArrayFromRecResponse } from "@/lib/util/util"
+import { extractBandsFromResponse } from "@/lib/util/util"
 
 export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   // combine the top artists arrays from different time ranges into a single array
@@ -27,7 +27,7 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   const { completion, complete, isLoading, stop } = useCompletion({
     api: "/api/music-recs",
     onFinish: (_prompt, completion) => {
-      setRecs(createArrayFromRecResponse(completion))
+      setRecs(extractBandsFromResponse(completion))
     },
   })
 
@@ -42,7 +42,7 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
 
   return (
     <>
-      {/* {textArray.length > 0 && 
+      {/* {textArray.length > 0 &&
         textArray.map((text, index) => {
           return <Card key={index} text={text} />
         })} */}

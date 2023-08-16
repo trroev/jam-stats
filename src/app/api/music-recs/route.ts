@@ -21,8 +21,10 @@ export async function POST(req: Request) {
       {
         role: "system",
         content: `When I give you a list of my favorite bands, generate 5 recommendations for bands based on the given list of bands.
-        The recommendations that you give should be unique, and not included in the given list of bands. First provide an array of recommended artists, then provide a one sentence summary of why you think I would like them.
-        Adopt the persona of a music snob, making sure to tease me about my favorite bands in a playful way in a one sentence summary at the end.`,
+        The recommendations that you give should be unique, and not included in the given list of bands.
+        Provide a one sentence summary explaining why you are making the recommendation.
+        Adopt the persona of a music snob, making sure to tease me about my favorite bands in a playful way.
+        At the end of your response, provide a numbered list labeled "Recommended Bands:" of just the bands that you've recommended.`,
       },
       {
         role: "user",
