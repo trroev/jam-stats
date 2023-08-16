@@ -24,17 +24,20 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   // convert the set of unique artists into a comma-separated string
   const topArtistsString = Array.from(uniqueTopArtists).join(", ")
 
-  const { completion, complete, isLoading, stop } = useCompletion({
+  const { completion, complete, isLoading } = useCompletion({
     api: "/api/music-recs",
     onFinish: (_prompt, completion) => {
       setRecs(extractBandsFromResponse(completion))
     },
   })
 
-  const getRecs = (e: any) => {
-    e.preventDefault()
-    complete(topArtistsString)
-  }
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      complete(topArtistsString)
+    }
+
+    fetchRecommendations()
+  }, [])
 
   useEffect(() => {
     console.log(recs)
@@ -42,18 +45,7 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
 
   return (
     <>
-      {/* {textArray.length > 0 &&
-        textArray.map((text, index) => {
-          return <Card key={index} text={text} />
-        })} */}
-      <p>{completion}</p>
-      {isLoading ? (
-        <button onClick={stop}>Stop Generating</button>
-      ) : (
-        <button disabled={isLoading} onClick={getRecs}>
-          Get Music Recommendations
-        </button>
-      )}
+      {isLoading ? <p>Generating Recommendations...</p> : <p>{completion}</p>}
     </>
   )
 }
