@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import { AIPodcastsProps } from "@/types"
 import { useCompletion } from "ai/react"
 
@@ -11,21 +12,15 @@ export default function AIPodcasts({ user }: AIPodcastsProps) {
     api: "/api/podcasts",
   })
 
-  const podcastStuff = (e: any) => {
-    e.preventDefault()
-    complete(showsString)
-  }
+  useEffect(() => {
+    const fetchPodcastStuff = async () => {
+      complete(showsString)
+    }
+
+    fetchPodcastStuff()
+  }, [])
 
   return (
-    <>
-      <p>{completion}</p>
-      {isLoading ? (
-        <button onClick={stop}>Stop Generating</button>
-      ) : (
-        <button disabled={isLoading} onClick={podcastStuff}>
-          Podcast Stuff
-        </button>
-      )}
-    </>
+    <>{isLoading ? <p>Generating Podcast Stuff...</p> : <p>{completion}</p>}</>
   )
 }
