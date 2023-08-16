@@ -17,7 +17,7 @@ import Card from "@/components/card"
 import Header from "@/components/header"
 
 const ulClasses =
-  "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-4 lg:gap-8 lg:justify-items-end lg:px-4"
+  "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-4 lg:justify-items-end"
 const sectionHeaderClasses =
   "flex justify-start text-4xl text-greenAccent font-bold"
 const liClasses = "w-full"
