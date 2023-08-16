@@ -40,24 +40,18 @@ export default function Card({ track, artist, show, index }: CardProps) {
           rel="noopener noreferrer"
           className="relative"
         >
-          <div className="bg-black rounded-md lg:h-[110px] w-2/3 md:w-full float-right lg:w-full transition-all duration-500 delay-75">
-            {
-              //adding height to the div that matches square images might fix it. if the image is at the top or bottom of the square, maybe flex on the div would fix it?
-              //if not flex, I'd try the commented out fill property on Image below.
-
-              toDisplay ? (
-                <Image
-                  src={toDisplay.image}
-                  alt={toDisplay.name}
-                  width={100}
-                  height={100}
-                  className="rounded-md w-full opacity-70"
-                  // fill={true}
-                />
-              ) : (
-                "something went wrong"
-              )
-            }
+          <div className="bg-black rounded-md lg:h-[110px] w-2/3 md:w-full float-right lg:w-full transition-all duration-500 delay-75 flex">
+            {toDisplay ? (
+              <Image
+                src={toDisplay.image}
+                alt={toDisplay.name}
+                width={100}
+                height={100}
+                className="rounded-md w-full opacity-70"
+              />
+            ) : (
+              "something went wrong"
+            )}
           </div>
         </a>
       </div>
