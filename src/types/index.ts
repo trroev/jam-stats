@@ -91,7 +91,6 @@ export interface SpotifyData {
     long: Track[]
   }
   shows: Show[]
-  userGenres: [string, number][]
   showTitleList: string[]
   averageArtistPopularity: number
   averageTrackPopularity: number
@@ -100,4 +99,13 @@ export interface SpotifyData {
 
 export interface SpotifyError {
   status: number
+}
+
+export interface Genre {
+  genre: string
+  count: number
+}
+
+export interface UserGenreProps {
+  genres: Genre[]
 }

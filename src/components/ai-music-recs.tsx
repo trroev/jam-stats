@@ -64,7 +64,7 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
           >
             <Image src={gear} alt="loading" />
           </motion.div>
-          <p className="text-center">Generating recommendations...</p>
+          <p className="text-center">Waiting on ChatGPT...</p>
         </div>
       ) : (
         <p>{completion}</p>

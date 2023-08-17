@@ -1,4 +1,5 @@
 import { Artist, Track } from "@/types"
+import { Dispatch, SetStateAction } from "react"
 import { Type } from "typescript"
 
 export function sortObjectByValues(obj: { [key: string]: number }) {
@@ -87,4 +88,37 @@ export const extractBandsFromResponse = (response: string) => {
   }
   // return an empty array of no matches are found
   return []
+}
+
+export const calculateUserGenres = (allTopArtists: Artist[]) => {
+  let sortedGenresArray: { genre: string, count: number }[] = [];
+  try{
+    const genresMap = new Map<string, number>()
+
+
+    allTopArtists.forEach((artist: Artist) => {
+      artist.genres.forEach((genre: string) => {
+        const genreWords = genre.split(" ")
+        genreWords.forEach((g: string) => {
+          if (metaGenres.includes(g)) {
+            genresMap.set(g, (genresMap.get(g) || 0) + 1)
+          }
+        })
+        if (genreWords.length === 1) {
+          genresMap.set(genre, (genresMap.get(genre) || 0) + 1)
+        }
+      })
+    })
+  
+    const genresArray: { genre: string, count: number }[] = [];
+    genresMap.forEach((value, key) => {
+      genresArray.push({ genre: key, count: value });
+    });
+  
+    sortedGenresArray = genresArray.sort((a, b) => b.count - a.count);
+  }catch(error){
+    console.error("Error calculating user genres:", error)
+  }finally{
+    return sortedGenresArray
+  }
 }

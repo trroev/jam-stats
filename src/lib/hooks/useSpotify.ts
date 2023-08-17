@@ -7,7 +7,6 @@ import {
   mapTracks,
   metaGenres,
   popularityDescription,
-  sortObjectByValues,
 } from "../util/util"
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1/me"
@@ -23,8 +22,19 @@ export default function useSpotify(): SpotifyData {
   const [topTracksLong, setTopTracksLong] = useState<Track[]>([])
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [shows, setShows] = useState<Show[]>([])
-  const [userGenres, setUserGenres] = useState<[string, number][]>([])
   const [authStatus, setAuthStatus] = useState<number>(0)
+
+  const topArtists = {
+    short: topArtistsShort,
+    medium: topArtistsMedium,
+    long: topArtistsLong,
+  }
+  
+  const topTracks = {
+    short: topTracksShort,
+    medium: topTracksMedium,
+    long: topTracksLong,
+  }
 
   // helper function to fetch Spotify data
   const fetchSpotifyData = async (url: string, stateSetter: Function) => {
@@ -134,32 +144,7 @@ export default function useSpotify(): SpotifyData {
   }
 
   // calculate and set userGenres
-  const calculateUserGenres = () => {
-    const genresMap = new Map<string, number>()
-
-    topArtistsLong.forEach((artist: Artist) => {
-      artist.genres.forEach((genre: string) => {
-        const genreWords = genre.split(" ")
-        genreWords.forEach((g: string) => {
-          if (metaGenres.includes(g)) {
-            genresMap.set(g, (genresMap.get(g) || 0) + 1)
-          }
-        })
-        if (genreWords.length === 1) {
-          genresMap.set(genre, (genresMap.get(genre) || 0) + 1)
-        }
-      })
-    })
-
-    const genresObject: { [key: string]: number } = {}
-    genresMap.forEach((value, key) => {
-      genresObject[key] = value
-    })
-
-    const sortedGenres = sortObjectByValues(genresObject)
-    // @ts-ignore
-    setUserGenres(Object.entries(sortedGenres) as [string, number][])
-  }
+  
 
   useEffect(() => {
     // call the functions to fetch the data when the session changes
@@ -171,7 +156,6 @@ export default function useSpotify(): SpotifyData {
     fetchSpotifyTopTracks("medium_term", setTopTracksMedium)
     fetchSpotifyTopTracks("long_term", setTopTracksLong)
     fetchSpotifyShowData()
-    calculateUserGenres()
   }, [session])
 
   // calculate average artist and track popularity
@@ -196,18 +180,9 @@ export default function useSpotify(): SpotifyData {
 
   return {
     userProfile,
-    topArtists: {
-      short: topArtistsShort,
-      medium: topArtistsMedium,
-      long: topArtistsLong,
-    },
-    topTracks: {
-      short: topTracksShort,
-      medium: topTracksMedium,
-      long: topTracksLong,
-    },
+    topArtists,
+    topTracks,
     shows,
-    userGenres,
     showTitleList,
     averageArtistPopularity,
     averageTrackPopularity,

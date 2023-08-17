@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { Artist, FavArtistProps, Show, TopTrackProps, Track } from "@/types"
+import {
+  Artist,
+  FavArtistProps,
+  Genre,
+  Show,
+  TopTrackProps,
+  Track,
+} from "@/types"
 // import { useCompletion } from "ai/react"
 import { motion } from "framer-motion"
 import { signIn } from "next-auth/react"
@@ -12,11 +19,12 @@ import useWindowSize from "@/lib/hooks/useWindowSize"
 import gear from "@/lib/images/gear.svg"
 import loginButton from "@/lib/images/spotifyLoginButton.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
-import { popularityDescription } from "@/lib/util/util"
+import { calculateUserGenres, popularityDescription } from "@/lib/util/util"
 import AIMusicRecs from "@/components/ai-music-recs"
 import AIPodcasts from "@/components/ai-podcasts"
 import Card from "@/components/card"
 import Header from "@/components/header"
+import UserGenres from "@/components/user-genres"
 import UserPill from "@/components/user-pill"
 
 const ulClasses =
@@ -30,7 +38,6 @@ const animationDelay = 0.1
 export default function Profile() {
   const [loading, setLoading] = useState(true)
   const [display, setDisplay] = useState("artists")
-
   const user = useSpotify()
   const size = useWindowSize()
   const waveHeight = Math.floor(size.height ? size.height * 1.2 : 0)
@@ -40,6 +47,12 @@ export default function Profile() {
     width: size.width ? Math.floor(size.width * 0.35) : 0,
     height: size.height ? Math.floor(size.height * 0.35) : 0,
   }
+  const userGenres: Genre[] = calculateUserGenres([
+    ...user.topArtists.long,
+    ...user.topArtists.medium,
+    ...user.topArtists.short,
+  ])
+  console.log(userGenres)
 
   useEffect(() => {
     setTimeout(() => {
@@ -104,6 +117,7 @@ export default function Profile() {
                   averageArtistPopularity={user.averageArtistPopularity}
                   artistDescription={artistDescription}
                 />
+                <UserGenres genres={userGenres} />
                 <AIMusicRecs user={user} />
               </div>
             ) : display === "tracks" ? (
