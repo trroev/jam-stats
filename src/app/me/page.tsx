@@ -5,10 +5,12 @@ import Image from "next/image"
 import { Artist, FavArtistProps, Show, TopTrackProps, Track } from "@/types"
 // import { useCompletion } from "ai/react"
 import { motion } from "framer-motion"
+import { signIn } from "next-auth/react"
 
 import useSpotify from "@/lib/hooks/useSpotify"
 import useWindowSize from "@/lib/hooks/useWindowSize"
 import gear from "@/lib/images/gear.svg"
+import loginButton from "@/lib/images/spotifyLoginButton.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
 import { popularityDescription } from "@/lib/util/util"
 import AIMusicRecs from "@/components/ai-music-recs"
@@ -46,9 +48,27 @@ export default function Profile() {
 
   if (loading) {
     return <Loading {...waveSize} />
-  } else if (user.userProfile == null) {
-    //should redirect to home with error message or something.
-    return null
+  } else if (user.userProfile == null || user.authStatus === 401) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center max-w-5xl">
+        <p>An error occured. Please login again.</p>
+        <button
+          className="border-2 border-greenAccent"
+          onClick={(e) => {
+            e.preventDefault()
+            // will update callbackUrl to user dashboard once that is set up
+            signIn("spotify", { callbackUrl: "/me" })
+          }}
+        >
+          <Image
+            priority
+            height={60}
+            src={loginButton}
+            alt="login with spotify"
+          />
+        </button>
+      </main>
+    )
   } else {
     return (
       <main className="flex min-h-screen flex-col items-center justify-start max-w-5xl">

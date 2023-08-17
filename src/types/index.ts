@@ -91,4 +91,9 @@ export interface SpotifyData {
   showTitleList: string[]
   averageArtistPopularity: number
   averageTrackPopularity: number
+  authStatus: number
+}
+
+export interface SpotifyError {
+  status: number
 }

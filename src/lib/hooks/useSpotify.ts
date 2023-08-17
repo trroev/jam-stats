@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Artist, Show, SpotifyData, Track, UserProfile } from "@/types"
+import { Artist, Show, SpotifyData, Track, UserProfile, SpotifyError } from "@/types"
 import { useSession } from "next-auth/react"
 
 import {
@@ -24,6 +24,7 @@ export default function useSpotify(): SpotifyData {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [shows, setShows] = useState<Show[]>([])
   const [userGenres, setUserGenres] = useState<[string, number][]>([])
+  const [authStatus, setAuthStatus] = useState<number>(0)
 
   // helper function to fetch Spotify data
   const fetchSpotifyData = async (url: string, stateSetter: Function) => {
@@ -44,7 +45,12 @@ export default function useSpotify(): SpotifyData {
         stateSetter(data)
       }
     } catch (error) {
-      console.error("Error fetching Spotify data:", error)
+      const err = error as SpotifyError
+      if(err.status){
+        setAuthStatus(err.status)
+      }else{
+        console.error("Error fetching Spotify data:", error)
+      }
     }
   }
 
@@ -118,7 +124,12 @@ export default function useSpotify(): SpotifyData {
         setShows(shows)
       }
     } catch (error) {
-      console.error("Error fetching Spotify user show data:", error)
+      const err = error as SpotifyError
+      if(err.status){
+        setAuthStatus(err.status)
+      }else{
+        console.error("Error fetching Spotify data:", error)
+      }
     }
   }
 
@@ -200,5 +211,6 @@ export default function useSpotify(): SpotifyData {
     showTitleList,
     averageArtistPopularity,
     averageTrackPopularity,
+    authStatus,
   }
 }
