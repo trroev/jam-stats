@@ -51,7 +51,10 @@ export default function Profile() {
   } else if (user.userProfile == null || user.authStatus === 401) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center max-w-5xl">
-        <p>An error occured. Please login again.</p>
+        <p>
+          Spotify declined our requests. Your session probably expired. Please
+          login again.
+        </p>
         <button
           className="border-2 border-greenAccent"
           onClick={(e) => {
