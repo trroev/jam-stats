@@ -51,7 +51,6 @@ export const options: NextAuthOptions = {
     async jwt({ token, account, user }) {
       if (account && user) {
         return {
-          // ...token,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           accessTokenExpires: account.expires_at * 1000,
