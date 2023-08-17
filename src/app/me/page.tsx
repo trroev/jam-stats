@@ -24,6 +24,7 @@ import AIMusicRecs from "@/components/ai-music-recs"
 import AIPodcasts from "@/components/ai-podcasts"
 import Card from "@/components/card"
 import Header from "@/components/header"
+import TasteDescription from "@/components/taste-description"
 import UserGenres from "@/components/user-genres"
 import UserPill from "@/components/user-pill"
 
@@ -52,7 +53,6 @@ export default function Profile() {
     ...user.topArtists.medium,
     ...user.topArtists.short,
   ])
-  console.log(userGenres)
 
   useEffect(() => {
     setTimeout(() => {
@@ -116,8 +116,8 @@ export default function Profile() {
                   }}
                   averageArtistPopularity={user.averageArtistPopularity}
                   artistDescription={artistDescription}
+                  userGenres={userGenres}
                 />
-                <UserGenres genres={userGenres} />
                 <AIMusicRecs user={user} />
               </div>
             ) : display === "tracks" ? (
@@ -147,6 +147,7 @@ const FavArtists = ({
   topArtists,
   averageArtistPopularity,
   artistDescription,
+  userGenres,
 }: FavArtistProps) => {
   const [artistsToDisplay, setArtistsToDisplay] = useState<{
     time: "long" | "medium" | "short"
@@ -244,20 +245,13 @@ const FavArtists = ({
           </motion.li>
         ))}
       </ul>
-      <motion.li
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{
-          duration: animationDuration,
-          delay: (artistsToDisplay.artists.length + 1) * animationDelay,
-        }}
-        className="w-full mt-8 flex justify-center items-center bg-darkGrayAccent rounded-md border-black border-2 gap-8"
-      >
-        <h2 className="text-2xl font-bold bg-greenAccent text-black p-6 rounded-full">
-          {averageArtistPopularity.toFixed(0)}
-        </h2>
-        <span className="text-sm">{artistDescription}</span>
-      </motion.li>
+      <div className="flex justify-center items-center gap-4">
+        <TasteDescription
+          description={artistDescription}
+          averageXPopularity={averageArtistPopularity}
+        />
+        <UserGenres genres={userGenres} />
+      </div>
     </div>
   )
 }
@@ -360,20 +354,10 @@ const TopTracks = ({
           </motion.li>
         ))}
       </ul>
-      <motion.li
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{
-          duration: animationDuration,
-          delay: (tracksToDisplay.tracks.length + 1) * animationDelay,
-        }}
-        className="w-full mt-8 flex justify-center items-center bg-darkGrayAccent rounded-md border-black border-2 gap-8"
-      >
-        <h2 className="text-2xl font-bold bg-greenAccent text-black p-6 rounded-full">
-          {averageTrackPopularity.toFixed(0)}
-        </h2>
-        <span className="text-sm">{trackDescription}</span>
-      </motion.li>
+      <TasteDescription
+        description={trackDescription}
+        averageXPopularity={averageTrackPopularity}
+      />
     </div>
   )
 }

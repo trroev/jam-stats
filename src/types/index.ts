@@ -54,6 +54,7 @@ export interface FavArtistProps {
   topArtists: TopArtists
   averageArtistPopularity: number
   artistDescription: string
+  userGenres: Genre[]
 }
 
 export interface HeaderProps {
@@ -108,4 +109,9 @@ export interface Genre {
 
 export interface UserGenreProps {
   genres: Genre[]
+}
+
+export interface TasteDescriptionProps {
+  description: string
+  averageXPopularity: number
 }
