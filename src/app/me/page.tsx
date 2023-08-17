@@ -17,6 +17,7 @@ import AIMusicRecs from "@/components/ai-music-recs"
 import AIPodcasts from "@/components/ai-podcasts"
 import Card from "@/components/card"
 import Header from "@/components/header"
+import UserPill from "@/components/user-pill"
 
 const ulClasses =
   "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-4 lg:justify-items-end"
@@ -83,11 +84,14 @@ export default function Profile() {
           height={waveHeight}
         />
         <div className="flex flex-col justify-center items-start gap-8">
-          <Header
-            user={user.userProfile}
-            display={display}
-            setDisplay={setDisplay}
-          />
+          <div className="relative flex flex-col justify-center items-end w-full gap-2">
+            <Header
+              user={user.userProfile}
+              display={display}
+              setDisplay={setDisplay}
+            />
+            <UserPill userProfile={user.userProfile} />
+          </div>
           <div className="flex flex-col justify-between gap-4">
             {display === "artists" ? (
               <div className="flex flex-col justify-center items-start gap-8 px-2">

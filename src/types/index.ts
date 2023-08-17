@@ -62,6 +62,10 @@ export interface HeaderProps {
   setDisplay: React.Dispatch<React.SetStateAction<string>>
 }
 
+export interface UserPillProps {
+  userProfile: UserProfile
+}
+
 export interface AIMusicRecsProps {
   user: {
     topArtists: TopArtists
