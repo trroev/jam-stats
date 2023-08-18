@@ -1,5 +1,6 @@
 import "@/styles/globals.css"
 import type { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/react"
 
 import { siteConfig } from "@/config/site"
 import { raleway } from "@/lib/fonts"
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={`min-h-screen font-sans antialiased ${raleway.variable} bg-darkPrimary text-lightPrimary flex justify-center items-start`}
       >
         <AuthProvider>{children}</AuthProvider>
+        <Analytics />
       </body>
     </html>
   )
