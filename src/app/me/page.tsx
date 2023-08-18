@@ -10,7 +10,6 @@ import {
   TopTrackProps,
   Track,
 } from "@/types"
-// import { useCompletion } from "ai/react"
 import { motion } from "framer-motion"
 import { signIn } from "next-auth/react"
 
@@ -73,7 +72,6 @@ export default function Profile() {
           className="border-2 border-greenAccent"
           onClick={(e) => {
             e.preventDefault()
-            // will update callbackUrl to user dashboard once that is set up
             signIn("spotify", { callbackUrl: "/me" })
           }}
         >

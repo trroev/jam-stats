@@ -42,7 +42,7 @@ export default function AIPodcasts({ user }: AIPodcastsProps) {
           >
             <Image src={gear} alt="loading" />
           </motion.div>
-          <p className="text-center">Generating recommendations...</p>
+          <p className="text-center">Waiting on ChatGPT...</p>
         </div>
       ) : (
         <p>{completion}</p>

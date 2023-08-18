@@ -1,6 +1,4 @@
-import Image from "next/image"
 import { HeaderProps } from "@/types"
-import { User } from "lucide-react"
 
 const Header = ({ user, display, setDisplay }: HeaderProps) => {
   return (

@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react"
-import { Artist, Show, SpotifyData, Track, UserProfile, SpotifyError } from "@/types"
+import {
+  Artist,
+  Show,
+  SpotifyData,
+  SpotifyError,
+  Track,
+  UserProfile,
+} from "@/types"
 import { useSession } from "next-auth/react"
 
-import {
-  mapArtists,
-  mapTracks,
-  metaGenres,
-  popularityDescription,
-} from "../util/util"
+import { mapArtists, mapTracks, popularityDescription } from "../util/util"
 
 const SPOTIFY_BASE_URL = "https://api.spotify.com/v1/me"
 
@@ -29,7 +31,7 @@ export default function useSpotify(): SpotifyData {
     medium: topArtistsMedium,
     long: topArtistsLong,
   }
-  
+
   const topTracks = {
     short: topTracksShort,
     medium: topTracksMedium,
@@ -56,9 +58,9 @@ export default function useSpotify(): SpotifyData {
       }
     } catch (error) {
       const err = error as SpotifyError
-      if(err.status){
+      if (err.status) {
         setAuthStatus(err.status)
-      }else{
+      } else {
         console.error("Error fetching Spotify data:", error)
       }
     }
@@ -135,16 +137,13 @@ export default function useSpotify(): SpotifyData {
       }
     } catch (error) {
       const err = error as SpotifyError
-      if(err.status){
+      if (err.status) {
         setAuthStatus(err.status)
-      }else{
+      } else {
         console.error("Error fetching Spotify data:", error)
       }
     }
   }
-
-  // calculate and set userGenres
-  
 
   useEffect(() => {
     // call the functions to fetch the data when the session changes
