@@ -1,5 +1,4 @@
 import { Artist, Track } from "@/types"
-import { Type } from "typescript"
 
 export function sortObjectByValues(obj: { [key: string]: number }) {
   const sortedEntries = Object.entries(obj).sort((a, b) => b[1] - a[1])
@@ -75,3 +74,48 @@ export const mapTracks = (items: any[]) =>
     spotifyUrl: track.external_urls.spotify,
     explicit: track.explicit,
   }))
+
+export const extractBandsFromResponse = (response: string) => {
+  // regex to match each numbered item and capture its content
+  const matches = response.match(
+    /\d+\.\s*(.*?)(?=\n\d+\.|\n$|\nRecommended Bands|$)/g
+  )
+  if (matches) {
+    // map over the matches and extract the band names by removing the nubmers and dots
+    return matches.map((match) => match.replace(/\d+\.\s*/, "").trim())
+  }
+  // return an empty array of no matches are found
+  return []
+}
+
+export const calculateUserGenres = (allTopArtists: Artist[]) => {
+  let sortedGenresArray: { genre: string; count: number }[] = []
+  try {
+    const genresMap = new Map<string, number>()
+
+    allTopArtists.forEach((artist: Artist) => {
+      artist.genres.forEach((genre: string) => {
+        const genreWords = genre.split(" ")
+        genreWords.forEach((g: string) => {
+          if (metaGenres.includes(g)) {
+            genresMap.set(g, (genresMap.get(g) || 0) + 1)
+          }
+        })
+        if (genreWords.length === 1) {
+          genresMap.set(genre, (genresMap.get(genre) || 0) + 1)
+        }
+      })
+    })
+
+    const genresArray: { genre: string; count: number }[] = []
+    genresMap.forEach((value, key) => {
+      genresArray.push({ genre: key, count: value })
+    })
+
+    sortedGenresArray = genresArray.sort((a, b) => b.count - a.count)
+  } catch (error) {
+    console.error("Error calculating user genres:", error)
+  } finally {
+    return sortedGenresArray
+  }
+}

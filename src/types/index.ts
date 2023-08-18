@@ -54,9 +54,29 @@ export interface FavArtistProps {
   topArtists: TopArtists
   averageArtistPopularity: number
   artistDescription: string
+  userGenres: Genre[]
 }
+
+export interface HeaderProps {
+  user: UserProfile
+  display: string
+  setDisplay: React.Dispatch<React.SetStateAction<string>>
+}
+
 export interface UserPillProps {
   userProfile: UserProfile
+}
+
+export interface AIMusicRecsProps {
+  user: {
+    topArtists: TopArtists
+  }
+}
+
+export interface AIPodcastsProps {
+  user: {
+    shows: Show[]
+  }
 }
 
 export interface SpotifyData {
@@ -72,8 +92,26 @@ export interface SpotifyData {
     long: Track[]
   }
   shows: Show[]
-  userGenres: [string, number][]
   showTitleList: string[]
   averageArtistPopularity: number
   averageTrackPopularity: number
+  authStatus: number
+}
+
+export interface SpotifyError {
+  status: number
+}
+
+export interface Genre {
+  genre: string
+  count: number
+}
+
+export interface UserGenreProps {
+  genres: Genre[]
+}
+
+export interface TasteDescriptionProps {
+  description: string
+  averageXPopularity: number
 }

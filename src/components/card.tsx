@@ -40,7 +40,7 @@ export default function Card({ track, artist, show, index }: CardProps) {
           rel="noopener noreferrer"
           className="relative"
         >
-          <div className="bg-black rounded-md w-2/3 md:w-full float-right lg:w-full transition-all duration-500 delay-75">
+          <div className="bg-black rounded-md lg:h-[110px] w-2/3 md:w-full float-right lg:w-full transition-all duration-500 delay-75 flex">
             {toDisplay ? (
               <Image
                 src={toDisplay.image}
