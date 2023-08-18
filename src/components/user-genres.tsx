@@ -3,19 +3,21 @@ import { motion } from "framer-motion"
 
 export default function UserGenres(genres: UserGenreProps) {
   const highestCount = genres.genres[0].count
-  const textStyles = "text-lightPrimary z-10 font-bold text-shadow"
+  const textStyles =
+    "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-1/4"
+  const lastText = "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-1/2"
 
   return (
-    <div className="w-full">
-      <h1 className="flex justify-start text-xl text-greenAccent font-bold">
-        Genres
+    <div className="w-full p-4">
+      <h1 className="flex justify-start text-xl text-greenAccent font-bold mb-4">
+        Top Genres
       </h1>
       <div className="flex flex-col gap-2">
         {genres.genres.map((genre, i) => {
           const widthPercentage: number = (genre.count / highestCount) * 100
           return (
-            <div className="w-full flex flex-col">
-              <div className="w-full h-4">
+            <div className="w-full flex flex-col justify-center items-start relative">
+              <div className="w-full h-8 absolute">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${widthPercentage}%` }}
@@ -23,10 +25,10 @@ export default function UserGenres(genres: UserGenreProps) {
                   className="h-full bg-black rounded-md"
                 />
               </div>
-              <div className="flex gap-4">
+              <div className="flex w-full justify-start gap-4">
                 <p className={textStyles}>{i + 1 + "."}</p>
                 <p className={textStyles}>{genre.genre}</p>
-                <p className={textStyles}>{genre.count}</p>
+                <p className={lastText}>{genre.count}</p>
               </div>
             </div>
           )
