@@ -22,15 +22,13 @@ export default function Home() {
   return (
     <main className="flex min-h-screen max-h-screen flex-col items-center justify-center p-24 overflow-clip">
       <h1 className="text-5xl lg:text-7xl lg:my-8 font-bold justify-self-center place-self-center text-greenAccent leading-loose tracking-wider">
-        Statify
+        JamStats
       </h1>
-      {/* {status === "loading" && <p>Loading...</p>} */}
       {status === "unauthenticated" && (
         <button
           className="border-2 border-greenAccent"
           onClick={(e) => {
             e.preventDefault()
-            // will update callbackUrl to user dashboard once that is set up
             signIn("spotify", { callbackUrl: "/me" })
           }}
         >
