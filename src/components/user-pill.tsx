@@ -13,11 +13,11 @@ const UserPill = ({ userProfile }: UserPillProps) => {
         {userProfile.userImage ? (
           <div className="w-6 h-6 rounded-md relative">
             <Image
-              className="rounded-full"
+              className="rounded-full object-cover"
               src={userProfile.userImage}
               alt="profile"
               fill
-              objectFit="cover"
+              sizes="100vw"
             />
           </div>
         ) : (
