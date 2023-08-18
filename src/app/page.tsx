@@ -28,13 +28,11 @@ export default function Home() {
         <Music2 size={30} />
       </h1>
 
-      {/* {status === "loading" && <p>Loading...</p>} */}
       {status === "unauthenticated" && (
         <button
           className="border-2 border-greenAccent rounded-md"
           onClick={(e) => {
             e.preventDefault()
-            // will update callbackUrl to user dashboard once that is set up
             signIn("spotify", { callbackUrl: "/me" })
           }}
         >
