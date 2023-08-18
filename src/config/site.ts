@@ -1,7 +1,8 @@
 import { SiteConfig } from "@/types"
 
 export const siteConfig: SiteConfig = {
-  title: "JamStats | A Music Recommendation App Using Spotify and OpenAI",
+  title:
+    "JamStats | A Personalized Music Exploration App using Spotify and OpenAI",
   description: "",
   author: ["Matt Gehrls", "Trevor Mathiak"],
   website: "",
@@ -18,10 +19,12 @@ export const siteConfig: SiteConfig = {
   ],
   url: "",
   openGraph: {
-    title: "JamStats | A Music Recommendation App Using Spotify and OpenAI",
+    title:
+      "JamStats | A Personalized Music Exploration App using Spotify and OpenAI",
     description: "",
     url: "",
-    site_name: "JamStats | A Music Recommendation App Using Spotify and OpenAI",
+    site_name:
+      "JamStats | A Personalized Music Exploration App using Spotify and OpenAI",
     images: "",
     type: "website",
     locale: "en_US",
