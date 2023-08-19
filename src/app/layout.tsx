@@ -9,7 +9,7 @@ import AuthProvider from "./context/AuthProvider"
 
 export const metadata: Metadata = {
   title: {
-    default: siteConfig.title,
+    default: `${siteConfig.title} | A Personalized Music Exploration App using Spotify and OpenAI`,
     template: `%s | ${siteConfig.title}`,
   },
   description: siteConfig.description,

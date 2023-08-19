@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Music2 } from "lucide-react"
 import { signIn, signOut, useSession } from "next-auth/react"
 
+import { siteConfig } from "@/config/site"
 import { merriweather } from "@/lib/fonts"
 import useWindowSize from "@/lib/hooks/useWindowSize"
 import openAiLogo from "@/lib/images/openAiLogo.svg"
@@ -24,7 +25,7 @@ export default function Home() {
     <main className="flex min-h-screen max-h-screen flex-col items-center justify-center p-24 overflow-clip">
       <h1 className="text-5xl lg:text-7xl lg:my-8 font-bold justify-self-center place-self-center text-greenAccent leading-loose tracking-wider flex">
         <Music2 size={30} />
-        JamStats
+        {siteConfig.title}
         <Music2 size={30} />
       </h1>
 
