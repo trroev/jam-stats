@@ -28,10 +28,10 @@ import UserGenres from "@/components/user-genres"
 import UserPill from "@/components/user-pill"
 
 const sectionHeaderDivClasses = "flex justify-between w-full gap-4 my-8"
-const selectedTimeClasses= "text-greenAccent font-bold underline text-sm"
+const selectedTimeClasses = "text-greenAccent font-bold underline text-sm"
 const notSelectedTimeClasses = "text-xs"
 const ulClasses =
-  "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-4 lg:justify-items-end"
+  "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-3 lg:justify-items-end"
 const sectionHeaderClasses =
   "flex justify-start text-2xl lg:text-4xl text-greenAccent font-bold"
 const liClasses = "w-full"
@@ -207,7 +207,7 @@ const FavArtists = ({
               }
             }}
           >
-         6 Months
+            6 Months
           </button>
           <button
             className={
@@ -268,7 +268,7 @@ const TopTracks = ({
   }>({ time: "long", tracks: topTracks.long })
   return (
     <div className="px-2">
-      <div className={sectionHeaderDivClasses} >
+      <div className={sectionHeaderDivClasses}>
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}

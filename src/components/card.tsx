@@ -21,11 +21,11 @@ export default function Card({ track, artist, show, index }: CardProps) {
     : null
 
   return (
-    <div className="flex items-center w-full lg:items-center lg:justify-center lg:relative lg:w-60 lg:h-fit bg-transparentDarkGray border-2 border-black lg:p-2  transition-all duration-500 delay-75">
+    <div className="flex items-center w-full lg:items-center lg:justify-center lg:relative lg:w-full lg:h-fit bg-transparentDarkGray border-2 border-black lg:p-2  transition-all duration-500 delay-75">
       <span className="pl-4 lg:absolute lg:-top-3 lg:-left-1 text-xl font-bold">
         {index + 1}
       </span>
-      <div className="w-full gap-8 ml-4 lg:ml-0 lg:block lg:w-1/2 transition-all duration-500 delay-75">
+      <div className="w-full gap-8 ml-4 lg:ml-0 lg:block lg:w-2/3 transition-all duration-500 delay-75">
         <h3 className="lg:absolute lg:top-6 lg:left-4 lg:text-lg font-bold lg:overflow-visible lg:z-10 transition-all duration-500 delay-75">
           {toDisplay ? toDisplay.name : "something went wrong"}
         </h3>
@@ -33,7 +33,7 @@ export default function Card({ track, artist, show, index }: CardProps) {
           {secondaryInfo}
         </span>
       </div>
-      <div className="lg:w-1/2">
+      <div className="lg:w-1/3">
         <a
           href={toDisplay ? toDisplay.spotifyUrl : "#"}
           target="_blank"
