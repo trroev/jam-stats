@@ -21,7 +21,7 @@ export default function Card({ track, artist, show, index }: CardProps) {
     : null
 
   return (
-    <div className="flex items-center w-full lg:items-center lg:justify-center lg:relative lg:w-60 lg:h-fit bg-transparentDarkGray border-2 border-black lg:p-2 rounded-md transition-all duration-500 delay-75">
+    <div className="flex items-center w-full lg:items-center lg:justify-center lg:relative lg:w-60 lg:h-fit bg-transparentDarkGray border-2 border-black lg:p-2  transition-all duration-500 delay-75">
       <span className="pl-4 lg:absolute lg:-top-3 lg:-left-1 text-xl font-bold">
         {index + 1}
       </span>
@@ -40,14 +40,14 @@ export default function Card({ track, artist, show, index }: CardProps) {
           rel="noopener noreferrer"
           className="relative"
         >
-          <div className="bg-black rounded-md lg:h-[110px] w-2/3 md:w-full float-right lg:w-full transition-all duration-500 delay-75 flex">
+          <div className="bg-black  lg:h-[110px] w-2/3 md:w-full float-right lg:w-full transition-all duration-500 delay-75 flex">
             {toDisplay ? (
               <Image
                 src={toDisplay.image}
                 alt={toDisplay.name}
                 width={100}
                 height={100}
-                className="rounded-md w-full opacity-70"
+                className=" w-full opacity-70"
               />
             ) : (
               "something went wrong"

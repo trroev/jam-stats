@@ -22,7 +22,7 @@ export default function UserGenres(genres: UserGenreProps) {
                   initial={{ width: 0 }}
                   animate={{ width: `${widthPercentage}%` }}
                   transition={{ duration: 0.2, delay: i * 0.1 }}
-                  className="h-full bg-black rounded-md"
+                  className="h-full bg-black "
                 />
               </div>
               <div className="flex w-full justify-start gap-4">

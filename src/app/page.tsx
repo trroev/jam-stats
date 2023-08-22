@@ -30,7 +30,7 @@ export default function Home() {
 
       {status === "unauthenticated" && (
         <button
-          className="border-2 border-greenAccent rounded-md"
+          className="border-2 border-greenAccent "
           onClick={(e) => {
             e.preventDefault()
             signIn("spotify", { callbackUrl: "/me" })
@@ -49,7 +49,7 @@ export default function Home() {
           <h2>Hello, {session?.user?.name}</h2>
           <a href="/me">Go to Your Data</a>
           <button
-            className="rounded-md p-2 border border-slate-900"
+            className=" p-2 border border-slate-900"
             onClick={(e) => {
               e.preventDefault()
               signOut({ callbackUrl: "/" })

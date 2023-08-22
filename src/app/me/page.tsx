@@ -246,7 +246,7 @@ const FavArtists = ({
           </motion.li>
         ))}
       </ul>
-      <div className="flex justify-center items-center gap-4 bg-darkGrayAccent rounded-md border-2 border-black mt-4">
+      <div className="flex justify-center items-center gap-4 bg-darkGrayAccent  border-2 border-black mt-4">
         <TasteDescription
           description={artistDescription}
           averageXPopularity={averageArtistPopularity}
@@ -355,7 +355,7 @@ const TopTracks = ({
           </motion.li>
         ))}
       </ul>
-      <div className="flex justify-center w-1/2 items-center gap-4 bg-darkGrayAccent rounded-md border-2 border-black mt-4 py-10">
+      <div className="flex justify-center w-1/2 items-center gap-4 bg-darkGrayAccent  border-2 border-black mt-4 py-10">
         <TasteDescription
           description={trackDescription}
           averageXPopularity={averageTrackPopularity}
