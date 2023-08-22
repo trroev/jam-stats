@@ -3,9 +3,11 @@ import { motion } from "framer-motion"
 
 export default function UserGenres(genres: UserGenreProps) {
   const highestCount = genres.genres[0].count
+  const indexStyles =
+    "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-[10%]"
   const textStyles =
-    "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-1/4"
-  const lastText = "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-1/2"
+    "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-[80%]"
+  const lastText = "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-[10%]"
 
   return (
     <div className="w-full p-4">
@@ -26,7 +28,7 @@ export default function UserGenres(genres: UserGenreProps) {
                 />
               </div>
               <div className="flex w-full justify-start gap-4">
-                <p className={textStyles}>{i + 1 + "."}</p>
+                <p className={indexStyles}>{i + 1 + "."}</p>
                 <p className={textStyles}>{genre.genre}</p>
                 <p className={lastText}>{genre.count}</p>
               </div>
