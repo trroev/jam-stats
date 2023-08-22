@@ -77,7 +77,7 @@ const LowerBanner = () => {
   const divClasses = "flex gap-4 items-center"
 
   return (
-    <div className="bg-grayAccent absolute bottom-0 w-full max-w-5xl h-24 border-t-2 lg:border-2 lg:border-b-0 border-black shadow-md lg:rounded-t-md">
+    <div className="bg-grayAccent absolute bottom-0 w-full max-w-5xl h-24 border-t-2 lg:border-2 lg:border-b-0 border-black shadow-md">
       <div className="flex flex-col lg:flex-row justify-center items-center h-full gap-2 lg:gap-8">
         <div className={divClasses}>
           <p className={textClasses}>Powered by:</p>
