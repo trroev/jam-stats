@@ -368,7 +368,7 @@ const TopTracks = ({
 
 const Podcasts = ({ shows }: { shows: Show[] }) => {
   return (
-    <div>
+    <div className="w-full">
       <motion.div
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
