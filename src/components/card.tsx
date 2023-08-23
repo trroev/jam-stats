@@ -38,7 +38,7 @@ export default function Card({ track, artist, show, index }: CardProps) {
           <p className="truncate text-sm">{secondaryInfo}</p>
         </div>
         <a
-          className="absolute right-2 lg:bottom-0"
+          className="absolute right-0 lg:bottom-0 lg:right-2"
           target="_blank"
           href={toDisplay?.spotifyUrl}
         >
