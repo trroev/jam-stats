@@ -27,10 +27,14 @@ import TasteDescription from "@/components/taste-description"
 import UserGenres from "@/components/user-genres"
 import UserPill from "@/components/user-pill"
 
+const sectionHeaderDivClasses = "flex justify-between w-full gap-4 my-8"
+const selectedTimeClasses =
+  "text-greenAccent font-bold underline text-sm lg:text-lg"
+const notSelectedTimeClasses = "text-xs lg:text-lg"
 const ulClasses =
-  "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-4 lg:justify-items-end"
+  "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-3 lg:justify-items-end"
 const sectionHeaderClasses =
-  "flex justify-start text-4xl text-greenAccent font-bold"
+  "flex justify-start text-2xl lg:text-4xl text-greenAccent font-bold"
 const liClasses = "w-full"
 const animationDuration = 0.2
 const animationDelay = 0.1
@@ -154,7 +158,7 @@ const FavArtists = ({
 
   return (
     <div>
-      <div className="flex gap-4 mb-8">
+      <div className={sectionHeaderDivClasses}>
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
@@ -163,7 +167,7 @@ const FavArtists = ({
           <h2 className={sectionHeaderClasses}>Fav Artists</h2>
         </motion.div>
         <motion.div
-          className="flex gap-4"
+          className="flex gap-2 lg:gap-4"
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{
@@ -174,8 +178,8 @@ const FavArtists = ({
           <button
             className={
               artistsToDisplay.time === "long"
-                ? "text-greenAccent font-bold underline"
-                : ""
+                ? selectedTimeClasses
+                : notSelectedTimeClasses
             }
             onClick={() => {
               if (artistsToDisplay.time === "long") {
@@ -190,8 +194,8 @@ const FavArtists = ({
           <button
             className={
               artistsToDisplay.time === "medium"
-                ? "text-greenAccent font-bold underline"
-                : ""
+                ? selectedTimeClasses
+                : notSelectedTimeClasses
             }
             onClick={() => {
               if (artistsToDisplay.time === "medium") {
@@ -204,13 +208,13 @@ const FavArtists = ({
               }
             }}
           >
-            Last 6 Months
+            6 Months
           </button>
           <button
             className={
               artistsToDisplay.time === "short"
-                ? "text-greenAccent font-bold underline"
-                : ""
+                ? selectedTimeClasses
+                : notSelectedTimeClasses
             }
             onClick={() => {
               if (artistsToDisplay.time === "short") {
@@ -223,7 +227,7 @@ const FavArtists = ({
               }
             }}
           >
-            Last 4 Weeks
+            4 Weeks
           </button>
         </motion.div>
       </div>
@@ -243,7 +247,7 @@ const FavArtists = ({
           </motion.li>
         ))}
       </ul>
-      <div className="flex justify-center items-center gap-4 bg-darkGrayAccent rounded-md border-2 border-black mt-4">
+      <div className="flex justify-center items-center gap-4 bg-darkGrayAccent  border-2 border-black mt-4">
         <TasteDescription
           description={artistDescription}
           averageXPopularity={averageArtistPopularity}
@@ -265,7 +269,7 @@ const TopTracks = ({
   }>({ time: "long", tracks: topTracks.long })
   return (
     <div className="px-2">
-      <div className="flex gap-4 mb-8">
+      <div className={sectionHeaderDivClasses}>
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
@@ -285,8 +289,8 @@ const TopTracks = ({
           <button
             className={
               tracksToDisplay.time === "long"
-                ? "text-greenAccent font-bold underline"
-                : ""
+                ? selectedTimeClasses
+                : notSelectedTimeClasses
             }
             onClick={() => {
               if (tracksToDisplay.time === "long") {
@@ -301,8 +305,8 @@ const TopTracks = ({
           <button
             className={
               tracksToDisplay.time === "medium"
-                ? "text-greenAccent font-bold underline"
-                : ""
+                ? selectedTimeClasses
+                : notSelectedTimeClasses
             }
             onClick={() => {
               if (tracksToDisplay.time === "medium") {
@@ -315,13 +319,13 @@ const TopTracks = ({
               }
             }}
           >
-            Last 6 Months
+            6 Months
           </button>
           <button
             className={
               tracksToDisplay.time === "short"
-                ? "text-greenAccent font-bold underline"
-                : ""
+                ? selectedTimeClasses
+                : notSelectedTimeClasses
             }
             onClick={() => {
               if (tracksToDisplay.time === "short") {
@@ -331,7 +335,7 @@ const TopTracks = ({
               }
             }}
           >
-            Last 4 Weeks
+            4 Weeks
           </button>
         </motion.div>
       </div>
@@ -352,7 +356,7 @@ const TopTracks = ({
           </motion.li>
         ))}
       </ul>
-      <div className="flex justify-center w-1/2 items-center gap-4 bg-darkGrayAccent rounded-md border-2 border-black mt-4 py-10">
+      <div className="flex justify-center w-1/2 items-center gap-4 bg-darkGrayAccent  border-2 border-black mt-4 py-10">
         <TasteDescription
           description={trackDescription}
           averageXPopularity={averageTrackPopularity}
@@ -364,12 +368,12 @@ const TopTracks = ({
 
 const Podcasts = ({ shows }: { shows: Show[] }) => {
   return (
-    <div>
+    <div className="w-full">
       <motion.div
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: animationDuration * 2 }}
-        className="mb-8"
+        className={sectionHeaderDivClasses}
       >
         <h2 className={sectionHeaderClasses}>Podcasts</h2>
       </motion.div>
