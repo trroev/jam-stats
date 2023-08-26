@@ -7,10 +7,11 @@ export default function UserGenres(genres: UserGenreProps) {
     "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-[10%]"
   const textStyles =
     "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-[80%]"
-  const lastText = "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-[10%]"
+  const lastText =
+    "text-lightPrimary z-10 font-bold text-shadow ml-2 basis-[10%]"
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 pb-8 lg:my-4">
       <h1 className="flex justify-start text-xl text-greenAccent font-bold mb-4">
         Top Genres
       </h1>
