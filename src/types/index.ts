@@ -14,6 +14,12 @@ export interface TopArtists {
   long: Artist[]
 }
 
+export interface TopItems{
+  short: ContentItemArray
+  medium: ContentItemArray
+  long: ContentItemArray
+}
+
 export interface Track {
   name: string
   artist: string
@@ -29,6 +35,17 @@ export interface TopTracks {
   medium: Track[]
   long: Track[]
 }
+
+export interface SingleSelectTimeFrameProps {
+  topItems: TopItems,
+  itemsToDisplay: {time: "long" | "medium" | "short", items: ContentItemArray},
+  setItemsToDisplay: React.Dispatch<React.SetStateAction<{
+    time: "long" | "medium" | "short";
+    items: ContentItemArray;
+}>>,
+}
+
+export type ContentItemArray = Artist[] | Track[] | Show[]
 
 export interface UserProfile {
   name: string
@@ -69,16 +86,8 @@ export interface UserPillProps {
   userProfile: UserProfile
 }
 
-export interface AIMusicRecsProps {
-  user: {
-    topArtists: TopArtists
-  }
-}
-
 export interface AIPodcastsProps {
-  user: {
-    shows: Show[]
-  }
+  user: SpotifyData
 }
 
 export interface SpotifyData {
