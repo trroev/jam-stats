@@ -25,9 +25,9 @@ export default function AIPodcasts({ user }: AIPodcastsProps) {
   }, [])
 
   return (
-    <>
+    <div className="w-full">
       {isLoading ? (
-        <div className="flex flex-col w-full justify-center items-center">
+        <div className="flex flex-col min-w-full justify-center items-center px-24 py-8">
           <motion.div
             animate={{
               x: [-100, -50, 0, 50, 100],
@@ -45,8 +45,10 @@ export default function AIPodcasts({ user }: AIPodcastsProps) {
           <p className="text-center">Waiting on ChatGPT...</p>
         </div>
       ) : (
-        <p>{completion}</p>
+        <div className="flex flex-col w-full justify-center items-center px-4 py-8">
+          <p>{completion}</p>
+        </div>
       )}
-    </>
+    </div>
   )
 }
