@@ -4,9 +4,11 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import {
   Artist,
+  ContentItemArray,
   FavArtistProps,
   Genre,
-  Show,
+  SingleSelectTimeFrameProps,
+  SpotifyData,
   TopTrackProps,
   Track,
 } from "@/types"
@@ -27,12 +29,13 @@ import TasteDescription from "@/components/taste-description"
 import UserGenres from "@/components/user-genres"
 import UserPill from "@/components/user-pill"
 
-const sectionHeaderDivClasses = "flex justify-between w-full gap-4 my-8"
 const selectedTimeClasses =
   "text-greenAccent font-bold underline text-sm lg:text-lg"
 const notSelectedTimeClasses = "text-xs lg:text-lg"
 const ulClasses =
-  "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-3 lg:justify-items-end"
+  "flex flex-col justify-center items-center gap-1 w-full lg:grid lg:grid-flow-row lg:grid-cols-3 lg:justify-items-end px-2 lg:px-0"
+const sectionHeaderDivClasses =
+  "flex justify-between max-w-full gap-4 my-8 mx-2"
 const sectionHeaderClasses =
   "flex justify-start text-2xl lg:text-4xl text-greenAccent font-bold"
 const liClasses = "w-full"
@@ -68,7 +71,7 @@ export default function Profile() {
   } else if (user.userProfile == null || user.authStatus === 401) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center max-w-5xl">
-        <p>
+        <p className="flex justify-center items-center p-4">
           Spotify declined our requests. Your session probably expired. Please
           login again.
         </p>
@@ -90,7 +93,7 @@ export default function Profile() {
     )
   } else {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-start max-w-5xl">
+      <main className="flex min-h-screen flex-col items-center justify-start w-full max-w-5xl p-2">
         <Image
           priority
           src={wave}
@@ -98,7 +101,7 @@ export default function Profile() {
           className="fixed opacity-10 -z-40 top-24"
           height={waveHeight}
         />
-        <div className="flex flex-col justify-center items-start gap-8">
+        <div className="flex flex-col justify-center items-start gap-8 w-full">
           <div className="relative flex flex-col justify-center items-end w-full gap-2">
             <Header
               user={user.userProfile}
@@ -107,21 +110,18 @@ export default function Profile() {
             />
             <UserPill userProfile={user.userProfile} />
           </div>
-          <div className="flex flex-col justify-between gap-4">
+          <div className="flex flex-col justify-between items-start gap-4 w-full">
             {display === "artists" ? (
-              <div className="flex flex-col justify-center items-start gap-8 px-2">
-                <FavArtists
-                  topArtists={{
-                    short: user.topArtists.short,
-                    medium: user.topArtists.medium,
-                    long: user.topArtists.long,
-                  }}
-                  averageArtistPopularity={user.averageArtistPopularity}
-                  artistDescription={artistDescription}
-                  userGenres={userGenres}
-                />
-                <AIMusicRecs user={user} />
-              </div>
+              <FavArtists
+                topArtists={{
+                  short: user.topArtists.short,
+                  medium: user.topArtists.medium,
+                  long: user.topArtists.long,
+                }}
+                averageArtistPopularity={user.averageArtistPopularity}
+                artistDescription={artistDescription}
+                userGenres={userGenres}
+              />
             ) : display === "tracks" ? (
               <TopTracks
                 topTracks={{
@@ -133,11 +133,14 @@ export default function Profile() {
                 trackDescription={trackDescription}
               />
             ) : (
-              <div className="flex flex-col justify-center items-start gap-8 px-2">
-                <Podcasts shows={user.shows} />
-                <AIPodcasts user={user} />
-              </div>
+              <Podcasts {...user} />
             )}
+          </div>
+          <hr className="h-[1px] bg-white w-full"></hr>
+          <div className="w-full flex justify-center items-center pb-4 pt-1">
+            <p>
+              Data and Images from <a>Spotify</a>
+            </p>
           </div>
         </div>
       </main>
@@ -151,10 +154,10 @@ const FavArtists = ({
   artistDescription,
   userGenres,
 }: FavArtistProps) => {
-  const [artistsToDisplay, setArtistsToDisplay] = useState<{
+  const [itemsToDisplay, setItemsToDisplay] = useState<{
     time: "long" | "medium" | "short"
-    artists: Artist[]
-  }>({ time: "long", artists: topArtists.long })
+    items: ContentItemArray
+  }>({ time: "long", items: topArtists.long })
 
   return (
     <div>
@@ -166,73 +169,14 @@ const FavArtists = ({
         >
           <h2 className={sectionHeaderClasses}>Fav Artists</h2>
         </motion.div>
-        <motion.div
-          className="flex gap-2 lg:gap-4"
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{
-            duration: animationDuration * 2,
-            delay: animationDelay * 2,
-          }}
-        >
-          <button
-            className={
-              artistsToDisplay.time === "long"
-                ? selectedTimeClasses
-                : notSelectedTimeClasses
-            }
-            onClick={() => {
-              if (artistsToDisplay.time === "long") {
-                return
-              } else {
-                setArtistsToDisplay({ time: "long", artists: topArtists.long })
-              }
-            }}
-          >
-            All Time
-          </button>
-          <button
-            className={
-              artistsToDisplay.time === "medium"
-                ? selectedTimeClasses
-                : notSelectedTimeClasses
-            }
-            onClick={() => {
-              if (artistsToDisplay.time === "medium") {
-                return
-              } else {
-                setArtistsToDisplay({
-                  time: "medium",
-                  artists: topArtists.medium,
-                })
-              }
-            }}
-          >
-            6 Months
-          </button>
-          <button
-            className={
-              artistsToDisplay.time === "short"
-                ? selectedTimeClasses
-                : notSelectedTimeClasses
-            }
-            onClick={() => {
-              if (artistsToDisplay.time === "short") {
-                return
-              } else {
-                setArtistsToDisplay({
-                  time: "short",
-                  artists: topArtists.short,
-                })
-              }
-            }}
-          >
-            4 Weeks
-          </button>
-        </motion.div>
+        <SingleSelectTimeFrame
+          topItems={topArtists}
+          setItemsToDisplay={setItemsToDisplay}
+          itemsToDisplay={itemsToDisplay}
+        />
       </div>
       <ul className={ulClasses}>
-        {artistsToDisplay.artists.map((artist, i) => (
+        {itemsToDisplay.items.map((artist, i) => (
           <motion.li
             className={liClasses}
             initial={{ opacity: 0, x: -100 }}
@@ -243,17 +187,18 @@ const FavArtists = ({
             }}
             key={i}
           >
-            <Card artist={artist} index={i} />
+            <Card artist={artist as Artist} index={i} />
           </motion.li>
         ))}
       </ul>
-      <div className="flex justify-center items-center gap-4 bg-darkGrayAccent  border-2 border-black mt-4">
+      <div className="flex flex-col lg:flex-row justify-center items-center lg:items-center gap-4 bg-darkGrayAccent border-2 border-black mt-4">
         <TasteDescription
           description={artistDescription}
           averageXPopularity={averageArtistPopularity}
         />
         <UserGenres genres={userGenres} />
       </div>
+      <AIMusicRecs {...topArtists} />
     </div>
   )
 }
@@ -263,12 +208,12 @@ const TopTracks = ({
   averageTrackPopularity,
   trackDescription,
 }: TopTrackProps) => {
-  const [tracksToDisplay, setTracksToDisplay] = useState<{
+  const [itemsToDisplay, setItemsToDisplay] = useState<{
     time: "long" | "medium" | "short"
-    tracks: Track[]
-  }>({ time: "long", tracks: topTracks.long })
+    items: ContentItemArray
+  }>({ time: "long", items: topTracks.long })
   return (
-    <div className="px-2">
+    <div>
       <div className={sectionHeaderDivClasses}>
         <motion.div
           initial={{ opacity: 0, x: -100 }}
@@ -277,70 +222,14 @@ const TopTracks = ({
         >
           <h2 className={sectionHeaderClasses}>Top Tracks</h2>
         </motion.div>
-        <motion.div
-          className="flex gap-4"
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{
-            duration: animationDuration * 2,
-            delay: animationDelay * 2,
-          }}
-        >
-          <button
-            className={
-              tracksToDisplay.time === "long"
-                ? selectedTimeClasses
-                : notSelectedTimeClasses
-            }
-            onClick={() => {
-              if (tracksToDisplay.time === "long") {
-                return
-              } else {
-                setTracksToDisplay({ time: "long", tracks: topTracks.long })
-              }
-            }}
-          >
-            All Time
-          </button>
-          <button
-            className={
-              tracksToDisplay.time === "medium"
-                ? selectedTimeClasses
-                : notSelectedTimeClasses
-            }
-            onClick={() => {
-              if (tracksToDisplay.time === "medium") {
-                return
-              } else {
-                setTracksToDisplay({
-                  time: "medium",
-                  tracks: topTracks.medium,
-                })
-              }
-            }}
-          >
-            6 Months
-          </button>
-          <button
-            className={
-              tracksToDisplay.time === "short"
-                ? selectedTimeClasses
-                : notSelectedTimeClasses
-            }
-            onClick={() => {
-              if (tracksToDisplay.time === "short") {
-                return
-              } else {
-                setTracksToDisplay({ time: "short", tracks: topTracks.short })
-              }
-            }}
-          >
-            4 Weeks
-          </button>
-        </motion.div>
+        <SingleSelectTimeFrame
+          topItems={topTracks}
+          itemsToDisplay={itemsToDisplay}
+          setItemsToDisplay={setItemsToDisplay}
+        />
       </div>
       <ul className={ulClasses}>
-        {tracksToDisplay.tracks.map((track, i) => (
+        {itemsToDisplay.items.map((track, i) => (
           <motion.li
             className={liClasses}
             initial={{ opacity: 0, x: -100 }}
@@ -352,11 +241,11 @@ const TopTracks = ({
             }}
             key={i}
           >
-            <Card track={track} index={i} />
+            <Card track={track as Track} index={i} />
           </motion.li>
         ))}
       </ul>
-      <div className="flex justify-center w-1/2 items-center gap-4 bg-darkGrayAccent  border-2 border-black mt-4 py-10">
+      <div className="flex justify-center items-center gap-4 bg-darkGrayAccent  border-2 border-black p-4 mt-8">
         <TasteDescription
           description={trackDescription}
           averageXPopularity={averageTrackPopularity}
@@ -366,33 +255,38 @@ const TopTracks = ({
   )
 }
 
-const Podcasts = ({ shows }: { shows: Show[] }) => {
+const Podcasts = (user: SpotifyData) => {
   return (
     <div className="w-full">
-      <motion.div
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: animationDuration * 2 }}
-        className={sectionHeaderDivClasses}
-      >
-        <h2 className={sectionHeaderClasses}>Podcasts</h2>
-      </motion.div>
+      <div className={sectionHeaderDivClasses}>
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: animationDuration * 2 }}
+        >
+          <h2 className={sectionHeaderClasses}>Podcasts</h2>
+        </motion.div>
+      </div>
       <ul className={ulClasses}>
-        {shows.map((show, i) => (
-          <motion.li
-            className={liClasses}
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{
-              duration: animationDuration,
-              delay: i * animationDelay,
-            }}
-            key={i}
-          >
-            <Card show={show} index={i} />
-          </motion.li>
-        ))}
+        {user.shows &&
+          user.shows.map((show, i) => (
+            <motion.li
+              className={liClasses}
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                duration: animationDuration,
+                delay: i * animationDelay,
+              }}
+              key={i}
+            >
+              <Card show={show} index={i} />
+            </motion.li>
+          ))}
       </ul>
+      <div className="flex justify-center items-center gap-4 p-4 mt-8">
+        <AIPodcasts user={user} />
+      </div>
     </div>
   )
 }
@@ -444,5 +338,78 @@ const Loading = (waveSize: { height: number; width: number }) => {
         alt="Spotify Logo Waves"
       />
     </div>
+  )
+}
+
+const SingleSelectTimeFrame = ({
+  topItems,
+  itemsToDisplay,
+  setItemsToDisplay,
+}: SingleSelectTimeFrameProps) => {
+  return (
+    <motion.div
+      className="flex gap-2 lg:gap-4"
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{
+        duration: animationDuration * 2,
+        delay: animationDelay * 2,
+      }}
+    >
+      <button
+        className={
+          itemsToDisplay.time === "long"
+            ? selectedTimeClasses
+            : notSelectedTimeClasses
+        }
+        onClick={() => {
+          if (itemsToDisplay.time === "long") {
+            return
+          } else {
+            setItemsToDisplay({ time: "long", items: topItems.long })
+          }
+        }}
+      >
+        All Time
+      </button>
+      <button
+        className={
+          itemsToDisplay.time === "medium"
+            ? selectedTimeClasses
+            : notSelectedTimeClasses
+        }
+        onClick={() => {
+          if (itemsToDisplay.time === "medium") {
+            return
+          } else {
+            setItemsToDisplay({
+              time: "medium",
+              items: topItems.medium,
+            })
+          }
+        }}
+      >
+        6 Months
+      </button>
+      <button
+        className={
+          itemsToDisplay.time === "short"
+            ? selectedTimeClasses
+            : notSelectedTimeClasses
+        }
+        onClick={() => {
+          if (itemsToDisplay.time === "short") {
+            return
+          } else {
+            setItemsToDisplay({
+              time: "short",
+              items: topItems.short,
+            })
+          }
+        }}
+      >
+        4 Weeks
+      </button>
+    </motion.div>
   )
 }

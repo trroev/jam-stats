@@ -1,8 +1,8 @@
 import { HeaderProps } from "@/types"
 
-const Header = ({ user, display, setDisplay }: HeaderProps) => {
+const Header = ({ display, setDisplay }: HeaderProps) => {
   return (
-    <div className="bg-black w-full py-4 px-8 flex justify-evenly items-center">
+    <div className="bg-black min-w-full py-4 px-8 flex justify-evenly items-center">
       <div className="w-1/3 relative flex justify-center items-center">
         <button
           className={

@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { AIMusicRecsProps, Artist } from "@/types"
+import { Artist, TopArtists } from "@/types"
 import { useCompletion } from "ai/react"
 import { motion } from "framer-motion"
 
 import gear from "@/lib/images/gear.svg"
 import { extractBandsFromResponse } from "@/lib/util/util"
 
-export default function AIMusicRecs({ user }: AIMusicRecsProps) {
+export default function AIMusicRecs(topArtists: TopArtists) {
   // combine the top artists arrays from different time ranges into a single array
   const allTopArtists = [
-    ...user.topArtists.long,
-    ...user.topArtists.medium,
-    ...user.topArtists.short,
+    ...topArtists.long,
+    ...topArtists.medium,
+    ...topArtists.short,
   ]
 
   const [recs, setRecs] = useState<string[]>([])
@@ -49,7 +49,7 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
   return (
     <>
       {isLoading ? (
-        <div className="flex flex-col w-full justify-center items-center">
+        <div className="flex flex-col w-full justify-center items-center px-4 py-8">
           <motion.div
             animate={{
               x: [-100, -50, 0, 50, 100],
@@ -67,7 +67,9 @@ export default function AIMusicRecs({ user }: AIMusicRecsProps) {
           <p className="text-center">Waiting on ChatGPT...</p>
         </div>
       ) : (
-        <p>{completion}</p>
+        <div className="flex flex-col w-full justify-center items-center px-4 py-8">
+          <p>{completion}</p>
+        </div>
       )}
     </>
   )

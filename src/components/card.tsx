@@ -24,7 +24,7 @@ export default function Card({ track, artist, show, index }: CardProps) {
     <div className="flex justify-between items-center w-full lg:justify-center relative bg-transparentDarkGray border-2 border-black lg:p-2  transition-all duration-500 delay-75">
       <div
         className={
-          "w-4/5 max-w-4/5 lg:w-2/3 lg:max-w-2/3 p-2 flex flex-col justify-center relative " +
+          "w-4/5 max-w-4/5 lg:w-2/3 lg:max-w-2/3 flex flex-col justify-center relative " +
           cardHeights
         }
       >

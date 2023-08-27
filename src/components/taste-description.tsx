@@ -13,17 +13,17 @@ export default function TasteDescription({
         duration: 0.2,
         delay: 0.2,
       }}
-      className="w-full lg:h-40 flex flex-col py-4 pl-4 lg:px-10 justify-center items-center  gap-8"
+      className="w-full lg:h-40 flex flex-col justify-center items-center gap-8 py-8 lg:py-32"
     >
-      <div className="w-full flex justify-between items-center gap">
-        <h2 className="text-md lg:text-xl font-bold text-greenAccent">
-          Artist Popularity Average
-        </h2>
+      <div className="w-full flex flex-col gap-4 md:flex-row justify-center items-center">
         <h3 className="text-2xl font-bold bg-greenAccent text-black py-2 px-3 lg:py-6 lg:px-7 rounded-full">
           {averageXPopularity.toFixed(0)}
         </h3>
+        <h2 className="text-xl font-bold text-greenAccent">
+          Artist Popularity Average
+        </h2>
       </div>
-      <span className="text-sm lg:text-md">{description}</span>
+      <span className="text-sm lg: w-2/3 lg:text-lg">{description}</span>
     </motion.li>
   )
 }
