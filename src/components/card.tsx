@@ -13,32 +13,41 @@ interface CardProps {
 }
 
 export default function Card({ track, artist, show, index }: CardProps) {
-  const toDisplay = track ? track : artist ? artist : show ? show : null
+  const toDisplay = track ? track : artist ? artist : show ? show : undefined
   const secondaryInfo = artist ? artist.genres[0] : track ? track.artist : null
 
-  const cardHeights = "h-[40px] md:h-[70px] lg:h-[110px]"
-  const cardWeights = "w-[40px] md:w-[70px] lg:w-[110px]"
-  const textDivClasses = "flex justify-start lg:h-1/2 ml-4"
+  if (!toDisplay) {
+    return <div>something went wrong</div>
+  } else if (toDisplay?.name.length > 30) {
+    toDisplay.name = toDisplay.name.slice(0, 30) + "..."
+  } else {
+    toDisplay.name = toDisplay.name
+  }
+
+  const cardHeights =
+    "h-[50px] min-h-[50px] md:h-[70px] lg:h-[110px] md:min-h-[70px] lg:min-h-[110px]"
+  const cardWeights =
+    "w-[50px] min-w-[50px] md:w-[70px] lg:w-[110px] md:min-w-[70px] lg:min-w-[110px]"
+  const textDivClasses = "lg:h-1/2 max-w-1/2"
 
   return (
-    <div className="flex justify-between items-center w-full lg:justify-center relative bg-transparentDarkGray border-2 border-black lg:p-2  transition-all duration-500 delay-75">
+    <div className="flex justify-between items-centerlg:justify-center relative bg-transparentDarkGray border-2 border-black lg:p-2  transition-all duration-500 delay-75">
       <div
         className={
-          "w-4/5 max-w-4/5 lg:w-2/3 lg:max-w-2/3 flex flex-col justify-center relative " +
-          cardHeights
+          "w-full flex justify-between items-center relative p-2 " + cardHeights
         }
       >
-        <span className="absolute -top-3 left-1 font-bold">{index + 1}</span>
-        <div className={textDivClasses + " items-end"}>
-          <h2 className="truncate font-extrabold md:text-lg">
-            {toDisplay?.name}
-          </h2>
-        </div>
-        <div className={"hidden md:block " + textDivClasses}>
-          <p className="truncate text-sm">{secondaryInfo}</p>
+        <span className="font-bold absolute -top-3 -left-1">{index + 1}</span>
+        <div className="flex flex-col justify-center items-start p-2">
+          <div className={textDivClasses + " items-end"}>
+            <h2 className="md:text-lg">{toDisplay?.name}</h2>
+          </div>
+          <div className={"hidden md:block wrap" + textDivClasses}>
+            <p className="wrap text-sm">{secondaryInfo}</p>
+          </div>
         </div>
         <a
-          className="absolute right-0 lg:bottom-0 lg:right-2"
+          className="min-h-[20px] min-w-[20px] lg:absolute lg:bottom-2 lg:right-2"
           target="_blank"
           href={toDisplay?.spotifyUrl}
         >
@@ -48,7 +57,7 @@ export default function Card({ track, artist, show, index }: CardProps) {
       {toDisplay ? (
         <div
           className={
-            "bg-black float-right transition-all duration-500 delay-75 flex " +
+            "bg-black transition-all duration-500 delay-75 flex " +
             cardHeights +
             " " +
             cardWeights
