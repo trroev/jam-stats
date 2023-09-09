@@ -93,7 +93,7 @@ export default function Profile() {
     )
   } else {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-start w-full max-w-5xl p-2">
+      <main className="flex min-h-screen flex-col items-center justify-start w-full max-w-5xl">
         <Image
           priority
           src={wave}
@@ -101,7 +101,7 @@ export default function Profile() {
           className="fixed opacity-10 -z-40 top-24"
           height={waveHeight}
         />
-        <div className="flex flex-col justify-center items-start gap-8 w-full">
+        <div className="flex flex-col justify-center items-start gap-8 w-full max-w-full">
           <div className="relative flex flex-col justify-center items-end w-full gap-2">
             <Header
               user={user.userProfile}
@@ -110,7 +110,7 @@ export default function Profile() {
             />
             <UserPill userProfile={user.userProfile} />
           </div>
-          <div className="flex flex-col justify-between items-start gap-4 w-full">
+          <div className="flex flex-col justify-between items-start gap-4 w-full max-w-full p-2">
             {display === "artists" ? (
               <FavArtists
                 topArtists={{
