@@ -21,8 +21,6 @@ import gear from "@/lib/images/gear.svg"
 import loginButton from "@/lib/images/spotifyLoginButton.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
 import { calculateUserGenres, popularityDescription } from "@/lib/util/util"
-import AIMusicRecs from "@/components/ai-music-recs"
-import AIPodcasts from "@/components/ai-podcasts"
 import Card from "@/components/card"
 import Header from "@/components/header"
 import TasteDescription from "@/components/taste-description"
@@ -101,7 +99,7 @@ export default function Profile() {
           className="fixed opacity-10 -z-40 top-24"
           height={waveHeight}
         />
-        <div className="flex flex-col justify-center items-start gap-8 w-full max-w-full">
+        <div className="flex flex-col justify-center gap-4 w-full max-w-full">
           <div className="relative flex flex-col justify-center items-end w-full gap-2">
             <Header
               user={user.userProfile}
@@ -136,12 +134,13 @@ export default function Profile() {
               <Podcasts {...user} />
             )}
           </div>
-          <hr className="h-[1px] bg-white w-full"></hr>
-          <div className="w-full flex justify-center items-center pb-4 pt-1">
-            <p>
-              Data and Images from <a>Spotify</a>
-            </p>
-          </div>
+        </div>
+        <div className="flex flex-col w-full justify-center items-center mt-auto pt-4 pb-2">
+          <p>
+            JamStats data and images provided by{" "}
+            <a href="https://spotify.com">Spotify</a>
+          </p>
+          <p>JamStats does not copy, keep, or sell any of your data.</p>
         </div>
       </main>
     )
@@ -192,28 +191,23 @@ const FavArtists = ({
         ))}
       </ul>
       <div className="flex flex-col lg:flex-row justify-center items-center lg:items-center gap-4 bg-darkGrayAccent border-2 border-black mt-4">
+        <UserGenres genres={userGenres} />
         <TasteDescription
           description={artistDescription}
           averageXPopularity={averageArtistPopularity}
         />
-        <UserGenres genres={userGenres} />
       </div>
-      <AIMusicRecs {...topArtists} />
     </div>
   )
 }
 
-const TopTracks = ({
-  topTracks,
-  averageTrackPopularity,
-  trackDescription,
-}: TopTrackProps) => {
+const TopTracks = ({ topTracks }: TopTrackProps) => {
   const [itemsToDisplay, setItemsToDisplay] = useState<{
     time: "long" | "medium" | "short"
     items: ContentItemArray
   }>({ time: "long", items: topTracks.long })
   return (
-    <div>
+    <div className="w-full">
       <div className={sectionHeaderDivClasses}>
         <motion.div
           initial={{ opacity: 0, x: -100 }}
@@ -245,12 +239,6 @@ const TopTracks = ({
           </motion.li>
         ))}
       </ul>
-      <div className="flex justify-center items-center gap-4 bg-darkGrayAccent  border-2 border-black p-4 mt-8">
-        <TasteDescription
-          description={trackDescription}
-          averageXPopularity={averageTrackPopularity}
-        />
-      </div>
     </div>
   )
 }
@@ -284,9 +272,6 @@ const Podcasts = (user: SpotifyData) => {
             </motion.li>
           ))}
       </ul>
-      <div className="flex justify-center items-center gap-4 p-4 mt-8">
-        <AIPodcasts user={user} />
-      </div>
     </div>
   )
 }

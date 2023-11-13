@@ -13,7 +13,7 @@ export default function TasteDescription({
         duration: 0.2,
         delay: 0.2,
       }}
-      className="w-full lg:h-40 flex flex-col justify-center items-center gap-8 py-8 lg:py-32"
+      className="w-full lg:h-40 flex flex-col justify-center items-center gap-8 py-8 lg:py-32 border-t-2 border-black lg:border-t-0"
     >
       <div className="w-full flex flex-col gap-4 md:flex-row justify-center items-center">
         <h3 className="text-2xl font-bold bg-greenAccent text-black py-2 px-3 lg:py-6 lg:px-7 rounded-full">
