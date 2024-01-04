@@ -7,7 +7,6 @@ import { signIn, signOut, useSession } from "next-auth/react"
 import { siteConfig } from "@/config/site"
 import { merriweather } from "@/lib/fonts"
 import useWindowSize from "@/lib/hooks/useWindowSize"
-import openAiLogo from "@/lib/images/openAiLogo.svg"
 import loginButton from "@/lib/images/spotifyLoginButton.svg"
 import spotifyLogo from "@/lib/images/spotifyLogo.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
@@ -74,19 +73,18 @@ export default function Home() {
 }
 
 const LowerBanner = () => {
-  const textClasses = `${merriweather.variable} font-serif text-black text-xl`
-  const divClasses = "flex gap-4 items-center"
-
   return (
-    <div className="bg-grayAccent absolute bottom-0 w-full max-w-5xl h-24 border-t-2 lg:border-2 lg:border-b-0 border-black shadow-md">
-      <div className="flex flex-col lg:flex-row justify-center items-center h-full gap-2 lg:gap-8">
-        <div className={divClasses}>
-          <p className={textClasses}>Powered by:</p>
+    <div className="absolute bottom-0 w-full max-w-5xl h-24">
+      <div className="flex flex-col lg:flex-row justify-center items-center h-full gap-2">
+        <div className={"flex gap-4 items-center"}>
+          <p
+            className={`${merriweather.variable} font-serif text-white text-xl`}
+          >
+            powered by
+          </p>
         </div>
-        <div className={divClasses}>
+        <div className={"flex gap-4 items-center"}>
           <Image height={45} src={spotifyLogo} alt="Spotify's Logo" />
-          <p className={textClasses}>&</p>
-          <Image height={40} src={openAiLogo} alt="OpenAI's Logo" />
         </div>
       </div>
     </div>
