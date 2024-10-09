@@ -8,8 +8,8 @@ import { signOut } from "next-auth/react"
 const UserPill = ({ userProfile }: UserPillProps) => {
   const [showMenu, setShowMenu] = useState(false)
   return (
-    <div className="absolute top-[70px] flex flex-col justify-starts items-center  bg-black w-fit px-4 py-1 mr-2 transition-all duration-75 delay-75">
-      <div className="flex gap-2 items-center transition-all duration-200 delay-100">
+    <div className="absolute top-[70px] flex flex-col justify-starts items-center  bg-black w-fit px-4 py-1 mr-2 transition-all motion-reduce:transition-none duration-75 delay-75">
+      <div className="flex gap-2 items-center transition-all motion-reduce:transition-none duration-200 delay-100">
         {userProfile.userImage ? (
           <div className="w-6 h-6  relative">
             <Image

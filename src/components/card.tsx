@@ -31,7 +31,7 @@ export default function Card({ track, artist, show, index }: CardProps) {
   const textDivClasses = "lg:h-1/2 max-w-1/2"
 
   return (
-    <div className="flex justify-between items-centerlg:justify-center relative bg-transparentDarkGray border-2 border-black lg:p-2  transition-all duration-500 delay-75">
+    <div className="flex justify-between items-center lg:justify-center relative bg-transparentDarkGray border-2 border-black lg:p-2  transition-all motion-reduce:transition-none duration-500 delay-75">
       <div
         className={
           "w-full flex justify-between items-center relative p-2 " + cardHeights
@@ -57,7 +57,7 @@ export default function Card({ track, artist, show, index }: CardProps) {
       {toDisplay ? (
         <div
           className={
-            "bg-black transition-all duration-500 delay-75 flex " +
+            "bg-black transition-all motion-reduce:transition-none duration-500 delay-75 flex " +
             cardHeights +
             " " +
             cardWeights
