@@ -1,8 +1,9 @@
 "use client"
 
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { Music2 } from "lucide-react"
-import { signIn, signOut, useSession } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
 import { merriweather } from "@/lib/fonts"
@@ -13,11 +14,16 @@ import wave from "@/lib/images/spotifyWaves.svg"
 
 export default function Home() {
   const { data: session, status } = useSession()
+  const router = useRouter()
 
   const size = useWindowSize()
   const waveSize = {
     width: size.width ? Math.floor(size.width * 0.35) : 0,
     height: size.height ? Math.floor(size.height * 0.35) : 0,
+  }
+
+  if (status === "authenticated") {
+    router.push("/me")
   }
 
   return (
@@ -43,21 +49,6 @@ export default function Home() {
             alt="login with spotify"
           />
         </button>
-      )}
-      {status === "authenticated" && (
-        <>
-          <h2>Hello, {session?.user?.name}</h2>
-          <a href="/me">Go to Your Data</a>
-          <button
-            className="p-2 border border-slate-900"
-            onClick={(e) => {
-              e.preventDefault()
-              signOut({ callbackUrl: "/" })
-            }}
-          >
-            Sign Out
-          </button>
-        </>
       )}
       <LowerBanner />
       <Image

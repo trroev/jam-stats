@@ -37,8 +37,6 @@ const sectionHeaderDivClasses =
 const sectionHeaderClasses =
   "flex justify-start text-2xl lg:text-4xl text-greenAccent font-bold"
 const liClasses = "w-full"
-const animationDuration = 0.2
-const animationDelay = 0.1
 
 export default function Profile() {
   const [loading, setLoading] = useState(true)
@@ -164,7 +162,7 @@ const FavArtists = ({
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: animationDuration * 2 }}
+          transition={{ duration: 0.4 }}
         >
           <h2 className={sectionHeaderClasses}>Fav Artists</h2>
         </motion.div>
@@ -174,22 +172,21 @@ const FavArtists = ({
           itemsToDisplay={itemsToDisplay}
         />
       </div>
-      <ul className={ulClasses}>
+      <motion.ul
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.3,
+          delay: 0.2,
+        }}
+        className={ulClasses}
+      >
         {itemsToDisplay.items.map((artist, i) => (
-          <motion.li
-            className={liClasses}
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{
-              duration: animationDuration,
-              delay: i * animationDelay,
-            }}
-            key={i}
-          >
+          <li className={liClasses} key={i}>
             <Card artist={artist as Artist} index={i} />
-          </motion.li>
+          </li>
         ))}
-      </ul>
+      </motion.ul>
       <div className="flex flex-col lg:flex-row justify-center items-center lg:items-center gap-4 bg-darkGrayAccent border-2 border-black mt-4">
         <UserGenres genres={userGenres} />
         <TasteDescription
@@ -212,7 +209,7 @@ const TopTracks = ({ topTracks }: TopTrackProps) => {
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: animationDuration * 2 }}
+          transition={{ duration: 0.4 }}
         >
           <h2 className={sectionHeaderClasses}>Top Tracks</h2>
         </motion.div>
@@ -222,23 +219,21 @@ const TopTracks = ({ topTracks }: TopTrackProps) => {
           setItemsToDisplay={setItemsToDisplay}
         />
       </div>
-      <ul className={ulClasses}>
+      <motion.ul
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.3,
+          delay: 0.2,
+        }}
+        className={ulClasses}
+      >
         {itemsToDisplay.items.map((track, i) => (
-          <motion.li
-            className={liClasses}
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{
-              ease: "easeInOut",
-              duration: animationDuration,
-              delay: i * animationDelay + animationDelay,
-            }}
-            key={i}
-          >
+          <li className={liClasses} key={i}>
             <Card track={track as Track} index={i} />
-          </motion.li>
+          </li>
         ))}
-      </ul>
+      </motion.ul>
     </div>
   )
 }
@@ -250,28 +245,27 @@ const Podcasts = (user: SpotifyData) => {
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: animationDuration * 2 }}
+          transition={{ duration: 0.4 }}
         >
           <h2 className={sectionHeaderClasses}>Podcasts</h2>
         </motion.div>
       </div>
-      <ul className={ulClasses}>
+      <motion.ul
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.3,
+          delay: 0.2,
+        }}
+        className={ulClasses}
+      >
         {user.shows &&
           user.shows.map((show, i) => (
-            <motion.li
-              className={liClasses}
-              initial={{ opacity: 0, x: -100 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                duration: animationDuration,
-                delay: i * animationDelay,
-              }}
-              key={i}
-            >
+            <li className={liClasses} key={i}>
               <Card show={show} index={i} />
-            </motion.li>
+            </li>
           ))}
-      </ul>
+      </motion.ul>
     </div>
   )
 }
@@ -337,8 +331,7 @@ const SingleSelectTimeFrame = ({
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
-        duration: animationDuration * 2,
-        delay: animationDelay * 2,
+        duration: 0.4,
       }}
     >
       <button
