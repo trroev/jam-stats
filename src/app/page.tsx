@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Music2 } from "lucide-react"
-import { signIn, signOut, useSession } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
 import { merriweather } from "@/lib/fonts"
