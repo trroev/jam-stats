@@ -28,11 +28,16 @@ export default function Home() {
 
   return (
     <main className="flex h-screen max-h-screen flex-col items-center justify-center p-24 overflow-clip relative">
-      <h1 className="text-5xl lg:text-7xl lg:my-8 font-bold justify-self-center place-self-center text-greenAccent leading-loose tracking-wider flex">
-        <Music2 size={30} />
-        {siteConfig.title}
-        <Music2 size={30} />
-      </h1>
+      <div>
+        <h1 className="text-5xl lg:text-7xl lg:my-8 font-bold justify-self-center place-self-center text-greenAccent leading-loose tracking-wider flex">
+          <Music2 size={30} />
+          {siteConfig.title}
+          <Music2 size={30} />
+        </h1>
+        <p className="text-xl lg:text-2xl mb-8 justify-self-center place-self-center text-greenAccent leading-loose tracking-wider flex">
+          Quantify your Groove
+        </p>
+      </div>
 
       {status === "unauthenticated" && (
         <button
