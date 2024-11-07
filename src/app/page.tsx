@@ -2,7 +2,6 @@
 
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { Music2 } from "lucide-react"
 import { signIn, useSession } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
@@ -11,6 +10,7 @@ import useWindowSize from "@/lib/hooks/useWindowSize"
 import loginButton from "@/lib/images/spotifyLoginButton.svg"
 import spotifyLogo from "@/lib/images/spotifyLogo.svg"
 import wave from "@/lib/images/spotifyWaves.svg"
+import JamStatsLogo from "@/components/JamStatsLogo"
 
 export default function Home() {
   const { data: session, status } = useSession()
@@ -28,33 +28,35 @@ export default function Home() {
 
   return (
     <main className="flex h-screen max-h-screen flex-col items-center justify-center p-24 overflow-clip relative">
-      <div>
-        <h1 className="text-5xl lg:text-7xl lg:my-8 font-bold justify-self-center place-self-center text-greenAccent leading-loose tracking-wider flex">
-          <Music2 size={30} />
-          {siteConfig.title}
-          <Music2 size={30} />
-        </h1>
-        <p className="text-xl lg:text-2xl mb-8 justify-self-center place-self-center text-greenAccent leading-loose tracking-wider flex">
-          Quantify your Groove
-        </p>
+      <div className="flex flex-col items-center gap-12">
+        <div className="text-greenAccent flex items-end">
+          <JamStatsLogo width={100} />
+          <div className="flex flex-col gap-1">
+            <h1 className="text-5xl lg:text-7xl font-bold text-greenAccent leading-loose tracking-wider flex">
+              {siteConfig.title}
+            </h1>
+            <p className="text-xl lg:text-2.5xl lg:leading-8 font-bold text-greenAccent leading-loose tracking-wider flex">
+              quantify your groove
+            </p>
+          </div>
+        </div>
+        {status === "unauthenticated" && (
+          <button
+            className="border-[1px] border-greenAccent"
+            onClick={(e) => {
+              e.preventDefault()
+              signIn("spotify", { callbackUrl: "/me" })
+            }}
+          >
+            <Image
+              priority
+              height={60}
+              src={loginButton}
+              alt="login with spotify"
+            />
+          </button>
+        )}
       </div>
-
-      {status === "unauthenticated" && (
-        <button
-          className="border-2 border-greenAccent "
-          onClick={(e) => {
-            e.preventDefault()
-            signIn("spotify", { callbackUrl: "/me" })
-          }}
-        >
-          <Image
-            priority
-            height={60}
-            src={loginButton}
-            alt="login with spotify"
-          />
-        </button>
-      )}
       <LowerBanner />
       <Image
         priority
