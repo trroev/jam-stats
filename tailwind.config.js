@@ -20,6 +20,9 @@ module.exports = {
         darkGrayAccent: "#3F3F3F",
         transparentDarkGray: "rgba(63, 63, 63, 0.5)",
       },
+      fontSize:{
+        '2.5xl': '1.75rem',
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         serif: ["var(--font-serif)", ...fontFamily.serif],
